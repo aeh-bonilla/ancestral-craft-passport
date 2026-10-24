@@ -64,11 +64,11 @@ export function QrCode({ value, size = 140, className }: { value: string; size?:
   const hex = (value || "0").padEnd(64, "0");
   const bits: boolean[] = [];
   for (let i = 0; i < n * n; i++) {
-    const c = parseInt(hex[(i * 7) % hex.length], 16);
+    const c = parseInt(hex[(i * 7) % hex.length] ?? "0", 16);
     bits.push(((c >> (i % 4)) & 1) === 1);
   }
   const finder = (x: number, y: number) => {
-    for (const [fx, fy] of [[0, 0], [n - 7, 0], [0, n - 7]]) {
+    for (const [fx, fy] of [[0, 0], [n - 7, 0], [0, n - 7]] as [number, number][]) {
       if (x >= fx && x < fx + 7 && y >= fy && y < fy + 7) {
         const dx = x - fx, dy = y - fy;
         return dx === 0 || dx === 6 || dy === 0 || dy === 6 || (dx >= 2 && dx <= 4 && dy >= 2 && dy <= 4) ? 1 : 0;

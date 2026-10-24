@@ -28,7 +28,7 @@ const categories = ["Textil", "Cerámica", "Talla en Madera", "Filigrana", "Laca
 
 function Register() {
   const [step, setStep] = useState(0);
-  const [d, setD] = useState({ title: "", artisan: artisans[0].name, category: "Talla en Madera", technique: "", materials: "", priceMxn: "" });
+  const [d, setD] = useState({ title: "", artisan: artisans[0]!.name, category: "Talla en Madera", technique: "", materials: "", priceMxn: "" });
   const [files, setFiles] = useState<{ name: string; size: number; type: string }[]>([]);
   const [drag, setDrag] = useState(false);
   const [hash, setHash] = useState("");
@@ -49,7 +49,7 @@ function Register() {
   };
 
   const next = () => {
-    if (step === 0 && !d.title.trim()) return toast.error("Agrega el título de la pieza");
+    if (step === 0 && !d.title.trim()) { toast.error("Agrega el título de la pieza"); return; }
     setStep((s) => Math.min(2, s + 1));
   };
 

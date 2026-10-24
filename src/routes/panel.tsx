@@ -37,7 +37,7 @@ function Panel() {
   ];
 
   const add = () => {
-    if (!form.name.trim()) return toast.error("Escribe el nombre del artesano");
+    if (!form.name.trim()) { toast.error("Escribe el nombre del artesano"); return; }
     const initials = form.name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase();
     setList([{ ...form, status: "Pendiente KYC", pieces: 0, usdc: 0, initials }, ...list]);
     setOpen(false);

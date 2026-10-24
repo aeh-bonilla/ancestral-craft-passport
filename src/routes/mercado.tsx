@@ -61,7 +61,7 @@ function Market() {
             <Chips title="Técnica" items={techniques} value={tech} onChange={setTech} />
             <div>
               <p className="mb-3 text-sm font-semibold">Precio máximo: ${max.toLocaleString("es-MX")} MXN</p>
-              <Slider min={1000} max={10000} step={250} value={[max]} onValueChange={(v) => setMax(v[0])} />
+              <Slider min={1000} max={10000} step={250} value={[max]} onValueChange={(v) => setMax(v[0] ?? 10000)} />
             </div>
           </aside>
           <div>
@@ -118,7 +118,7 @@ function Market() {
             </div>
             <div>
               <p className="mb-3 text-sm font-semibold">Regalías automáticas para la comunidad: <span className="text-primary">{royalty}%</span></p>
-              <Slider min={5} max={25} step={1} value={[royalty]} onValueChange={(v) => setRoyalty(v[0])} />
+              <Slider min={5} max={25} step={1} value={[royalty]} onValueChange={(v) => setRoyalty(v[0] ?? 12)} />
             </div>
             <div className="rounded-lg bg-sand p-3 font-mono text-xs text-muted-foreground">
               contract.license(pattern="{lic?.id}", use="{use}", royalty_bps={royalty * 100})

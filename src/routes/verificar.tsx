@@ -28,6 +28,7 @@ const gallery = [
 
 function Verify() {
   const [active, setActive] = useState(0);
+  const cur = gallery[active]!;
   const [audit, setAudit] = useState(true);
   const [tip, setTip] = useState(false);
   const price = 8900;
@@ -54,8 +55,8 @@ function Verify() {
       <div className="mt-8 grid gap-8 lg:grid-cols-[1.2fr_1fr]">
         <div>
           <div className="relative overflow-hidden rounded-2xl bg-sand shadow-float">
-            <img src={gallery[active].src} alt={gallery[active].label} className="aspect-square w-full object-cover md:aspect-[4/3]" />
-            {gallery[active].video && (
+            <img src={cur.src} alt={cur.label} className="aspect-square w-full object-cover md:aspect-[4/3]" />
+            {cur.video && (
               <button onClick={() => toast("Reproduciendo video del proceso (demo)")} className="absolute inset-0 grid place-items-center bg-indigo/30">
                 <span className="grid h-16 w-16 place-items-center rounded-full bg-card/90 text-primary"><Play className="h-7 w-7" /></span>
               </button>
@@ -126,6 +127,8 @@ function Verify() {
                 ["Smart Contract (Soroban)", contractId],
                 ["Timestamp inmutable", ts],
                 ["Ledger", "#52,184,907 · Testnet"],
+              ] as [string, string][]).map(([k, v]) => (
+
               ].map(([k, v]) => (
                 <div key={k}>
                   <dt className="text-xs uppercase tracking-wider opacity-60">{k}</dt>
