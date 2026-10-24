@@ -122,14 +122,12 @@ function Verify() {
         {audit && (
           <div className="grid gap-6 border-t border-indigo-foreground/10 p-5 md:grid-cols-[1fr_auto]">
             <dl className="space-y-4 text-sm">
-              {[
+              {([
                 ["Hash SHA-256 del expediente", sampleHash],
                 ["Smart Contract (Soroban)", contractId],
                 ["Timestamp inmutable", ts],
                 ["Ledger", "#52,184,907 · Testnet"],
               ] as [string, string][]).map(([k, v]) => (
-
-              ].map(([k, v]) => (
                 <div key={k}>
                   <dt className="text-xs uppercase tracking-wider opacity-60">{k}</dt>
                   <dd className="mt-1 flex items-start gap-2 break-all font-mono text-gold">
