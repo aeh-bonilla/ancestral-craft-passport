@@ -1,14 +1,13 @@
-import { BadgeCheck, ShieldCheck } from "lucide-react";
+import { BadgeCheck } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { fmtMxn, toUsdc, type Piece } from "@/lib/toltek";
+import toltekMark from "@/assets/toltek-mark.png";
 
 export function Logo({ className }: { className?: string }) {
   return (
     <span className={cn("flex items-center gap-2", className)}>
-      <span className="grid h-9 w-9 place-items-center rounded-lg bg-seal text-gold-foreground shadow-float">
-        <ShieldCheck className="h-5 w-5" />
-      </span>
+      <img src={toltekMark} alt="Sello Toltek" width={36} height={36} className="h-9 w-9 rounded-full" />
       <span className="font-serif text-2xl font-semibold tracking-wide">Toltek</span>
     </span>
   );
