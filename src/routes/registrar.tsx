@@ -14,9 +14,9 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/registrar")({
   head: () => ({
     meta: [
-      { title: "Registrar Obra y Pasaporte Cultural — Toltek" },
+      { title: "Registrar Obra y Pasaporte Cultural — Tlamatik" },
       { name: "description", content: "Registra una pieza, sella su evidencia con SHA-256 y ánclala en Stellar." },
-      { property: "og:title", content: "Registro de Obra — Toltek" },
+      { property: "og:title", content: "Registro de Obra — Tlamatik" },
       { property: "og:description", content: "Genera un Pasaporte Cultural Phygital con QR y hash inmutable." },
     ],
   }),

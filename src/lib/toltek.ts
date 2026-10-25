@@ -69,7 +69,7 @@ export const patterns: Pattern[] = [
 ];
 
 export const sampleHash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
-export const contractId = "CAOAFGPATXWJ7Q4R2NHLM3YEVZK5D6TSUB8PXCWQ2LJ9TOLTEK";
+export const contractId = "CAOAFGPATXWJ7Q4R2NHLM3YEVZK5D6TSUB8PXCWQ2LJ9TLAMATIK";
 
 export async function sha256(text: string): Promise<string> {
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));

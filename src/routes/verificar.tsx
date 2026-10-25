@@ -11,9 +11,9 @@ import { contractId, fmtMxn, images, sampleHash, toUsdc } from "@/lib/toltek";
 export const Route = createFileRoute("/verificar")({
   head: () => ({
     meta: [
-      { title: "Verificador Público — Toltek" },
+      { title: "Verificador Público — Tlamatik" },
       { name: "description", content: "Escanea el QR de una pieza y confirma su autenticidad en el ledger de Stellar." },
-      { property: "og:title", content: "Verificador Público Universal — Toltek" },
+      { property: "og:title", content: "Verificador Público Universal — Tlamatik" },
       { property: "og:description", content: "Pieza auténtica y certificada: consulta su historia y registro blockchain." },
     ],
   }),

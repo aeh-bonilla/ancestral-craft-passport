@@ -13,9 +13,9 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/panel")({
   head: () => ({
     meta: [
-      { title: "Panel del Promotor Cultural — Toltek" },
+      { title: "Panel del Promotor Cultural — Tlamatik" },
       { name: "description", content: "Gestiona artesanos, obras catalogadas y kits QR de tu cooperativa." },
-      { property: "og:title", content: "Panel del Promotor y Cooperativa — Toltek" },
+      { property: "og:title", content: "Panel del Promotor y Cooperativa — Tlamatik" },
       { property: "og:description", content: "Métricas, catálogo de artesanos e impresión de Pasaportes Culturales." },
     ],
   }),

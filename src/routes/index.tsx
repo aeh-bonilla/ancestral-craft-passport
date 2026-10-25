@@ -7,9 +7,9 @@ import { images, pieces } from "@/lib/toltek";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Toltek — Memoria viva del patrimonio, certificada en Stellar" },
+      { title: "Tlamatik — Memoria viva del patrimonio, certificada en Stellar" },
       { name: "description", content: "Pasaportes culturales físico-digitales y comercio justo para artesanos de México y América Latina." },
-      { property: "og:title", content: "Toltek — Memoria viva del patrimonio" },
+      { property: "og:title", content: "Tlamatik — Memoria viva del patrimonio" },
       { property: "og:description", content: "Certificamos el origen genuino de cada pieza artesanal en la red Stellar." },
     ],
   }),
@@ -41,7 +41,7 @@ function Index() {
               <span className="italic text-primary">Certificamos su Origen Genuino.</span>
             </h1>
             <p className="mt-6 max-w-xl text-lg text-muted-foreground">
-              Toltek une la tradición artesanal mexicana con trazabilidad inmutable en la red Stellar: cada pieza lleva un Pasaporte Cultural que honra a quien la creó y garantiza que el pago llegue a sus manos.
+              Tlamatik une la tradición artesanal mexicana con trazabilidad inmutable en la red Stellar: cada pieza lleva un Pasaporte Cultural que honra a quien la creó y garantiza que el pago llegue a sus manos.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg"><Link to="/verificar"><ScanLine /> Verificar una Pieza (QR)</Link></Button>
