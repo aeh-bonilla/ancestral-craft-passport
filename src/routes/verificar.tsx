@@ -141,7 +141,7 @@ function Verify() {
                 <Button size="sm" variant="secondary" onClick={() => toast("Abriendo Stellar Expert (simulado)")}><ExternalLink /> Ver en Stellar Expert</Button>
               </div>
             </dl>
-            <div className="rounded-xl bg-card p-3"><QrCode value={sampleHash} size={150} /></div>
+            <div className="self-center rounded-xl bg-card p-3"><QrCode value={sampleHash} size={190} /></div>
           </div>
         )}
       </div>
