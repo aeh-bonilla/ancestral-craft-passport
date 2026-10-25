@@ -1,14 +1,13 @@
-import { BadgeCheck } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { fmtMxn, toUsdc, type Piece } from "@/lib/toltek";
-import toltekMark from "@/assets/toltek-mark-blue.png";
+import tlamatikMark from "@/assets/tlamatik-mark.png.asset.json";
 
 export function Logo({ className }: { className?: string }) {
   return (
     <span className={cn("flex items-center gap-2", className)}>
-      <img src={toltekMark} alt="Sello Toltek" width={36} height={36} className="h-9 w-9 rounded-full" />
-      <span className="font-serif text-2xl font-semibold tracking-wide">Toltek</span>
+      <img src={tlamatikMark.url} alt="Sello Tlamatik" width={36} height={36} className="h-9 w-9" />
+      <span className="font-serif text-2xl font-semibold tracking-wide">Tlamatik</span>
     </span>
   );
 }
@@ -16,7 +15,7 @@ export function Logo({ className }: { className?: string }) {
 export function StellarBadge({ className, label = "Certificado en Stellar" }: { className?: string; label?: string }) {
   return (
     <span className={cn("inline-flex items-center gap-1 rounded-full bg-seal px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-gold-foreground shadow-sm", className)}>
-      <BadgeCheck className="h-3.5 w-3.5" /> {label}
+      <img src={tlamatikMark.url} alt="" className="h-3.5 w-3.5 rounded-full" /> {label}
     </span>
   );
 }
