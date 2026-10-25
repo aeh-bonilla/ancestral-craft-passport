@@ -2,7 +2,7 @@ import { BadgeCheck } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { fmtMxn, toUsdc, type Piece } from "@/lib/toltek";
-import toltekMark from "@/assets/toltek-mark.png";
+import toltekMark from "@/assets/toltek-mark-blue.png";
 
 export function Logo({ className }: { className?: string }) {
   return (
