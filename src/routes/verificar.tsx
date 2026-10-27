@@ -77,10 +77,10 @@ function Verify() {
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Talla en madera de copal</p>
             <h1 className="mt-2 text-4xl font-semibold">Alebrije Jaguar Nahual</h1>
             <div className="mt-4 flex items-center gap-3">
-              <span className="grid h-12 w-12 place-items-center rounded-full bg-primary/15 font-serif font-semibold text-primary">MA</span>
-              <div>
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-primary/15 font-serif font-semibold text-primary">MA</span>
+              <div className="min-w-0">
                 <p className="font-semibold">Maestro Don Miguel Aguilar</p>
-                <p className="flex items-center gap-1 text-sm text-muted-foreground"><MapPin className="h-3.5 w-3.5" /> Taller Familiar Aguilar · San Antonio Arrazola, Oaxaca, México</p>
+                <p className="flex items-start gap-1 text-sm text-muted-foreground"><MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" /> Taller Familiar Aguilar · San Antonio Arrazola, Oaxaca, México</p>
               </div>
             </div>
           </div>
