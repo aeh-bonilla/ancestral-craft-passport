@@ -44,8 +44,8 @@ function Verify() {
       <div className="flex flex-col items-start gap-4 rounded-2xl border border-jade/30 bg-jade/10 p-6 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-4">
           <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-jade text-jade-foreground"><BadgeCheck className="h-8 w-8" /></span>
-          <div>
-            <p className="font-serif text-2xl font-semibold text-jade md:text-3xl">✓ PIEZA AUTÉNTICA & CERTIFICADA</p>
+          <div className="min-w-0">
+            <p className="font-serif text-xl font-semibold text-jade sm:text-2xl md:text-3xl">✓ PIEZA AUTÉNTICA & CERTIFICADA</p>
             <p className="text-sm text-muted-foreground">Pasaporte TK-0042 · escaneado hace unos segundos</p>
           </div>
         </div>
