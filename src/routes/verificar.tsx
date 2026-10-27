@@ -44,8 +44,8 @@ function Verify() {
       <div className="flex flex-col items-start gap-4 rounded-2xl border border-jade/30 bg-jade/10 p-6 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-4">
           <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-jade text-jade-foreground"><BadgeCheck className="h-8 w-8" /></span>
-          <div>
-            <p className="font-serif text-2xl font-semibold text-jade md:text-3xl">✓ PIEZA AUTÉNTICA & CERTIFICADA</p>
+          <div className="min-w-0">
+            <p className="font-serif text-xl font-semibold text-jade sm:text-2xl md:text-3xl">✓ PIEZA AUTÉNTICA & CERTIFICADA</p>
             <p className="text-sm text-muted-foreground">Pasaporte TK-0042 · escaneado hace unos segundos</p>
           </div>
         </div>
@@ -77,10 +77,10 @@ function Verify() {
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Talla en madera de copal</p>
             <h1 className="mt-2 text-4xl font-semibold">Alebrije Jaguar Nahual</h1>
             <div className="mt-4 flex items-center gap-3">
-              <span className="grid h-12 w-12 place-items-center rounded-full bg-primary/15 font-serif font-semibold text-primary">MA</span>
-              <div>
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-primary/15 font-serif font-semibold text-primary">MA</span>
+              <div className="min-w-0">
                 <p className="font-semibold">Maestro Don Miguel Aguilar</p>
-                <p className="flex items-center gap-1 text-sm text-muted-foreground"><MapPin className="h-3.5 w-3.5" /> Taller Familiar Aguilar · San Antonio Arrazola, Oaxaca, México</p>
+                <p className="flex items-start gap-1 text-sm text-muted-foreground"><MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" /> Taller Familiar Aguilar · San Antonio Arrazola, Oaxaca, México</p>
               </div>
             </div>
           </div>
