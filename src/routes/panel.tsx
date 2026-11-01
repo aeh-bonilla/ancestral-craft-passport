@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { BarChart3, FilePlus2, Printer, QrCode as QrIcon, UserPlus, Users, Package, Coins, Download } from "lucide-react";
+import { BarChart3, FilePlus2, Printer, QrCode as QrIcon, UserPlus, Users, Package, Coins, Download, Landmark, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,7 +22,13 @@ export const Route = createFileRoute("/panel")({
   component: Panel,
 });
 
-type Tab = "resumen" | "artesanos" | "kits";
+type Tab = "resumen" | "artesanos" | "kits" | "liquidaciones";
+
+const liquidaciones = [
+  { artisan: "Don Miguel Aguilar", piece: "TK-0042 · Alebrije Jaguar Nahual", amount: "$8,472.80 MXN", date: "07 nov 2026", clave: "2026110740014000009876543" },
+  { artisan: "Doña Rosa Real", piece: "TK-0117 · Cántaro de Barro Negro", amount: "$3,284.40 MXN", date: "02 nov 2026", clave: "2026110240014000008765432" },
+  { artisan: "Petrona Gómez", piece: "TK-0203 · Huipil de Telar de Cintura", amount: "$5,902.40 MXN", date: "28 oct 2026", clave: "2026102840014000007654321" },
+];
 
 function Panel() {
   const [tab, setTab] = useState<Tab>("resumen");
@@ -34,6 +40,7 @@ function Panel() {
     { id: "resumen" as const, label: "Resumen / Métricas", icon: BarChart3 },
     { id: "artesanos" as const, label: "Catálogo de Artesanos", icon: Users },
     { id: "kits" as const, label: "Kits Phygital QR", icon: QrIcon },
+    { id: "liquidaciones" as const, label: "Liquidaciones SPEI", icon: Landmark },
   ];
 
   const add = () => {
@@ -60,7 +67,7 @@ function Panel() {
       </aside>
 
       <section className="min-w-0 space-y-6">
-        {tab !== "kits" && (
+        {(tab === "resumen" || tab === "artesanos") && (
           <>
             <div className="grid gap-4 sm:grid-cols-3">
               {[
@@ -133,6 +140,32 @@ function Panel() {
                   </div>
                   <StellarBadge className="mt-3" label="Escanea · Verifica en Stellar" />
                 </div>
+              ))}
+            </div>
+          </div>
+        )}
+        {tab === "liquidaciones" && (
+          <div className="rounded-xl border bg-card p-5 shadow-float">
+            <h2 className="text-xl font-semibold">Histórico de Liquidaciones Bancarias (SPEI)</h2>
+            <p className="text-sm text-muted-foreground">Comprobantes Electrónicos de Pago (CEP de Banxico) emitidos a las tarjetas de débito de los artesanos.</p>
+            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {liquidaciones.map((l) => (
+                <article key={l.clave} className="rounded-xl border bg-background p-4">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-jade/15 px-2.5 py-1 text-xs font-semibold text-jade">
+                    <CheckCircle2 className="h-3.5 w-3.5" /> Transferido a Tarjeta de Débito (SPEI)
+                  </span>
+                  <p className="mt-3 font-semibold">{l.artisan}</p>
+                  <p className="text-xs text-muted-foreground">{l.piece}</p>
+                  <p className="mt-2 font-serif text-2xl font-semibold">{l.amount}</p>
+                  <p className="text-xs text-muted-foreground">{l.date} · CEP Banxico</p>
+                  <div className="mt-3 rounded-lg bg-sand p-2">
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Clave de Rastreo Banxico</p>
+                    <p className="break-all font-mono text-xs">{l.clave}</p>
+                  </div>
+                  <Button variant="link" size="sm" className="mt-2 h-auto px-0" onClick={() => toast("Abriendo Stellar Explorer (simulado)")}>
+                    Ver auditoría en Stellar Explorer ↗
+                  </Button>
+                </article>
               ))}
             </div>
           </div>

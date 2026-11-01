@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Check, Loader2, UploadCloud, FileAudio, FileImage, FileText, X, Anchor } from "lucide-react";
+import { Check, Loader2, UploadCloud, FileAudio, FileImage, FileText, X, Anchor, Sparkles, Mic, Camera } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +34,22 @@ function Register() {
   const [hash, setHash] = useState("");
   const [minting, setMinting] = useState<"idle" | "running" | "done">("idle");
   const [phase, setPhase] = useState(0);
+  const [aiBusy, setAiBusy] = useState(false);
+
+  const generateWithAi = () => {
+    setAiBusy(true);
+    setTimeout(() => {
+      setD((prev) => ({
+        ...prev,
+        title: prev.title || "Alebrije Jaguar Nahual · Guardián del Monte",
+        technique: "Tallado a mano en madera de copal verde, siguiendo la veta para que la pieza revele el animal que guarda. Cada pincelada de grana cochinilla y añil honra tres generaciones del taller familiar.\n\nEN: Hand-carved from green copal wood, following the grain so the piece reveals the animal it holds. Every brushstroke of cochineal and indigo honors three generations of the family workshop.",
+        materials: "Copal (Bursera glabrifolia) · Grana cochinilla · Añil · Cempasúchil · Jugo de limón",
+        priceMxn: prev.priceMxn || "8900",
+      }));
+      setAiBusy(false);
+      toast.success("Historia y metadatos generados", { description: "Narrativa en español + traducción al inglés + etiquetas de materiales ancestrales." });
+    }, 2000);
+  };
 
   useEffect(() => {
     sha256(JSON.stringify({ d, files: files.map((f) => f.name + f.size) })).then(setHash);
@@ -81,6 +97,22 @@ function Register() {
           </li>
         ))}
       </ol>
+
+      <div className="mt-6 rounded-xl border border-primary/30 bg-primary/5 p-5 shadow-float">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="min-w-0">
+            <p className="flex items-center gap-2 font-serif text-lg font-semibold"><Sparkles className="h-5 w-5 shrink-0 text-gold" /> Asistente de Redacción Cultural con IA (OpenAI GPT-4o)</p>
+            <p className="mt-1 text-sm text-muted-foreground">Redacta la narrativa y los metadatos de la obra a partir del relato del maestro.</p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Button variant="outline" size="sm" onClick={() => toast.success("Audio recibido", { description: "relato_maestro.mp3 · transcribiendo…" })}><Mic /> Subir Audio con Relato del Maestro</Button>
+            <Button variant="outline" size="sm" onClick={() => toast.success("Foto analizada", { description: "Se detectaron pigmentos naturales y talla en copal." })}><Camera /> Analizar Foto de la Obra</Button>
+            <Button size="sm" onClick={generateWithAi} disabled={aiBusy}>
+              {aiBusy ? <Loader2 className="animate-spin" /> : <Sparkles />} Generar Historia y Metadatos con IA
+            </Button>
+          </div>
+        </div>
+      </div>
 
       <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_380px]">
         <div className="rounded-xl border bg-card p-6 shadow-float">

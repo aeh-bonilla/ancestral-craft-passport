@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { PieceCard, SectionTitle, StellarBadge } from "@/components/toltek/ui";
+import { CodiButton, PieceCard, SectionTitle, StellarBadge } from "@/components/toltek/ui";
 import { patterns, pieces, toUsdc, type Pattern } from "@/lib/toltek";
 import { cn } from "@/lib/utils";
 
@@ -69,9 +69,12 @@ function Market() {
             <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {list.map((p) => (
                 <PieceCard key={p.id} piece={p} action={
-                  <Button size="sm" onClick={() => toast.success("Checkout rápido completado", { description: `${toUsdc(p.priceMxn)} USDC enviados a ${p.artisan}` })}>
-                    <ShoppingCart /> Comprar
-                  </Button>
+                  <div className="flex w-full flex-col gap-1.5">
+                    <Button size="sm" className="w-full" onClick={() => toast.success("Checkout rápido completado", { description: `${toUsdc(p.priceMxn)} USDC enviados a ${p.artisan}` })}>
+                      <ShoppingCart /> Comprar
+                    </Button>
+                    <CodiButton piece={p} className="w-full" />
+                  </div>
                 } />
               ))}
               {list.length === 0 && <p className="text-muted-foreground">No hay piezas con estos filtros.</p>}
