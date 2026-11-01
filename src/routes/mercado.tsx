@@ -69,11 +69,11 @@ function Market() {
             <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {list.map((p) => (
                 <PieceCard key={p.id} piece={p} action={
-                  <div className="flex flex-col items-end gap-1.5">
-                    <Button size="sm" onClick={() => toast.success("Checkout rápido completado", { description: `${toUsdc(p.priceMxn)} USDC enviados a ${p.artisan}` })}>
+                  <div className="flex w-full flex-col gap-1.5">
+                    <Button size="sm" className="w-full" onClick={() => toast.success("Checkout rápido completado", { description: `${toUsdc(p.priceMxn)} USDC enviados a ${p.artisan}` })}>
                       <ShoppingCart /> Comprar
                     </Button>
-                    <CodiButton piece={p} />
+                    <CodiButton piece={p} className="w-full" />
                   </div>
                 } />
               ))}

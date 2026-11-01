@@ -52,14 +52,17 @@ export function PieceCard({ piece, action }: { piece: Piece; action?: React.Reac
         <p className="text-xs font-medium uppercase tracking-wider text-primary">{piece.community}, {piece.region}</p>
         <h3 className="text-lg font-semibold leading-snug">{piece.title}</h3>
         <p className="text-sm text-muted-foreground">{piece.artisan} · {piece.technique}</p>
-        <div className="flex items-end justify-between pt-2">
-          <div>
-            <p className="flex items-center gap-1.5 font-semibold">{fmtMxn(piece.priceMxn)} <PriceBreakdown priceMxn={piece.priceMxn} /></p>
-            <p className="text-xs text-muted-foreground">≈ {toUsdc(piece.priceMxn)} USDC</p>
+        <div className="flex flex-col gap-2 pt-2">
+          <div className="flex items-end justify-between">
+            <div>
+              <p className="flex items-center gap-1.5 font-semibold">{fmtMxn(piece.priceMxn)} <PriceBreakdown priceMxn={piece.priceMxn} /></p>
+              <p className="text-xs text-muted-foreground">≈ {toUsdc(piece.priceMxn)} USDC</p>
+            </div>
+            {!action && (
+              <Link to="/verificar" className="text-sm font-medium text-primary hover:underline">Ver pasaporte →</Link>
+            )}
           </div>
-          {action ?? (
-            <Link to="/verificar" className="text-sm font-medium text-primary hover:underline">Ver pasaporte →</Link>
-          )}
+          {action}
         </div>
       </div>
     </article>
