@@ -19,15 +19,16 @@ export type Piece = {
   technique: "Textil" | "Cerámica" | "Talla en Madera" | "Filigrana" | "Laca";
   priceMxn: number;
   image: string;
+  unesco?: string;
 };
 
 export const pieces: Piece[] = [
+  { id: "TK-0388", title: "Plato de Talavera Poblana", artisan: "Uriarte Talavera", community: "Puebla de Zaragoza", region: "Puebla", technique: "Cerámica", priceMxn: 2650, image: talavera, unesco: "Patrimonio Cultural Inmaterial (UNESCO) · Puebla" },
   { id: "TK-0042", title: "Alebrije Jaguar Nahual", artisan: "Jacobo y María Ángeles", community: "San Martín Tilcajete", region: "Oaxaca", technique: "Talla en Madera", priceMxn: 8900, image: alebrije },
   { id: "TK-0117", title: "Cántaro Calado de Barro Negro", artisan: "Familia Doña Rosa", community: "San Bartolo Coyotepec", region: "Oaxaca", technique: "Cerámica", priceMxn: 3450, image: barroNegro },
   { id: "TK-0203", title: "Huipil de Telar de Cintura", artisan: "Cooperativa Sna Jolobil", community: "San Juan Chamula", region: "Chiapas", technique: "Textil", priceMxn: 6200, image: huipil },
   { id: "TK-0251", title: "Baúl de Laca Rayada", artisan: "Maestro Francisco Coronel", community: "Olinalá", region: "Guerrero", technique: "Laca", priceMxn: 5800, image: olinala },
   { id: "TK-0310", title: "Cazo Martillado y Arracadas", artisan: "Taller Punzo Hermanos", community: "Santa Clara del Cobre", region: "Michoacán", technique: "Filigrana", priceMxn: 4100, image: cobre },
-  { id: "TK-0388", title: "Plato de Talavera Poblana", artisan: "Uriarte Talavera", community: "Puebla de Zaragoza", region: "Puebla", technique: "Cerámica", priceMxn: 2650, image: talavera },
 ];
 
 export const toUsdc = (mxn: number) => (mxn / USDC_RATE).toFixed(2);

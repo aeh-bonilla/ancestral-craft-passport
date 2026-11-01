@@ -1,6 +1,11 @@
 import { Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { Award, CheckCircle2, Info, Loader2, Smartphone } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { fmtMxn, toUsdc, type Piece } from "@/lib/toltek";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import tlamatikMark from "@/assets/tlamatik-mark.png.asset.json";
 
 export function Logo({ className }: { className?: string }) {
@@ -37,6 +42,11 @@ export function PieceCard({ piece, action }: { piece: Piece; action?: React.Reac
         <img src={piece.image} alt={piece.title} loading="lazy" width={816} height={816} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
         <StellarBadge className="absolute left-3 top-3" />
         <span className="absolute right-3 top-3 rounded-full bg-card/90 px-2 py-0.5 font-mono text-[10px] text-muted-foreground">{piece.id}</span>
+        {piece.unesco && (
+          <span className="absolute inset-x-3 bottom-3 flex items-center gap-1.5 rounded-full bg-seal px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-gold-foreground shadow-sm">
+            <Award className="h-3.5 w-3.5 shrink-0" /> {piece.unesco}
+          </span>
+        )}
       </div>
       <div className="space-y-2 p-4">
         <p className="text-xs font-medium uppercase tracking-wider text-primary">{piece.community}, {piece.region}</p>
@@ -44,7 +54,7 @@ export function PieceCard({ piece, action }: { piece: Piece; action?: React.Reac
         <p className="text-sm text-muted-foreground">{piece.artisan} · {piece.technique}</p>
         <div className="flex items-end justify-between pt-2">
           <div>
-            <p className="font-semibold">{fmtMxn(piece.priceMxn)}</p>
+            <p className="flex items-center gap-1.5 font-semibold">{fmtMxn(piece.priceMxn)} <PriceBreakdown priceMxn={piece.priceMxn} /></p>
             <p className="text-xs text-muted-foreground">≈ {toUsdc(piece.priceMxn)} USDC</p>
           </div>
           {action ?? (
