@@ -5,10 +5,13 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { CodiButton, PriceBreakdown, QrCode, StellarBadge } from "@/components/toltek/ui";
-import { contractId, fmtMxn, images, pieces, sampleHash, toUsdc } from "@/lib/toltek";
+import { CodiButton, FullBreakdown, LedgerBadge, PriceBreakdown, QrCode, StellarBadge, StripeButton } from "@/components/toltek/ui";
+import { contractId, fmtMxn, getPiece, images, pieces, sampleHash, toUsdc, type Piece } from "@/lib/toltek";
 
 export const Route = createFileRoute("/verificar")({
+  validateSearch: (search: Record<string, unknown>): { id?: string } => ({
+    id: typeof search.id === "string" ? search.id : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Verificador Público — Tlamatik" },
@@ -27,6 +30,56 @@ const gallery = [
 ];
 
 function Verify() {
+  const { id } = Route.useSearch();
+  const found = getPiece(id);
+  if (found?.story) return <FeaturedVerify piece={found} />;
+  return <DefaultVerify />;
+}
+
+function FeaturedVerify({ piece }: { piece: Piece }) {
+  const available = piece.status === "available";
+  return (
+    <div className="mx-auto max-w-6xl px-4 py-10">
+      <div className="flex flex-col items-start gap-4 rounded-2xl border border-jade/30 bg-jade/10 p-6 md:flex-row md:items-center md:justify-between">
+        <div className="flex items-center gap-4">
+          <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-jade text-jade-foreground"><BadgeCheck className="h-8 w-8" /></span>
+          <div className="min-w-0">
+            <p className="font-serif text-xl font-semibold text-jade sm:text-2xl md:text-3xl">✓ PIEZA AUTÉNTICA & CERTIFICADA</p>
+            <p className="text-sm text-muted-foreground">Pasaporte {piece.id} · {piece.ledgerStatus} · {available ? "Disponible" : "No disponible"}</p>
+          </div>
+        </div>
+        <StellarBadge label={piece.badge ?? "Certificado en Stellar"} />
+      </div>
+      <div className="mt-8 grid gap-8 lg:grid-cols-[1.1fr_1fr]">
+        <div className="overflow-hidden rounded-2xl bg-sand shadow-float">
+          <img src={piece.image} alt={piece.title} className="w-full object-cover" />
+        </div>
+        <div className="space-y-6">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">{piece.category}</p>
+            <h1 className="mt-2 text-3xl font-semibold md:text-4xl">{piece.title}</h1>
+            <p className="mt-3 flex items-start gap-1 text-sm text-muted-foreground"><MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" /> {piece.artisan} · {piece.location}</p>
+          </div>
+          <p className="leading-relaxed text-muted-foreground">{piece.story}</p>
+          <div className="space-y-1 text-sm text-muted-foreground">
+            <p><span className="font-semibold text-foreground">Técnica:</span> {piece.techniqueDetail}</p>
+            <p><span className="font-semibold text-foreground">Dimensiones:</span> {piece.dimensions}</p>
+          </div>
+          <div className="rounded-xl border bg-card p-5 shadow-float">
+            <FullBreakdown piece={piece} />
+            <div className="mt-4 grid gap-2">
+              <CodiButton piece={piece} primary className="w-full" />
+              <StripeButton piece={piece} className="w-full" />
+            </div>
+          </div>
+          <LedgerBadge piece={piece} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DefaultVerify() {
   const [active, setActive] = useState(0);
   const cur = gallery[active]!;
   const [audit, setAudit] = useState(true);
