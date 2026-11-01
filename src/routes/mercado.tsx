@@ -61,7 +61,7 @@ function Market() {
             <Chips title="Técnica" items={techniques} value={tech} onChange={setTech} />
             <div>
               <p className="mb-3 text-sm font-semibold">Precio máximo: ${max.toLocaleString("es-MX")} MXN</p>
-              <Slider min={1000} max={10000} step={250} value={[max]} onValueChange={(v) => setMax(v[0] ?? 10000)} />
+              <Slider min={250} max={10000} step={250} value={[max]} onValueChange={(v) => setMax(v[0] ?? 10000)} />
             </div>
           </aside>
           <div>

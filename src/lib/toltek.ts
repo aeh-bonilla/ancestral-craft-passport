@@ -5,6 +5,7 @@ import olinala from "@/assets/olinala.jpg";
 import cobre from "@/assets/cobre.jpg";
 import talavera from "@/assets/talavera.jpg";
 import hero from "@/assets/hero.jpg";
+import tecuani from "@/assets/tecuani-tk0512.jpg.asset.json";
 
 export const images = { alebrije, barroNegro, huipil, olinala, cobre, talavera, hero };
 
@@ -20,9 +21,46 @@ export type Piece = {
   priceMxn: number;
   image: string;
   unesco?: string;
+  /** Campos extendidos para piezas destacadas con pasaporte completo. */
+  featured?: boolean;
+  badge?: string;
+  category?: string;
+  location?: string;
+  techniqueDetail?: string;
+  dimensions?: string;
+  priceUsd?: number;
+  certFeeMxn?: number;
+  shippingMxn?: number;
+  status?: "available" | "sold" | "reserved";
+  stellarTxHash?: string;
+  ledgerStatus?: string;
+  story?: string;
 };
 
 export const pieces: Piece[] = [
+  {
+    id: "TK-0512",
+    title: "El Guardián del Monte: Tecuani de Acatlán",
+    artisan: "Taller Tradicional Mixteco",
+    community: "Acatlán de Osorio",
+    region: "Puebla",
+    technique: "Talla en Madera",
+    priceMxn: 450,
+    image: tecuani.url,
+    featured: true,
+    badge: "Puebla · Mixteca",
+    category: "Figuras de Danza / Madera & Textil",
+    location: "Acatlán de Osorio, Puebla, México",
+    techniqueDetail: "Tallado en madera de copal/pino, confección textil pintada a mano y ensamble de ixtle natural",
+    dimensions: "18cm x 10cm x 8cm (180g)",
+    priceUsd: 25,
+    certFeeMxn: 25,
+    shippingMxn: 120,
+    status: "available",
+    stellarTxHash: "0x8f3b2a1c0e9d7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a",
+    ledgerStatus: "Verified on Soroban Testnet",
+    story: "En las entrañas de la Mixteca, el sonido del teponaztli y la flauta de carrizo anuncian la llegada del Tecuani. Esta pieza rinde homenaje a la danza ancestral de petición de lluvias y protección de las cosechas. Modelado y ensamblado a mano, viste el tradicional mazo amarillo salpicado con las rosetas del felino sagrado y una máscara decorada con cerdas naturales e hilos de ixtle trenzado.",
+  },
   { id: "TK-0388", title: "Plato de Talavera Poblana", artisan: "Uriarte Talavera", community: "Puebla de Zaragoza", region: "Puebla", technique: "Cerámica", priceMxn: 2650, image: talavera, unesco: "Patrimonio Cultural Inmaterial (UNESCO) · Puebla" },
   { id: "TK-0042", title: "Alebrije Jaguar Nahual", artisan: "Jacobo y María Ángeles", community: "San Martín Tilcajete", region: "Oaxaca", technique: "Talla en Madera", priceMxn: 8900, image: alebrije },
   { id: "TK-0117", title: "Cántaro Calado de Barro Negro", artisan: "Familia Doña Rosa", community: "San Bartolo Coyotepec", region: "Oaxaca", technique: "Cerámica", priceMxn: 3450, image: barroNegro },
@@ -80,3 +118,5 @@ export async function sha256(text: string): Promise<string> {
 export function shortHash(h: string, n = 8) {
   return h.length > n * 2 ? `${h.slice(0, n)}…${h.slice(-n)}` : h;
 }
+
+export const getPiece = (id?: string) => (id ? pieces.find((p) => p.id === id.toUpperCase()) : undefined);
