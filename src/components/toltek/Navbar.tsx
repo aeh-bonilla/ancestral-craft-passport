@@ -79,6 +79,9 @@ export function Footer() {
           <p className="mt-2">Oaxaca · Chiapas · Guerrero · Michoacán · Puebla · Jalisco</p>
         </div>
       </div>
+      <p className="mx-auto max-w-3xl px-4 pb-3 text-center text-xs opacity-60">
+        Inclusión financiera real: Las comunidades rurales reciben sus pagos directamente en moneda nacional ($MXN) a su tarjeta de débito habitual vía SPEI/CoDi, respaldados de forma inmutable en la red Stellar.
+      </p>
       <p className="pb-6 text-center text-xs opacity-50">Interfaz demostrativa · Datos simulados</p>
     </footer>
   );

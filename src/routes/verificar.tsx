@@ -5,8 +5,8 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { QrCode, StellarBadge } from "@/components/toltek/ui";
-import { contractId, fmtMxn, images, sampleHash, toUsdc } from "@/lib/toltek";
+import { CodiButton, PriceBreakdown, QrCode, StellarBadge } from "@/components/toltek/ui";
+import { contractId, fmtMxn, images, pieces, sampleHash, toUsdc } from "@/lib/toltek";
 
 export const Route = createFileRoute("/verificar")({
   head: () => ({
@@ -31,7 +31,8 @@ function Verify() {
   const cur = gallery[active]!;
   const [audit, setAudit] = useState(true);
   const [tip, setTip] = useState(false);
-  const price = 8900;
+  const piece = pieces.find((p) => p.id === "TK-0042")!;
+  const price = piece.priceMxn;
   const ts = "2026-03-14 17:42:09 UTC";
 
   const copy = (v: string) => {
@@ -86,11 +87,12 @@ function Verify() {
           </div>
 
           <div className="rounded-xl border bg-card p-5 shadow-float">
-            <p className="text-2xl font-semibold">{fmtMxn(price)}</p>
-            <p className="text-sm text-muted-foreground">≈ {toUsdc(price)} USDC · 92% llega directo al taller</p>
+            <p className="flex items-center gap-2 text-2xl font-semibold">{fmtMxn(price)} <PriceBreakdown priceMxn={price} /></p>
+            <p className="text-sm text-muted-foreground">≈ {toUsdc(price)} USDC · 95.2% llega directo al taller</p>
             <div className="mt-4 grid gap-2 sm:grid-cols-2">
               <Button onClick={() => toast.success("Pago simulado enviado", { description: `${toUsdc(price)} USDC → GBTK…AGUI` })}><ShoppingBag /> Comprar en USDC / MXN</Button>
               <Button variant="outline" onClick={() => setTip(true)}><Gift /> Propina / Mecenazgo</Button>
+              <CodiButton piece={piece} className="sm:col-span-2" />
             </div>
           </div>
 
