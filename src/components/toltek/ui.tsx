@@ -98,3 +98,81 @@ export function QrCode({ value, size = 140, className }: { value: string; size?:
     </svg>
   );
 }
+
+const fmt2 = (n: number) => "$" + n.toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " MXN";
+
+/** Desglose transparente "Buyer Premium": 95.2% artesano / 4.8% certificado. */
+export function PriceBreakdown({ priceMxn }: { priceMxn: number }) {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <button aria-label="Ver desglose transparente del precio" className="text-muted-foreground transition-colors hover:text-primary">
+          <Info className="h-4 w-4" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent className="w-80 text-sm">
+        <p className="font-semibold">Desglose transparente</p>
+        <dl className="mt-3 space-y-2">
+          <div className="flex items-start justify-between gap-3">
+            <dt className="text-muted-foreground">Precio Base para el Artesano (95.2%)</dt>
+            <dd className="shrink-0 font-mono">{fmt2(priceMxn * 0.952)}</dd>
+          </div>
+          <div className="flex items-start justify-between gap-3">
+            <dt className="text-muted-foreground">Certificado Phygital &amp; Buyer Premium (4.8%)</dt>
+            <dd className="shrink-0 font-mono">{fmt2(priceMxn * 0.048)}</dd>
+          </div>
+          <div className="flex items-start justify-between gap-3 border-t pt-2 font-semibold">
+            <dt>Total Transparentado</dt>
+            <dd className="shrink-0 font-mono">{fmt2(priceMxn)}</dd>
+          </div>
+        </dl>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+/** Botón + modal de pago CoDi® / pey.mx (mockup interactivo). */
+export function CodiButton({ piece, className }: { piece: Piece; className?: string }) {
+  const [open, setOpen] = useState(false);
+  const [state, setState] = useState<"qr" | "wait" | "done">("qr");
+  const close = (o: boolean) => {
+    setOpen(o);
+    if (!o) setTimeout(() => setState("qr"), 250);
+  };
+  const confirm = () => {
+    setState("wait");
+    setTimeout(() => setState("done"), 1500);
+  };
+  return (
+    <>
+      <Button variant="outline" size="sm" className={className} onClick={() => setOpen(true)}>
+        <Smartphone /> Pagar con CoDi® (0% Comisión)
+      </Button>
+      <Dialog open={open} onOpenChange={close}>
+        <DialogContent className="text-center">
+          <DialogHeader className="text-center">
+            <DialogTitle className="font-serif text-2xl">CoDi® · pey.mx</DialogTitle>
+            <DialogDescription>{piece.title} · {fmtMxn(piece.priceMxn)}</DialogDescription>
+          </DialogHeader>
+          {state === "done" ? (
+            <div className="rounded-xl border border-jade/30 bg-jade/10 p-6">
+              <CheckCircle2 className="mx-auto h-12 w-12 text-jade" />
+              <p className="mt-3 font-semibold text-jade">✓ Pago confirmado por pey.mx (SPEI)</p>
+              <p className="mt-1 text-sm text-muted-foreground">Pasaporte grabado en Stellar Testnet: Hash 0x7a8f…b855</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="mx-auto w-fit animate-pulse rounded-2xl border-4 border-primary/25 p-3">
+                <QrCode value={piece.id + ":" + piece.priceMxn} size={170} />
+              </div>
+              <p className="text-sm text-muted-foreground">Escanea desde cualquier app bancaria en México (Banxico)</p>
+              <Button className="w-full" onClick={confirm} disabled={state === "wait"}>
+                {state === "wait" && <Loader2 className="animate-spin" />} Simular Confirmación de Pago CoDi
+              </Button>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
