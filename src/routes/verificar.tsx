@@ -51,7 +51,7 @@ function FeaturedVerify({ piece }: { piece: Piece }) {
         <StellarBadge label={piece.badge ?? "Certificado en Stellar"} />
       </div>
       <div className="mt-8 grid gap-8 lg:grid-cols-[1.1fr_1fr]">
-        <div className="overflow-hidden rounded-2xl bg-sand shadow-float">
+        <div className="self-start overflow-hidden rounded-2xl bg-sand shadow-float">
           <img src={piece.image} alt={piece.title} className="w-full object-cover" />
         </div>
         <div className="space-y-6">
