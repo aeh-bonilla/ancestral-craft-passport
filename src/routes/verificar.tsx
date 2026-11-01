@@ -10,7 +10,7 @@ import { contractId, fmtMxn, getPiece, images, pieces, sampleHash, toUsdc, type 
 
 export const Route = createFileRoute("/verificar")({
   validateSearch: (search: Record<string, unknown>): { id?: string } => ({
-    id: typeof search.id === "string" ? search.id : undefined,
+    id: typeof search["id"] === "string" ? search["id"] : undefined,
   }),
   head: () => ({
     meta: [
