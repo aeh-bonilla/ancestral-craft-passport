@@ -9,7 +9,7 @@ import { CodiButton, FullBreakdown, LedgerBadge, PriceBreakdown, QrCode, Stellar
 import { contractId, fmtMxn, getPiece, images, pieces, sampleHash, toUsdc, type Piece } from "@/lib/toltek";
 
 export const Route = createFileRoute("/verificar")({
-  validateSearch: (search: Record<string, unknown>): { id?: string } => ({
+  validateSearch: (search: Record<string, unknown>): { id?: string | undefined } => ({
     id: typeof search["id"] === "string" ? search["id"] : undefined,
   }),
   head: () => ({
