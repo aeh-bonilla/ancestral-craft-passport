@@ -15,6 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "sonner";
 import { WalletProvider } from "@/components/toltek/wallet";
 import { Navbar, Footer } from "@/components/toltek/Navbar";
+import { AuthProvider } from "@/components/toltek/AuthProvider";
 
 function NotFoundComponent() {
   return (
@@ -94,6 +95,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
       },
       { rel: "stylesheet", href: appCss },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Google+Sans:wght@500&display=swap" },
       { rel: "icon", type: "image/png", href: "/favicon.png" },
     ],
   }),
@@ -122,6 +124,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <AuthProvider>
       <WalletProvider>
         <Navbar />
         <main className="min-h-[70vh]">
@@ -130,6 +133,7 @@ function RootComponent() {
         <Footer />
         <Toaster position="top-right" richColors closeButton />
       </WalletProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

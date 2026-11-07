@@ -1,5 +1,9 @@
-import { Link } from "@tanstack/react-router";
-import { Menu, Wallet, X } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Menu, Wallet, X, LogOut } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAccount } from "./AuthProvider";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "./ui";
@@ -15,6 +19,17 @@ const links = [
 export function Navbar() {
   const { address, connect, disconnect, lang, toggleLang } = useWallet();
   const [open, setOpen] = useState(false);
+  const { user } = useAccount();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const signOut = async () => {
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    const { error } = await supabase.auth.signOut();
+    if (error) { toast.error("No se pudo cerrar sesión"); return; }
+    setOpen(false);
+    await navigate({ to: "/auth", search: { next: "/panel" }, replace: true });
+  };
   return (
     <header className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4">
@@ -29,6 +44,7 @@ export function Navbar() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
+          {user && <Button variant="ghost" size="icon" onClick={signOut} title="Cerrar sesión" aria-label="Cerrar sesión"><LogOut className="h-4 w-4" /></Button>}
           <button onClick={toggleLang} className="rounded-lg border px-2.5 py-1.5 text-xs font-semibold">
             {lang === "ES" ? "ES · en" : "EN · es"}
           </button>
