@@ -1302,5 +1302,25 @@
   "{{count}} archivo(s)_other": [
     "{{count}} files",
     "{{count}} 个文件"
+  ],
+  "Banco": [
+    "Bank",
+    "银行"
+  ],
+  "Cuenta": [
+    "Account",
+    "账户"
+  ],
+  "CLABE interbancaria": [
+    "Interbank CLABE",
+    "银行间 CLABE"
+  ],
+  "No se pudo proteger la información bancaria. Inténtalo de nuevo.": [
+    "Unable to protect the banking information. Please try again.",
+    "无法保护银行信息，请重试。"
+  ],
+  "Copiar": [
+    "Copy",
+    "复制"
   ]
 }

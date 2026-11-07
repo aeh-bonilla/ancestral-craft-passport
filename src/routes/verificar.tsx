@@ -192,7 +192,7 @@ function DefaultVerify() {
                   <dt className="text-xs uppercase tracking-wider opacity-60">{t(k)}</dt>
                   <dd className="mt-1 flex items-start gap-2 break-all font-mono text-gold">
                     {v}
-                    <button onClick={() => copy(v)} aria-label="Copiar" className="shrink-0 opacity-60 hover:opacity-100"><Copy className="h-4 w-4" /></button>
+                    <button onClick={() => copy(v)} aria-label={t("Copiar")} className="shrink-0 opacity-60 hover:opacity-100"><Copy className="h-4 w-4" /></button>
                   </dd>
                 </div>
               ))}
