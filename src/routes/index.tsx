@@ -7,6 +7,8 @@ import { images, pieces } from "@/lib/toltek";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Tlamatik — Memoria viva del patrimonio, certificada en Stellar" },
       { name: "description", content: "Pasaportes culturales físico-digitales y comercio justo para artesanos de México y América Latina." },
       { property: "og:title", content: "Tlamatik — Memoria viva del patrimonio" },
