@@ -1,11 +1,11 @@
 import { createInstance } from 'i18next';
-import { I18nextProvider, useTranslation } from 'react-i18next';
-import { useEffect, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import catalog from './catalog.json';
 import { useHydrated } from '@tanstack/react-router';
 
 export const languages = ['es', 'en', 'zh-CN'] as const;
 export type Language = typeof languages[number];
+const LanguageContext = createContext<{ instance: ReturnType<typeof createTranslations>; language: Language } | null>(null);
 export function validLanguage(value: unknown): Language {
   return languages.includes(value as Language) ? value as Language : 'es';
 }
@@ -18,23 +18,26 @@ export function createTranslations() {
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [instance] = useState(createTranslations);
+  const [language, setLanguage] = useState<Language>('es');
   useEffect(() => {
     let saved: string | null = null;
     try { saved = localStorage.getItem('tlamatik-language'); } catch { /* Storage is optional. */ }
     void instance.changeLanguage(validLanguage(saved));
-    const sync = (language: string) => { document.documentElement.lang = validLanguage(language); };
+    const sync = (language: string) => { const next = validLanguage(language); document.documentElement.lang = next; setLanguage(next); };
     sync(instance.language);
     instance.on('languageChanged', sync);
     return () => { instance.off('languageChanged', sync); };
   }, [instance]);
-  return <I18nextProvider i18n={instance}>{children}</I18nextProvider>;
+  return <LanguageContext.Provider value={{ instance, language }}>{children}</LanguageContext.Provider>;
 }
 
 export function useI18n() {
-  const { t: translate, i18n } = useTranslation();
+  const context = useContext(LanguageContext);
+  const [fallback] = useState(createTranslations);
+  const i18n = context?.instance ?? fallback;
   const hydrated = useHydrated();
-  const language = hydrated ? validLanguage(i18n?.language) : 'es';
-  const t = (text: string | null | undefined, params?: Record<string, unknown>) => text ? String(translate(text, { ...params, lng: language })) : '';
+  const language = hydrated ? (context?.language ?? 'es') : 'es';
+  const t = (text: string | null | undefined, params?: Record<string, unknown>) => text ? String(i18n.t(text, { ...params, lng: language })) : '';
   const setLanguage = (value: string) => {
     const next = validLanguage(value);
     void i18n.changeLanguage(next);
