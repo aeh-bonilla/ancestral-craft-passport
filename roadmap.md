@@ -2,3 +2,5 @@
 - [x] Implement persistent owner-only promoter profile and private photo storage with saved-data restoration.
 - [x] Verify signed-out restrictions and public pages on desktop/mobile; access tests pass.
 - [ ] Verify Google sign-in, profile save/readback and sign-out with a real account. Blocker: no auth users exist; first Google sign-in required.
+- [ ] Add Spanish, English and Simplified Chinese across navigation, pages, forms, craft details and notifications.
+- [ ] Persist language preference and verify switching on desktop/mobile.
