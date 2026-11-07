@@ -11,9 +11,11 @@ import { QrCode, StellarBadge } from "@/components/toltek/ui";
 import { artisans, contractId, sha256, shortHash, USDC_RATE } from "@/lib/toltek";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/registrar")({
+export const Route = createFileRoute("/_authenticated/registrar")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Registrar Obra y Pasaporte Cultural — Tlamatik" },
       { name: "description", content: "Registra una pieza, sella su evidencia con SHA-256 y ánclala en Stellar." },
       { property: "og:title", content: "Registro de Obra — Tlamatik" },
@@ -28,7 +30,7 @@ const categories = ["Textil", "Cerámica", "Talla en Madera", "Filigrana", "Laca
 
 function Register() {
   const [step, setStep] = useState(0);
-  const [d, setD] = useState({ title: "", artisan: artisans[0]!.name, category: "Talla en Madera", technique: "", materials: "", priceMxn: "" });
+  const [d, setD] = useState({ title: "", artisan: artisans[0]?.name ?? "", category: "Talla en Madera", technique: "", materials: "", priceMxn: "" });
   const [files, setFiles] = useState<{ name: string; size: number; type: string }[]>([]);
   const [drag, setDrag] = useState(false);
   const [hash, setHash] = useState("");
