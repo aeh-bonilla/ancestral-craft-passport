@@ -1,3 +1,4 @@
+import { useI18n } from "@/i18n";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Coins, Fingerprint, QrCode as QrIcon, ScanLine, LayoutDashboard, Users, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -32,30 +33,28 @@ const steps = [
 ];
 
 function Index() {
+  const { t } = useI18n();
   return (
     <>
       <section className="relative overflow-hidden talavera-bg">
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 md:py-24 lg:grid-cols-2">
           <div>
-            <StellarBadge label="Respaldado por Stellar · Soroban" />
-            <h1 className="mt-5 text-4xl font-semibold leading-[1.1] md:text-6xl">
-              Preservamos la Memoria Viva de Nuestro Patrimonio.{" "}
-              <span className="italic text-primary">Certificamos su Origen Genuino.</span>
+            <StellarBadge label={t("Respaldado por Stellar · Soroban")} />
+            <h1 className="mt-5 text-4xl font-semibold leading-[1.1] md:text-6xl">{t("Preservamos la Memoria Viva de Nuestro Patrimonio.")}{" "}
+              <span className="italic text-primary">{t("Certificamos su Origen Genuino.")}</span>
             </h1>
-            <p className="mt-6 max-w-xl text-lg text-muted-foreground">
-              Tlamatik une la tradición artesanal mexicana con trazabilidad inmutable en la red Stellar: cada pieza lleva un Pasaporte Cultural que honra a quien la creó y garantiza que el pago llegue a sus manos.
-            </p>
+            <p className="mt-6 max-w-xl text-lg text-muted-foreground">{t("Tlamatik une la tradición artesanal mexicana con trazabilidad inmutable en la red Stellar: cada pieza lleva un Pasaporte Cultural que honra a quien la creó y garantiza que el pago llegue a sus manos.")}</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg"><Link to="/verificar"><ScanLine /> Verificar una Pieza (QR)</Link></Button>
-              <Button asChild size="lg" variant="outline"><Link to="/panel"><LayoutDashboard /> Panel de Promotor / Artesano</Link></Button>
+              <Button asChild size="lg"><Link to="/verificar"><ScanLine />{t("Verificar una Pieza (QR)")}</Link></Button>
+              <Button asChild size="lg" variant="outline"><Link to="/panel"><LayoutDashboard />{t("Panel de Promotor / Artesano")}</Link></Button>
             </div>
           </div>
           <div className="relative">
-            <img src={images.hero} alt="Manos de artesano tallando madera de copal" width={1280} height={960} className="aspect-[4/3] w-full rounded-2xl object-cover shadow-float" />
+            <img src={images.hero} alt={t("Manos de artesano tallando madera de copal")} width={1280} height={960} className="aspect-[4/3] w-full rounded-2xl object-cover shadow-float" />
             <div className="absolute -bottom-6 -left-4 rounded-xl border bg-card p-4 shadow-float md:-left-8">
-              <p className="text-xs uppercase tracking-wider text-muted-foreground">Pasaporte TK-0042</p>
-              <p className="font-serif text-lg font-semibold">Talla en copal · Arrazola</p>
-              <p className="mt-1 font-mono text-xs text-jade">✓ Hash verificado en ledger</p>
+              <p className="text-xs uppercase tracking-wider text-muted-foreground">{t("Pasaporte TK-0042")}</p>
+              <p className="font-serif text-lg font-semibold">{t("Talla en copal · Arrazola")}</p>
+              <p className="mt-1 font-mono text-xs text-jade">{t("✓ Hash verificado en ledger")}</p>
             </div>
           </div>
         </div>
@@ -74,7 +73,7 @@ function Index() {
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-20">
-        <SectionTitle center eyebrow="Flujo Phygital" title="Cómo funciona en tres pasos" sub="De las manos del maestro a la billetera del comprador, sin intermediarios opacos." />
+        <SectionTitle center eyebrow={t("Flujo Phygital")} title={t("Cómo funciona en tres pasos")} sub={t("De las manos del maestro a la billetera del comprador, sin intermediarios opacos.")} />
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {steps.map((s) => (
             <div key={s.n} className="relative rounded-xl border bg-card p-6 shadow-float">
@@ -90,8 +89,8 @@ function Index() {
 
       <section className="mx-auto max-w-7xl px-4">
         <div className="flex flex-wrap items-end justify-between gap-4">
-          <SectionTitle eyebrow="Galería" title="Piezas y creadores destacados" />
-          <Button asChild variant="outline"><Link to="/mercado">Ver mercado ético</Link></Button>
+          <SectionTitle eyebrow={t("Galería")} title={t("Piezas y creadores destacados")} />
+          <Button asChild variant="outline"><Link to="/mercado">{t("Ver mercado ético")}</Link></Button>
         </div>
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {pieces.slice(0, 6).map((p) => <PieceCard key={p.id} piece={p} />)}

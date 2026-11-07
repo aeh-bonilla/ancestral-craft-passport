@@ -1,3 +1,4 @@
+import { useI18n } from "@/i18n";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Check, Loader2, UploadCloud, FileAudio, FileImage, FileText, X, Anchor, Sparkles, Mic, Camera } from "lucide-react";
@@ -29,6 +30,7 @@ const steps = ["Datos de la Pieza", "Evidencia del Saber", "Minting Criptográfi
 const categories = ["Textil", "Cerámica", "Talla en Madera", "Filigrana", "Laca"];
 
 function Register() {
+  const { t } = useI18n();
   const [step, setStep] = useState(0);
   const [d, setD] = useState({ title: "", artisan: artisans[0]?.name ?? "", category: "Talla en Madera", technique: "", materials: "", priceMxn: "" });
   const [files, setFiles] = useState<{ name: string; size: number; type: string }[]>([]);
@@ -49,7 +51,7 @@ function Register() {
         priceMxn: prev.priceMxn || "8900",
       }));
       setAiBusy(false);
-      toast.success("Historia y metadatos generados", { description: "Narrativa en español + traducción al inglés + etiquetas de materiales ancestrales." });
+      toast.success(t("Historia y metadatos generados"), { description: t("Narrativa en español + traducción al inglés + etiquetas de materiales ancestrales.") });
     }, 2000);
   };
 
@@ -67,7 +69,7 @@ function Register() {
   };
 
   const next = () => {
-    if (step === 0 && !d.title.trim()) { toast.error("Agrega el título de la pieza"); return; }
+    if (step === 0 && !d.title.trim()) { toast.error(t("Agrega el título de la pieza")); return; }
     setStep((s) => Math.min(2, s + 1));
   };
 
@@ -78,7 +80,7 @@ function Register() {
     phases.forEach((t, i) => setTimeout(() => setPhase(i + 1), t));
     setTimeout(() => {
       setMinting("done");
-      toast.success("Pasaporte Phygital anclado en Stellar", { description: shortHash(hash) });
+      toast.success(t("Pasaporte Phygital anclado en Stellar"), { description: shortHash(hash) });
     }, 3200);
   };
 
@@ -86,15 +88,15 @@ function Register() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10">
-      <h1 className="text-3xl font-semibold md:text-4xl">Registro de Obra & Pasaporte Cultural</h1>
-      <p className="mt-2 text-muted-foreground">Cada dato que escribes se sella en vivo; nada sale de tu navegador hasta el anclaje.</p>
+      <h1 className="text-3xl font-semibold md:text-4xl">{t("Registro de Obra & Pasaporte Cultural")}</h1>
+      <p className="mt-2 text-muted-foreground">{t("Cada dato que escribes se sella en vivo; nada sale de tu navegador hasta el anclaje.")}</p>
 
       <ol className="mt-8 flex flex-wrap gap-3">
         {steps.map((s, i) => (
-          <li key={s} className="flex items-center gap-2">
+          <li key={t(s)} className="flex items-center gap-2">
             <button onClick={() => i <= step && setStep(i)} className={cn("flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm", i === step && "border-primary bg-primary text-primary-foreground", i < step && "border-jade text-jade")}>
               <span className="grid h-5 w-5 place-items-center rounded-full bg-background/20 text-xs">{i < step ? <Check className="h-3 w-3" /> : i + 1}</span>
-              {s}
+              {t(s)}
             </button>
           </li>
         ))}
@@ -103,15 +105,14 @@ function Register() {
       <div className="mt-6 rounded-xl border border-primary/30 bg-primary/5 p-5 shadow-float">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="min-w-0">
-            <p className="flex items-center gap-2 font-serif text-lg font-semibold"><Sparkles className="h-5 w-5 shrink-0 text-gold" /> Asistente de Redacción Cultural con IA (OpenAI GPT-4o)</p>
-            <p className="mt-1 text-sm text-muted-foreground">Redacta la narrativa y los metadatos de la obra a partir del relato del maestro.</p>
+            <p className="flex items-center gap-2 font-serif text-lg font-semibold"><Sparkles className="h-5 w-5 shrink-0 text-gold" />{t("Asistente de Redacción Cultural con IA (OpenAI GPT-4o)")}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{t("Redacta la narrativa y los metadatos de la obra a partir del relato del maestro.")}</p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Button variant="outline" size="sm" onClick={() => toast.success("Audio recibido", { description: "relato_maestro.mp3 · transcribiendo…" })}><Mic /> Subir Audio con Relato del Maestro</Button>
-            <Button variant="outline" size="sm" onClick={() => toast.success("Foto analizada", { description: "Se detectaron pigmentos naturales y talla en copal." })}><Camera /> Analizar Foto de la Obra</Button>
+            <Button variant="outline" size="sm" onClick={() => toast.success(t("Audio recibido"), { description: t("relato_maestro.mp3 · transcribiendo…") })}><Mic />{t("Subir Audio con Relato del Maestro")}</Button>
+            <Button variant="outline" size="sm" onClick={() => toast.success(t("Foto analizada"), { description: t("Se detectaron pigmentos naturales y talla en copal.") })}><Camera />{t("Analizar Foto de la Obra")}</Button>
             <Button size="sm" onClick={generateWithAi} disabled={aiBusy}>
-              {aiBusy ? <Loader2 className="animate-spin" /> : <Sparkles />} Generar Historia y Metadatos con IA
-            </Button>
+              {aiBusy ? <Loader2 className="animate-spin" /> : <Sparkles />}{t("Generar Historia y Metadatos con IA")}</Button>
           </div>
         </div>
       </div>
@@ -120,20 +121,20 @@ function Register() {
         <div className="rounded-xl border bg-card p-6 shadow-float">
           {step === 0 && (
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Título de la obra" className="sm:col-span-2"><Input value={d.title} onChange={set("title")} placeholder="Ej. Alebrije Jaguar Nahual" /></Field>
-              <Field label="Artesano">
+              <Field label={t("Título de la obra")} className="sm:col-span-2"><Input value={d.title} onChange={set("title")} placeholder={t("Ej. Alebrije Jaguar Nahual")} /></Field>
+              <Field label={t("Artesano")}>
                 <select value={d.artisan} onChange={set("artisan")} className="h-9 w-full rounded-md border bg-background px-3 text-sm">
                   {artisans.map((a) => <option key={a.name}>{a.name}</option>)}
                 </select>
               </Field>
-              <Field label="Categoría">
+              <Field label={t("Categoría")}>
                 <select value={d.category} onChange={set("category")} className="h-9 w-full rounded-md border bg-background px-3 text-sm">
                   {categories.map((c) => <option key={c}>{c}</option>)}
                 </select>
               </Field>
-              <Field label="Técnica ancestral" className="sm:col-span-2"><Textarea value={d.technique} onChange={set("technique")} placeholder="Tallado a mano en copal, pintura con pigmentos naturales…" /></Field>
-              <Field label="Materiales autóctonos"><Input value={d.materials} onChange={set("materials")} placeholder="Copal, grana cochinilla, añil" /></Field>
-              <Field label="Precio (MXN)">
+              <Field label={t("Técnica ancestral")} className="sm:col-span-2"><Textarea value={d.technique} onChange={set("technique")} placeholder={t("Tallado a mano en copal, pintura con pigmentos naturales…")} /></Field>
+              <Field label={t("Materiales autóctonos")}><Input value={d.materials} onChange={set("materials")} placeholder={t("Copal, grana cochinilla, añil")} /></Field>
+              <Field label={t("Precio (MXN)")}>
                 <Input type="number" min={0} value={d.priceMxn} onChange={set("priceMxn")} placeholder="8900" />
                 <p className="mt-1 text-xs text-muted-foreground">≈ {usdc} USDC</p>
               </Field>
@@ -148,8 +149,8 @@ function Register() {
                 onDrop={(e) => { e.preventDefault(); setDrag(false); addFiles(e.dataTransfer.files); }}
                 className={cn("flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-10 text-center transition-colors", drag ? "border-primary bg-primary/5" : "border-border talavera-bg")}>
                 <UploadCloud className="h-10 w-10 text-primary" />
-                <p className="mt-3 font-semibold">Arrastra fotos del proceso, audios o documentos</p>
-                <p className="text-sm text-muted-foreground">o haz clic para seleccionar · JPG, MP3, PDF</p>
+                <p className="mt-3 font-semibold">{t("Arrastra fotos del proceso, audios o documentos")}</p>
+                <p className="text-sm text-muted-foreground">{t("o haz clic para seleccionar · JPG, MP3, PDF")}</p>
                 <input type="file" multiple className="hidden" onChange={(e) => addFiles(e.target.files)} />
               </label>
               <ul className="mt-4 space-y-2">
@@ -160,7 +161,7 @@ function Register() {
                       <I className="h-5 w-5 text-primary" />
                       <span className="flex-1 truncate">{f.name}</span>
                       <span className="text-xs text-muted-foreground">{(f.size / 1024).toFixed(0)} KB</span>
-                      <button onClick={() => setFiles(files.filter((_, j) => j !== i))} aria-label="Quitar"><X className="h-4 w-4" /></button>
+                      <button onClick={() => setFiles(files.filter((_, j) => j !== i))} aria-label={t("Quitar")}><X className="h-4 w-4" /></button>
                     </li>
                   );
                 })}
@@ -170,7 +171,7 @@ function Register() {
 
           {step === 2 && (
             <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Generación criptográfica</h2>
+              <h2 className="text-xl font-semibold">{t("Generación criptográfica")}</h2>
               <dl className="grid gap-3 text-sm">
                 <Row k="Hash SHA-256 del expediente" v={hash} />
                 <Row k="Contrato Soroban" v={contractId} />
@@ -178,14 +179,13 @@ function Register() {
                 <Row k="Evidencias selladas" v={`${files.length} archivo(s)`} />
               </dl>
               <Button size="lg" className="w-full" onClick={mint} disabled={minting === "running"}>
-                <Anchor /> Anclar en Stellar Blockchain & Generar Pasaporte Phygital
-              </Button>
+                <Anchor />{t("Anclar en Stellar Blockchain & Generar Pasaporte Phygital")}</Button>
             </div>
           )}
 
           <div className="mt-6 flex justify-between">
-            <Button variant="ghost" onClick={() => setStep((s) => Math.max(0, s - 1))} disabled={step === 0}>Atrás</Button>
-            {step < 2 && <Button onClick={next}>Continuar</Button>}
+            <Button variant="ghost" onClick={() => setStep((s) => Math.max(0, s - 1))} disabled={step === 0}>{t("Atrás")}</Button>
+            {step < 2 && <Button onClick={next}>{t("Continuar")}</Button>}
           </div>
         </div>
 
@@ -194,8 +194,8 @@ function Register() {
             <div className="greca" />
             <div className="p-5">
               <div className="flex items-center justify-between">
-                <p className="text-xs uppercase tracking-[0.2em] text-gold">Pasaporte Cultural</p>
-                <span className="font-mono text-[10px] opacity-60">Vista previa</span>
+                <p className="text-xs uppercase tracking-[0.2em] text-gold">{t("Pasaporte Cultural")}</p>
+                <span className="font-mono text-[10px] opacity-60">{t("Vista previa")}</span>
               </div>
               <h3 className="mt-3 font-serif text-2xl font-semibold">{d.title || "Título de la obra"}</h3>
               <p className="text-sm opacity-75">{d.artisan} · {d.category}</p>
@@ -203,14 +203,14 @@ function Register() {
               <div className="mt-5 flex items-center gap-4">
                 <div className="rounded-lg bg-card p-2"><QrCode value={hash} size={112} /></div>
                 <div className="min-w-0 text-sm">
-                  <p className="text-xs opacity-60">Precio</p>
+                  <p className="text-xs opacity-60">{t("Precio")}</p>
                   <p className="font-semibold">{d.priceMxn ? `$${Number(d.priceMxn).toLocaleString("es-MX")} MXN` : "—"}</p>
                   <p className="text-xs text-gold">{usdc} USDC</p>
                 </div>
               </div>
-              <p className="mt-5 text-xs uppercase tracking-wider opacity-60">SHA-256 (en vivo)</p>
+              <p className="mt-5 text-xs uppercase tracking-wider opacity-60">{t("SHA-256 (en vivo)")}</p>
               <p className="break-all font-mono text-[11px] text-gold">{hash}</p>
-              <StellarBadge className="mt-4" label={minting === "done" ? "Anclado en Stellar" : "Pendiente de anclaje"} />
+              <StellarBadge className="mt-4" label={minting === "done" ? t("Anclado en Stellar") : t("Pendiente de anclaje")} />
             </div>
           </div>
         </aside>
@@ -220,14 +220,14 @@ function Register() {
         <DialogContent className="overflow-hidden">
           {minting === "done" && <Confetti />}
           <DialogHeader>
-            <DialogTitle className="font-serif text-2xl">{minting === "done" ? "¡Pasaporte emitido!" : "Anclando en Stellar…"}</DialogTitle>
-            <DialogDescription>{minting === "done" ? "La pieza ya puede verificarse con su QR." : "No cierres esta ventana."}</DialogDescription>
+            <DialogTitle className="font-serif text-2xl">{minting === "done" ? t("¡Pasaporte emitido!") : t("Anclando en Stellar…")}</DialogTitle>
+            <DialogDescription>{minting === "done" ? t("La pieza ya puede verificarse con su QR.") : t("No cierres esta ventana.")}</DialogDescription>
           </DialogHeader>
           <ul className="space-y-3">
             {["Calculando hash SHA-256", "Firmando transacción con Freighter", "Invocando contrato Soroban", "Emitiendo Pasaporte Phygital"].map((l, i) => (
-              <li key={l} className="flex items-center gap-3 text-sm">
+              <li key={t(l)} className="flex items-center gap-3 text-sm">
                 {phase > i ? <Check className="h-5 w-5 text-jade" /> : phase === i ? <Loader2 className="h-5 w-5 animate-spin text-primary" /> : <span className="h-5 w-5 rounded-full border" />}
-                <span className={phase > i ? "" : "text-muted-foreground"}>{l}</span>
+                <span className={phase > i ? "" : "text-muted-foreground"}>{t(l)}</span>
               </li>
             ))}
           </ul>
@@ -237,7 +237,7 @@ function Register() {
               <div className="min-w-0 text-sm">
                 <p className="font-semibold">{d.title || "Nueva obra"}</p>
                 <p className="truncate font-mono text-xs text-muted-foreground">{shortHash(hash)}</p>
-                <Button asChild size="sm" variant="link" className="h-auto px-0"><Link to="/verificar">Ver en verificador →</Link></Button>
+                <Button asChild size="sm" variant="link" className="h-auto px-0"><Link to="/verificar">{t("Ver en verificador →")}</Link></Button>
               </div>
             </div>
           )}
@@ -248,13 +248,15 @@ function Register() {
 }
 
 function Field({ label, children, className }: { label: string; children: React.ReactNode; className?: string }) {
-  return <div className={cn("space-y-1.5", className)}><Label>{label}</Label>{children}</div>;
+  const { t } = useI18n();
+  return <div className={cn("space-y-1.5", className)}><Label>{t(label)}</Label>{children}</div>;
 }
 
 function Row({ k, v }: { k: string; v: string }) {
+  const { t } = useI18n();
   return (
     <div className="rounded-lg bg-sand p-3">
-      <dt className="text-xs uppercase tracking-wider text-muted-foreground">{k}</dt>
+      <dt className="text-xs uppercase tracking-wider text-muted-foreground">{t(k)}</dt>
       <dd className="mt-1 break-all font-mono text-xs">{v}</dd>
     </div>
   );
