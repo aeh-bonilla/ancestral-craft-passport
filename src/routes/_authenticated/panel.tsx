@@ -11,10 +11,14 @@ import { artisans as seed, pieces, sampleHash, type Artisan } from "@/lib/toltek
 import { cn } from "@/lib/utils";
 import { PromoterRegistration } from "@/components/toltek/PromoterRegistration";
 import { BadgeCheck } from "lucide-react";
+import { profileOptions } from "@/lib/promoter-profile";
 
-export const Route = createFileRoute("/panel")({
+export const Route = createFileRoute("/_authenticated/panel")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(profileOptions(context.user.id)),
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Panel del Promotor Cultural — Tlamatik" },
       { name: "description", content: "Gestiona artesanos, obras catalogadas y kits QR de tu cooperativa." },
       { property: "og:title", content: "Panel del Promotor y Cooperativa — Tlamatik" },

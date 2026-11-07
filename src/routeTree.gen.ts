@@ -10,14 +10,25 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as MercadoRouteImport } from './routes/mercado'
-import { Route as PanelRouteImport } from './routes/panel'
-import { Route as RegistrarRouteImport } from './routes/registrar'
 import { Route as VerificarRouteImport } from './routes/verificar'
+import { Route as AuthenticatedPanelRouteImport } from './routes/_authenticated/panel'
+import { Route as AuthenticatedRegistrarRouteImport } from './routes/_authenticated/registrar'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MercadoRoute = MercadoRouteImport.update({
@@ -25,57 +36,69 @@ const MercadoRoute = MercadoRouteImport.update({
   path: '/mercado',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PanelRoute = PanelRouteImport.update({
-  id: '/panel',
-  path: '/panel',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RegistrarRoute = RegistrarRouteImport.update({
-  id: '/registrar',
-  path: '/registrar',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const VerificarRoute = VerificarRouteImport.update({
   id: '/verificar',
   path: '/verificar',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedPanelRoute = AuthenticatedPanelRouteImport.update({
+  id: '/panel',
+  path: '/panel',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedRegistrarRoute = AuthenticatedRegistrarRouteImport.update({
+  id: '/registrar',
+  path: '/registrar',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/mercado': typeof MercadoRoute
-  '/panel': typeof PanelRoute
-  '/registrar': typeof RegistrarRoute
   '/verificar': typeof VerificarRoute
+  '/panel': typeof AuthenticatedPanelRoute
+  '/registrar': typeof AuthenticatedRegistrarRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/mercado': typeof MercadoRoute
-  '/panel': typeof PanelRoute
-  '/registrar': typeof RegistrarRoute
   '/verificar': typeof VerificarRoute
+  '/panel': typeof AuthenticatedPanelRoute
+  '/registrar': typeof AuthenticatedRegistrarRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
   '/mercado': typeof MercadoRoute
-  '/panel': typeof PanelRoute
-  '/registrar': typeof RegistrarRoute
   '/verificar': typeof VerificarRoute
+  '/_authenticated/panel': typeof AuthenticatedPanelRoute
+  '/_authenticated/registrar': typeof AuthenticatedRegistrarRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/mercado' | '/panel' | '/registrar' | '/verificar'
+  fullPaths: '/' | '/auth' | '/mercado' | '/verificar' | '/panel' | '/registrar'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/mercado' | '/panel' | '/registrar' | '/verificar'
-  id: '__root__' | '/' | '/mercado' | '/panel' | '/registrar' | '/verificar'
+  to: '/' | '/auth' | '/mercado' | '/verificar' | '/panel' | '/registrar'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/mercado'
+    | '/verificar'
+    | '/_authenticated/panel'
+    | '/_authenticated/registrar'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
   MercadoRoute: typeof MercadoRoute
-  PanelRoute: typeof PanelRoute
-  RegistrarRoute: typeof RegistrarRoute
   VerificarRoute: typeof VerificarRoute
 }
 
@@ -88,25 +111,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mercado': {
       id: '/mercado'
       path: '/mercado'
       fullPath: '/mercado'
       preLoaderRoute: typeof MercadoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/panel': {
-      id: '/panel'
-      path: '/panel'
-      fullPath: '/panel'
-      preLoaderRoute: typeof PanelRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/registrar': {
-      id: '/registrar'
-      path: '/registrar'
-      fullPath: '/registrar'
-      preLoaderRoute: typeof RegistrarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/verificar': {
@@ -116,14 +139,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerificarRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/panel': {
+      id: '/_authenticated/panel'
+      path: '/panel'
+      fullPath: '/panel'
+      preLoaderRoute: typeof AuthenticatedPanelRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/registrar': {
+      id: '/_authenticated/registrar'
+      path: '/registrar'
+      fullPath: '/registrar'
+      preLoaderRoute: typeof AuthenticatedRegistrarRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedPanelRoute: typeof AuthenticatedPanelRoute
+  AuthenticatedRegistrarRoute: typeof AuthenticatedRegistrarRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedPanelRoute: AuthenticatedPanelRoute,
+  AuthenticatedRegistrarRoute: AuthenticatedRegistrarRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
   MercadoRoute: MercadoRoute,
-  PanelRoute: PanelRoute,
-  RegistrarRoute: RegistrarRoute,
   VerificarRoute: VerificarRoute,
 }
 export const routeTree = rootRouteImport

@@ -14,6 +14,8 @@ export const Route = createFileRoute("/verificar")({
   }),
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Verificador Público — Tlamatik" },
       { name: "description", content: "Escanea el QR de una pieza y confirma su autenticidad en el ledger de Stellar." },
       { property: "og:title", content: "Verificador Público Universal — Tlamatik" },

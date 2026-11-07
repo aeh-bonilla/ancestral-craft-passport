@@ -12,6 +12,8 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/mercado")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Mercado Ético y Licenciamiento B2B — Tlamatik" },
       { name: "description", content: "Compra artesanías certificadas o licencia patrones tradicionales con regalías para la comunidad." },
       { property: "og:title", content: "Mercado Ético — Tlamatik" },
