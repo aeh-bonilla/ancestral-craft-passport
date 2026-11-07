@@ -9,7 +9,6 @@ const links = [
   { to: "/", es: "Inicio", en: "Home" },
   { to: "/verificar", es: "Verificar", en: "Verify" },
   { to: "/panel", es: "Panel Promotor", en: "Dashboard" },
-  { to: "/registrar", es: "Registrar Obra", en: "Register" },
   { to: "/mercado", es: "Mercado Ético", en: "Marketplace" },
 ] as const;
 
