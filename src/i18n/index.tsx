@@ -41,5 +41,6 @@ export function useI18n() {
     try { localStorage.setItem('tlamatik-language', next); } catch { /* Storage is optional. */ }
   };
   const locale = language === 'es' ? 'es-MX' : language === 'en' ? 'en-US' : 'zh-CN';
-  return { t, language, setLanguage, locale };
+  const money = (amount: number, decimals = 0) => new Intl.NumberFormat(locale, { style: 'currency', currency: 'MXN', currencyDisplay: 'code', minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(amount);
+  return { t, language, setLanguage, locale, money };
 }
