@@ -2,6 +2,7 @@ import { createInstance } from 'i18next';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { useEffect, useState, type ReactNode } from 'react';
 import catalog from './catalog.json';
+import { useHydrated } from '@tanstack/react-router';
 
 export const languages = ['es', 'en', 'zh-CN'] as const;
 export type Language = typeof languages[number];
@@ -31,8 +32,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
 export function useI18n() {
   const { t: translate, i18n } = useTranslation();
-  const language = validLanguage(i18n?.language);
-  const t = (text: string | null | undefined, params?: Record<string, unknown>) => text ? String(translate(text, params ?? {})) : '';
+  const hydrated = useHydrated();
+  const language = hydrated ? validLanguage(i18n?.language) : 'es';
+  const t = (text: string | null | undefined, params?: Record<string, unknown>) => text ? String(translate(text, { ...params, lng: language })) : '';
   const setLanguage = (value: string) => {
     const next = validLanguage(value);
     void i18n.changeLanguage(next);
