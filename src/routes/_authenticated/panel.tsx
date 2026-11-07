@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import { PromoterRegistration } from "@/components/toltek/PromoterRegistration";
 import { BadgeCheck } from "lucide-react";
 import { profileOptions } from "@/lib/promoter-profile";
+import { hashArtisanBanking } from "@/lib/artisan-banking";
 
 export const Route = createFileRoute("/_authenticated/panel")({
   loader: ({ context }) => context.queryClient.ensureQueryData(profileOptions(context.user.id)),
@@ -42,7 +43,8 @@ function Panel() {
   const [tab, setTab] = useState<Tab>("resumen");
   const [list, setList] = useState<Artisan[]>(seed);
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ name: "", technique: "", location: "" });
+  const [form, setForm] = useState({ name: "", technique: "", location: "", bank: "", account: "", clabe: "" });
+  const [adding, setAdding] = useState(false);
 
   const nav = [
     { id: "registro" as const, label: "Registro del Promotor", icon: BadgeCheck },
@@ -52,13 +54,18 @@ function Panel() {
     { id: "liquidaciones" as const, label: "Liquidaciones SPEI", icon: Landmark },
   ];
 
-  const add = () => {
+  const add = async () => {
     if (!form.name.trim()) { toast.error(t("Escribe el nombre del artesano")); return; }
+    setAdding(true);
+    try {
+    const bankingHashes = await hashArtisanBanking({ bank: form.bank, account: form.account, clabe: form.clabe });
     const initials = form.name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase();
-    setList([{ ...form, status: "Pendiente KYC", pieces: 0, usdc: 0, initials }, ...list]);
+    setList((previous) => [{ name: form.name, technique: form.technique, location: form.location, bankingHashes, status: "Pendiente KYC", pieces: 0, usdc: 0, initials }, ...previous]);
     setOpen(false);
-    setForm({ name: "", technique: "", location: "" });
+    setForm({ name: "", technique: "", location: "", bank: "", account: "", clabe: "" });
     toast.success(t("Artesano agregado"), { description: t("Se generó su billetera Stellar custodiada.") });
+    } catch { toast.error(t("No se pudo proteger la información bancaria. Inténtalo de nuevo.")); }
+    finally { setAdding(false); }
   };
 
   return (
@@ -103,7 +110,7 @@ function Panel() {
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[640px] text-sm">
                   <thead className="bg-sand text-left text-xs uppercase tracking-wider text-muted-foreground">
-                    <tr><th className="p-3">{t("Artesano")}</th><th className="p-3">{t("Técnica")}</th><th className="p-3">{t("Ubicación")}</th><th className="p-3">{t("Piezas")}</th><th className="p-3">USDC</th><th className="p-3">{t("Estado")}</th></tr>
+                    <tr><th className="p-3">{t("Artesano")}</th><th className="p-3">{t("Técnica")}</th><th className="p-3">{t("Ubicación")}</th><th className="p-3">{t("Piezas")}</th><th className="p-3">USDC</th><th className="p-3">{t("Estado")}</th>{['Banco', 'Cuenta', 'CLABE interbancaria'].map(label => <th key={label} className="p-3">{t(label)}</th>)}</tr>
                   </thead>
                   <tbody>
                     {list.map((a) => (
@@ -116,6 +123,7 @@ function Panel() {
                         <td className="p-3">
                           <span className={cn("rounded-full px-2 py-0.5 text-xs font-medium", a.status === "Verificada" && "bg-jade/15 text-jade", a.status === "Activa" && "bg-gold/20 text-gold-foreground", a.status === "Pendiente KYC" && "bg-primary/10 text-primary")}>{t(a.status)}</span>
                         </td>
+                        {(['bank', 'account', 'clabe'] as const).map(field => <td key={field} className="p-3 font-mono text-xs text-muted-foreground"><span className="block max-w-32 truncate" title={a.bankingHashes?.[field]}>{a.bankingHashes?.[field] ?? '—'}</span></td>)}
                       </tr>
                     ))}
                   </tbody>
@@ -181,18 +189,18 @@ function Panel() {
         )}
       </section>
 
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
+      <Dialog open={open} onOpenChange={(value) => { if (adding) return; setOpen(value); if (!value) setForm({ name: "", technique: "", location: "", bank: "", account: "", clabe: "" }); }}>
+        <DialogContent className="max-h-[90vh] overflow-y-auto">
           <DialogHeader><DialogTitle className="font-serif">{t("Nuevo artesano")}</DialogTitle></DialogHeader>
           <div className="space-y-3">
-            {(["name", "technique", "location"] as const).map((k) => (
+            {(["name", "technique", "location", "bank", "account", "clabe"] as const).map((k) => (
               <div key={k} className="space-y-1">
-                <Label>{t({ name: "Nombre completo", technique: "Técnica", location: "Comunidad / Estado" }[k])}</Label>
-                <Input value={form[k]} onChange={(e) => setForm({ ...form, [k]: e.target.value })} />
+                <Label htmlFor={`artisan-${k}`}>{t({ name: "Nombre completo", technique: "Técnica", location: "Comunidad / Estado", bank: "Banco", account: "Cuenta", clabe: "CLABE interbancaria" }[k])}</Label>
+                <Input id={`artisan-${k}`} autoComplete="off" inputMode={k === 'account' || k === 'clabe' ? 'numeric' : 'text'} value={form[k]} onChange={(e) => setForm({ ...form, [k]: e.target.value })} />
               </div>
             ))}
           </div>
-          <DialogFooter><Button onClick={add}>{t("Agregar")}</Button></DialogFooter>
+          <DialogFooter><Button disabled={adding} onClick={add}>{adding ? t("Enviando…") : t("Agregar")}</Button></DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
