@@ -14,7 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          avatar_path: string | null
+          bio: string
+          communities: string
+          credential: string
+          display_name: string
+          ethics_accepted: boolean
+          experience_years: number
+          id: string
+          official_id: string
+          organization: string
+          professional_email: string
+          professional_title: string
+          region: string
+          specialties: string[]
+          submitted_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_path?: string | null
+          bio?: string
+          communities?: string
+          credential?: string
+          display_name?: string
+          ethics_accepted?: boolean
+          experience_years?: number
+          id: string
+          official_id?: string
+          organization?: string
+          professional_email?: string
+          professional_title?: string
+          region?: string
+          specialties?: string[]
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_path?: string | null
+          bio?: string
+          communities?: string
+          credential?: string
+          display_name?: string
+          ethics_accepted?: boolean
+          experience_years?: number
+          id?: string
+          official_id?: string
+          organization?: string
+          professional_email?: string
+          professional_title?: string
+          region?: string
+          specialties?: string[]
+          submitted_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
