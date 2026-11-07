@@ -9,6 +9,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { QrCode, StellarBadge } from "@/components/toltek/ui";
 import { artisans as seed, pieces, sampleHash, type Artisan } from "@/lib/toltek";
 import { cn } from "@/lib/utils";
+import { PromoterRegistration } from "@/components/toltek/PromoterRegistration";
+import { BadgeCheck } from "lucide-react";
 
 export const Route = createFileRoute("/panel")({
   head: () => ({
@@ -22,7 +24,7 @@ export const Route = createFileRoute("/panel")({
   component: Panel,
 });
 
-type Tab = "resumen" | "artesanos" | "kits" | "liquidaciones";
+type Tab = "registro" | "resumen" | "artesanos" | "kits" | "liquidaciones";
 
 const liquidaciones = [
   { artisan: "Don Miguel Aguilar", piece: "TK-0042 · Alebrije Jaguar Nahual", amount: "$8,472.80 MXN", date: "07 nov 2026", clave: "2026110740014000009876543" },
@@ -37,6 +39,7 @@ function Panel() {
   const [form, setForm] = useState({ name: "", technique: "", location: "" });
 
   const nav = [
+    { id: "registro" as const, label: "Registro del Promotor", icon: BadgeCheck },
     { id: "resumen" as const, label: "Resumen / Métricas", icon: BarChart3 },
     { id: "artesanos" as const, label: "Catálogo de Artesanos", icon: Users },
     { id: "kits" as const, label: "Kits Phygital QR", icon: QrIcon },
@@ -67,6 +70,7 @@ function Panel() {
       </aside>
 
       <section className="min-w-0 space-y-6">
+        {tab === "registro" && <PromoterRegistration />}
         {(tab === "resumen" || tab === "artesanos") && (
           <>
             <div className="grid gap-4 sm:grid-cols-3">
