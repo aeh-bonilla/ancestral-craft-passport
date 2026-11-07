@@ -16,6 +16,7 @@ import { Toaster } from "sonner";
 import { WalletProvider } from "@/components/toltek/wallet";
 import { Navbar, Footer } from "@/components/toltek/Navbar";
 import { AuthProvider } from "@/components/toltek/AuthProvider";
+import { LanguageProvider } from "@/i18n";
 
 function NotFoundComponent() {
   return (
@@ -124,6 +125,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <LanguageProvider>
       <AuthProvider>
       <WalletProvider>
         <Navbar />
@@ -134,6 +136,7 @@ function RootComponent() {
         <Toaster position="top-right" richColors closeButton />
       </WalletProvider>
       </AuthProvider>
+      </LanguageProvider>
     </QueryClientProvider>
   );
 }

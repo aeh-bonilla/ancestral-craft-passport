@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "./ui";
 import { useWallet } from "./wallet";
+import { useI18n } from "@/i18n";
 
 const links = [
   { to: "/", es: "Inicio", en: "Home" },
@@ -17,7 +18,8 @@ const links = [
 ] as const;
 
 export function Navbar() {
-  const { address, connect, disconnect, lang, toggleLang } = useWallet();
+  const { address, connect, disconnect } = useWallet();
+  const { t, language, setLanguage } = useI18n();
   const [open, setOpen] = useState(false);
   const { user } = useAccount();
   const queryClient = useQueryClient();
@@ -39,15 +41,15 @@ export function Navbar() {
             <Link key={l.to} to={l.to} activeOptions={{ exact: l.to === "/" }}
               className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
               activeProps={{ className: "bg-sand text-foreground" }}>
-              {lang === "ES" ? l.es : l.en}
+              {t(l.es)}
             </Link>
           ))}
         </nav>
         <div className="flex items-center gap-2">
           {user && <Button variant="ghost" size="icon" onClick={signOut} title="Cerrar sesión" aria-label="Cerrar sesión"><LogOut className="h-4 w-4" /></Button>}
-          <button onClick={toggleLang} className="rounded-lg border px-2.5 py-1.5 text-xs font-semibold">
-            {lang === "ES" ? "ES · en" : "EN · es"}
-          </button>
+          <select aria-label={t("Idioma")} value={language} onChange={(e) => setLanguage(e.target.value)} className="h-9 max-w-28 rounded-md border bg-background px-2 text-xs font-semibold">
+            <option value="es">Español</option><option value="en">English</option><option value="zh-CN">简体中文</option>
+          </select>
           <Button size="sm" onClick={address ? disconnect : connect} className="hidden sm:inline-flex" variant={address ? "outline" : "default"}>
             <Wallet className="h-4 w-4" />
             {address ? address : "Conectar Billetera Stellar"}
@@ -62,7 +64,7 @@ export function Navbar() {
           {links.map((l) => (
             <Link key={l.to} to={l.to} onClick={() => setOpen(false)} activeOptions={{ exact: l.to === "/" }}
               className="block rounded-lg px-3 py-2.5 text-sm font-medium" activeProps={{ className: "bg-sand" }}>
-              {lang === "ES" ? l.es : l.en}
+              {t(l.es)}
             </Link>
           ))}
           <Button className="mt-2 w-full" onClick={address ? disconnect : connect}>
