@@ -66,8 +66,8 @@ function Panel() {
         ))}
         <Link
           to="/registrar"
-          className="flex shrink-0 items-center gap-2 rounded-lg border-l border-sidebar-border px-3 py-2.5 text-sm font-medium hover:bg-sidebar-accent lg:mt-1 lg:border-l-0 lg:border-t lg:px-3 lg:pt-3.5">
-          <FilePlus2 className="h-4 w-4" /> Registro de Nuevas Obras
+          className="flex shrink-0 items-center gap-2 whitespace-nowrap rounded-lg border-l border-sidebar-border px-3 py-2.5 text-sm font-medium hover:bg-sidebar-accent lg:mt-1 lg:border-l-0 lg:border-t lg:pt-3.5">
+          <FilePlus2 className="h-4 w-4 shrink-0" /> Registro de Obras
         </Link>
       </aside>
 
