@@ -1,0 +1,1326 @@
+{
+  "Inicio": [
+    "Home",
+    "首页"
+  ],
+  "Verificar": [
+    "Verify",
+    "验证"
+  ],
+  "Panel Promotor": [
+    "Promoter Panel",
+    "推广人面板"
+  ],
+  "Mercado Ético": [
+    "Ethical Marketplace",
+    "公平交易市场"
+  ],
+  "Conectar Billetera Stellar": [
+    "Connect Stellar Wallet",
+    "连接 Stellar 钱包"
+  ],
+  "Cerrar sesión": [
+    "Sign out",
+    "退出登录"
+  ],
+  "Menú": [
+    "Menu",
+    "菜单"
+  ],
+  "Idioma": [
+    "Language",
+    "语言"
+  ],
+  "Sello Tlamatik": [
+    "Tlamatik seal",
+    "Tlamatik 印章"
+  ],
+  "Certificado en Stellar": [
+    "Certified on Stellar",
+    "已通过 Stellar 认证"
+  ],
+  "Ver pasaporte →": [
+    "View passport →",
+    "查看护照 →"
+  ],
+  "Obra": [
+    "Craftwork",
+    "工艺品"
+  ],
+  "Certificado Phygital": [
+    "Phygital Certificate",
+    "实体数字证书"
+  ],
+  "Envío": [
+    "Shipping",
+    "运费"
+  ],
+  "Total": [
+    "Total",
+    "总计"
+  ],
+  "Precio internacional de la obra: USD $": [
+    "International craft price: USD $",
+    "工艺品国际价格：USD $"
+  ],
+  "Abriendo Soroban Explorer (simulado)": [
+    "Opening Soroban Explorer (simulation)",
+    "正在打开 Soroban 浏览器（模拟）"
+  ],
+  "Inmutable ·": [
+    "Immutable ·",
+    "不可篡改 ·"
+  ],
+  "Checkout de Stripe simulado": [
+    "Simulated Stripe checkout",
+    "模拟 Stripe 结账"
+  ],
+  "Buy in USD (Stripe)": [
+    "Buy in USD (Stripe)",
+    "使用美元购买（Stripe）"
+  ],
+  "Técnica:": [
+    "Technique:",
+    "技法："
+  ],
+  "· Pasaporte": [
+    "· Passport",
+    "· 护照"
+  ],
+  "Abrir verificador público →": [
+    "Open public verifier →",
+    "打开公开验证页面 →"
+  ],
+  "Código QR del pasaporte": [
+    "Passport QR code",
+    "护照二维码"
+  ],
+  "Ver desglose transparente del precio": [
+    "View transparent price breakdown",
+    "查看透明价格明细"
+  ],
+  "Desglose transparente": [
+    "Transparent breakdown",
+    "透明明细"
+  ],
+  "Precio Base para el Artesano (95.2%)": [
+    "Base price for the artisan (95.2%)",
+    "匠人基础收入（95.2%）"
+  ],
+  "Certificado Phygital & Buyer Premium (4.8%)": [
+    "Phygital Certificate & Buyer Premium (4.8%)",
+    "实体数字证书与买方服务费（4.8%）"
+  ],
+  "Total Transparentado": [
+    "Transparent total",
+    "透明总价"
+  ],
+  "Pagar con CoDi® (pey.mx)": [
+    "Pay with CoDi® (pey.mx)",
+    "使用 CoDi® 支付（pey.mx）"
+  ],
+  "Pagar con CoDi® (0% Comisión)": [
+    "Pay with CoDi® (0% Fee)",
+    "使用 CoDi® 支付（零手续费）"
+  ],
+  "✓ Pago confirmado por pey.mx (SPEI)": [
+    "✓ Payment confirmed by pey.mx (SPEI)",
+    "✓ pey.mx 已确认付款（SPEI）"
+  ],
+  "Pasaporte grabado en Stellar Testnet: Hash": [
+    "Passport recorded on Stellar Testnet: Hash",
+    "护照已记录至 Stellar 测试网：哈希"
+  ],
+  "Escanea desde cualquier app bancaria en México (Banxico)": [
+    "Scan with any Mexican banking app (Banxico)",
+    "使用墨西哥银行应用扫码（Banxico）"
+  ],
+  "Simular Confirmación de Pago CoDi": [
+    "Simulate CoDi Payment Confirmation",
+    "模拟 CoDi 付款确认"
+  ],
+  "Pasaportes Culturales Phygital, preservación de saberes y comercio justo sobre Stellar.": [
+    "Phygital Cultural Passports, knowledge preservation and fair trade on Stellar.",
+    "基于 Stellar 的实体数字文化护照、传统知识保护与公平贸易。"
+  ],
+  "Red": [
+    "Network",
+    "网络"
+  ],
+  "Pagos en USDC": [
+    "Payments in USDC",
+    "USDC 付款"
+  ],
+  "Comunidades": [
+    "Communities",
+    "社区"
+  ],
+  "Inclusión financiera real: Las comunidades rurales reciben sus pagos directamente en moneda nacional ($MXN) a su tarjeta de débito habitual vía SPEI/CoDi, respaldados de forma inmutable en la red Stellar.": [
+    "Real financial inclusion: rural communities receive payments directly in Mexican pesos (MXN) on their regular debit cards through SPEI/CoDi, backed by immutable records on Stellar.",
+    "真正的金融包容：乡村社区通过 SPEI/CoDi 直接将墨西哥比索（MXN）收至日常借记卡，并由 Stellar 网络提供不可篡改的记录。"
+  ],
+  "Interfaz demostrativa · Datos simulados": [
+    "Demo interface · Simulated data",
+    "演示界面 · 模拟数据"
+  ],
+  "Billetera Stellar conectada correctamente": [
+    "Stellar wallet connected successfully",
+    "Stellar 钱包已成功连接"
+  ],
+  "Billetera desconectada": [
+    "Wallet disconnected",
+    "钱包已断开连接"
+  ],
+  "No se pudo cerrar sesión": [
+    "Unable to sign out",
+    "无法退出登录"
+  ],
+  "Antropólogo(a) / Etnólogo(a)": [
+    "Anthropologist / Ethnologist",
+    "人类学家／民族学家"
+  ],
+  "Curador(a) de Arte Popular": [
+    "Folk Art Curator",
+    "民间艺术策展人"
+  ],
+  "Gestor(a) Cultural": [
+    "Cultural Manager",
+    "文化管理人"
+  ],
+  "Maestro(a) Artesano(a) Certificador(a)": [
+    "Master Artisan Certifier",
+    "工艺大师认证人"
+  ],
+  "Representante de Cooperativa": [
+    "Cooperative Representative",
+    "合作社代表"
+  ],
+  "Alfarería y Barro": [
+    "Pottery and Clay",
+    "陶艺与黏土"
+  ],
+  "Textil y Telar": [
+    "Textiles and Weaving",
+    "纺织与织造"
+  ],
+  "Madera y Tallado": [
+    "Wood and Carving",
+    "木材与雕刻"
+  ],
+  "Laca y Maque": [
+    "Lacquer and Maque",
+    "漆艺与 Maque"
+  ],
+  "Metalistería": [
+    "Metalwork",
+    "金属工艺"
+  ],
+  "Talavera y Cerámica": [
+    "Talavera and Ceramics",
+    "Talavera 与陶瓷"
+  ],
+  "Fibras Naturales": [
+    "Natural Fibers",
+    "天然纤维"
+  ],
+  "Máscaras y Danza": [
+    "Masks and Dance",
+    "面具与舞蹈"
+  ],
+  "Otro (Latinoamérica)": [
+    "Other (Latin America)",
+    "其他（拉丁美洲）"
+  ],
+  "La foto debe pesar menos de 5 MB": [
+    "The photo must be under 5 MB",
+    "照片必须小于 5 MB"
+  ],
+  "Selecciona una foto JPG o PNG": [
+    "Select a JPG or PNG photo",
+    "请选择 JPG 或 PNG 照片"
+  ],
+  "Completa nombre, correo, perfil, región y al menos una especialidad": [
+    "Enter your name, email, profession, region and at least one specialty",
+    "请填写姓名、邮箱、职业、地区及至少一项专长"
+  ],
+  "Agrega una foto del promotor": [
+    "Add a promoter photo",
+    "请添加推广人照片"
+  ],
+  "Acepta el código de ética de certificación": [
+    "Accept the certification code of ethics",
+    "请同意认证道德准则"
+  ],
+  "Revisa los años de experiencia": [
+    "Check the years of experience",
+    "请检查从业年数"
+  ],
+  "Perfil guardado": [
+    "Profile saved",
+    "个人资料已保存"
+  ],
+  "No se pudo guardar el perfil. Inténtalo de nuevo.": [
+    "Unable to save your profile. Please try again.",
+    "无法保存个人资料，请重试。"
+  ],
+  "Perfil profesional guardado ·": [
+    "Professional profile saved ·",
+    "专业资料已保存 ·"
+  ],
+  "Editar registro": [
+    "Edit registration",
+    "编辑登记"
+  ],
+  "Registro del Promotor Certificador": [
+    "Certifying Promoter Registration",
+    "认证推广人登记"
+  ],
+  "Tu perfil respalda la originalidad, la técnica y la procedencia de cada pieza que certifiques.": [
+    "Your professional profile supports the originality, technique and origin of each piece you certify.",
+    "您的专业资料为每件认证作品的原创性、技法及产地提供依据。"
+  ],
+  "Foto del promotor": [
+    "Promoter photo",
+    "推广人照片"
+  ],
+  "Cambiar foto": [
+    "Change photo",
+    "更换照片"
+  ],
+  "Subir foto": [
+    "Upload photo",
+    "上传照片"
+  ],
+  "Rostro visible · JPG/PNG · máx. 5 MB": [
+    "Visible face · JPG/PNG · max. 5 MB",
+    "面部清晰 · JPG/PNG · 最大 5 MB"
+  ],
+  "Identidad": [
+    "Identity",
+    "身份"
+  ],
+  "Nombre completo *": [
+    "Full name *",
+    "姓名 *"
+  ],
+  "CURP / ID oficial": [
+    "CURP / Official ID",
+    "CURP／官方身份证件"
+  ],
+  "Correo profesional *": [
+    "Professional email *",
+    "工作邮箱 *"
+  ],
+  "Perfil profesional": [
+    "Professional profile",
+    "专业资料"
+  ],
+  "Perfil *": [
+    "Profession *",
+    "职业 *"
+  ],
+  "Selecciona…": [
+    "Select…",
+    "请选择…"
+  ],
+  "Institución / Cooperativa": [
+    "Institution / Cooperative",
+    "机构／合作社"
+  ],
+  "Cédula o certificación": [
+    "Professional license or certification",
+    "执业证件或认证"
+  ],
+  "Cédula 12345678 / FONART": [
+    "License 12345678 / FONART",
+    "执业证件 12345678／FONART"
+  ],
+  "Años de experiencia": [
+    "Years of experience",
+    "从业年数"
+  ],
+  "Técnicas que puede autenticar *": [
+    "Techniques you can authenticate *",
+    "可认证的技法 *"
+  ],
+  "Región de procedencia": [
+    "Region of origin",
+    "产地"
+  ],
+  "Estado / región *": [
+    "State / Region *",
+    "州／地区 *"
+  ],
+  "Comunidades que acompaña": [
+    "Communities you support",
+    "您支持的社区"
+  ],
+  "Trayectoria breve": [
+    "Brief professional background",
+    "简要职业经历"
+  ],
+  "Investigación de campo, curadurías, vínculo con talleres…": [
+    "Field research, curatorial work, workshop connections…",
+    "田野研究、策展、与工坊的联系…"
+  ],
+  "Me comprometo con el código de ética Tlamatik: certificar solo piezas cuya autoría, técnica y origen haya verificado, respetando el consentimiento de cada comunidad.": [
+    "I commit to Tlamatik’s code of ethics: certify only pieces whose authorship, technique and origin I have verified, respecting each community’s consent.",
+    "我承诺遵守 Tlamatik 道德准则：仅认证已核实作者、技法及产地的作品，并尊重各社区的知情同意。"
+  ],
+  "Tu firma quedará vinculada a cada pasaporte en Stellar.": [
+    "Your signature will be linked to each passport on Stellar.",
+    "您的签名将与 Stellar 上的每份护照关联。"
+  ],
+  "Enviando…": [
+    "Submitting…",
+    "正在提交…"
+  ],
+  "Enviar registro": [
+    "Submit registration",
+    "提交登记"
+  ],
+  "Artesanos protegidos": [
+    "Artisans protected",
+    "受保护的匠人"
+  ],
+  "Pagos directos en USDC": [
+    "Direct payments in USDC",
+    "USDC 直接付款"
+  ],
+  "Pasaportes emitidos": [
+    "Passports issued",
+    "已签发护照"
+  ],
+  "Comunidades de origen": [
+    "Origin communities",
+    "来源社区"
+  ],
+  "Registro & Hashing": [
+    "Registration & Hashing",
+    "登记与哈希"
+  ],
+  "Preservación del saber": [
+    "Knowledge preservation",
+    "传统知识保护"
+  ],
+  "Documentamos técnica, materiales y relato del maestro. Cada evidencia se sella con un hash SHA-256 inmutable.": [
+    "We document the master’s technique, materials and story. Each piece of evidence is sealed with an immutable SHA-256 hash.",
+    "我们记录工艺大师的技法、材料及故事，每份证据均以不可篡改的 SHA-256 哈希封存。"
+  ],
+  "Pasaporte Cultural QR/NFC": [
+    "QR/NFC Cultural Passport",
+    "QR/NFC 文化护照"
+  ],
+  "Anclaje físico-digital": [
+    "Physical-digital anchoring",
+    "实体与数字关联"
+  ],
+  "Una etiqueta física vincula la pieza con su registro en Soroban. Cualquiera puede verificarla desde su teléfono.": [
+    "A physical tag links the piece to its Soroban record. Anyone can verify it from their phone.",
+    "实体标签将作品与 Soroban 记录关联，任何人均可通过手机验证。"
+  ],
+  "Comercio Justo & Regalías": [
+    "Fair Trade & Royalties",
+    "公平贸易与版税"
+  ],
+  "Liquidación en Stellar": [
+    "Settlement on Stellar",
+    "Stellar 结算"
+  ],
+  "Ventas y licencias se pagan en USDC directo a la billetera del taller, con regalías automáticas para la comunidad.": [
+    "Sales and licenses are paid in USDC directly to the workshop wallet, with automatic community royalties.",
+    "销售与授权款项以 USDC 直接支付至工坊钱包，社区版税自动分配。"
+  ],
+  "Respaldado por Stellar · Soroban": [
+    "Backed by Stellar · Soroban",
+    "由 Stellar · Soroban 支持"
+  ],
+  "Preservamos la Memoria Viva de Nuestro Patrimonio.": [
+    "Preserving the Living Memory of Our Heritage.",
+    "守护文化遗产的鲜活记忆。"
+  ],
+  "Certificamos su Origen Genuino.": [
+    "We Certify Its Authentic Origin.",
+    "认证其真实源头。"
+  ],
+  "Tlamatik une la tradición artesanal mexicana con trazabilidad inmutable en la red Stellar: cada pieza lleva un Pasaporte Cultural que honra a quien la creó y garantiza que el pago llegue a sus manos.": [
+    "Tlamatik connects Mexican craft traditions with immutable traceability on Stellar: each piece carries a Cultural Passport that honors its creator and ensures payment reaches their hands.",
+    "Tlamatik 将墨西哥传统工艺与 Stellar 的不可篡改溯源相结合，每件作品都拥有文化护照，尊重创作者并确保款项直接到达他们手中。"
+  ],
+  "Verificar una Pieza (QR)": [
+    "Verify a Piece (QR)",
+    "验证作品（二维码）"
+  ],
+  "Panel de Promotor / Artesano": [
+    "Promoter / Artisan Panel",
+    "推广人／匠人面板"
+  ],
+  "Manos de artesano tallando madera de copal": [
+    "Artisan hands carving copal wood",
+    "匠人双手雕刻科帕木"
+  ],
+  "Pasaporte TK-0042": [
+    "Passport TK-0042",
+    "护照 TK-0042"
+  ],
+  "Talla en copal · Arrazola": [
+    "Copal carving · Arrazola",
+    "科帕木雕刻 · Arrazola"
+  ],
+  "✓ Hash verificado en ledger": [
+    "✓ Hash verified on the ledger",
+    "✓ 哈希已在账本验证"
+  ],
+  "Flujo Phygital": [
+    "Phygital Journey",
+    "实体数字流程"
+  ],
+  "Cómo funciona en tres pasos": [
+    "How it works in three steps",
+    "三步了解流程"
+  ],
+  "De las manos del maestro a la billetera del comprador, sin intermediarios opacos.": [
+    "From the master’s hands to the buyer’s wallet, without opaque intermediaries.",
+    "从大师的双手到买家的钱包，没有不透明的中间商。"
+  ],
+  "Galería": [
+    "Gallery",
+    "作品展廊"
+  ],
+  "Piezas y creadores destacados": [
+    "Featured Crafts and Creators",
+    "精选工艺品与创作者"
+  ],
+  "Ver mercado ético": [
+    "Explore the ethical marketplace",
+    "浏览公平交易市场"
+  ],
+  "Pieza terminada": [
+    "Finished piece",
+    "成品"
+  ],
+  "Tallado en copal": [
+    "Copal carving",
+    "科帕木雕刻"
+  ],
+  "Pigmentos naturales": [
+    "Natural pigments",
+    "天然颜料"
+  ],
+  "✓ PIEZA AUTÉNTICA & CERTIFICADA": [
+    "✓ AUTHENTIC & CERTIFIED PIECE",
+    "✓ 正品与认证作品"
+  ],
+  "Pasaporte": [
+    "Passport",
+    "护照"
+  ],
+  "Disponible": [
+    "Available",
+    "可购买"
+  ],
+  "No disponible": [
+    "Unavailable",
+    "不可购买"
+  ],
+  "Dimensiones:": [
+    "Dimensions:",
+    "尺寸："
+  ],
+  "Copiado al portapapeles": [
+    "Copied to clipboard",
+    "已复制到剪贴板"
+  ],
+  "Pasaporte TK-0042 · escaneado hace unos segundos": [
+    "Passport TK-0042 · scanned a few seconds ago",
+    "护照 TK-0042 · 几秒前扫描"
+  ],
+  "Registrado en Ledger de Stellar / Soroban Testnet": [
+    "Recorded on the Stellar / Soroban Testnet Ledger",
+    "已记录至 Stellar／Soroban 测试网账本"
+  ],
+  "Reproduciendo video del proceso (demo)": [
+    "Playing process video (demo)",
+    "正在播放制作过程视频（演示）"
+  ],
+  "Talla en madera de copal": [
+    "Copal wood carving",
+    "科帕木雕刻"
+  ],
+  "Maestro Don Miguel Aguilar": [
+    "Master Don Miguel Aguilar",
+    "大师 Don Miguel Aguilar"
+  ],
+  "USDC · 95.2% llega directo al taller": [
+    "USDC · 95.2% goes directly to the workshop",
+    "USDC · 95.2% 直接到达工坊"
+  ],
+  "Pago simulado enviado": [
+    "Simulated payment sent",
+    "模拟付款已发送"
+  ],
+  "Comprar en USDC / MXN": [
+    "Buy in USDC / MXN",
+    "使用 USDC／MXN 购买"
+  ],
+  "Propina / Mecenazgo": [
+    "Tip / Patronage",
+    "小费／赞助"
+  ],
+  "La Memoria del Oficio": [
+    "The Memory of the Craft",
+    "工艺的记忆"
+  ],
+  "Técnica ancestral heredada": [
+    "Inherited ancestral technique",
+    "传承的古老技法"
+  ],
+  "Don Miguel aprendió de su padre a tallar el copal verde con machete y cuchillo, siguiendo la veta para que la madera “diga” qué animal guarda. Tres generaciones del taller han perfeccionado el oficio iniciado en Arrazola por Manuel Jiménez.": [
+    "Don Miguel learned from his father to carve green copal with a machete and knife, following the grain so the wood reveals the animal within. Three workshop generations have refined the craft pioneered in Arrazola by Manuel Jiménez.",
+    "Don Miguel 从父亲那里学习用砍刀与小刀雕刻新鲜科帕木，顺着纹理让木材显现其内的动物。工坊三代人不断精进由 Manuel Jiménez 在 Arrazola 开创的技艺。"
+  ],
+  "Materiales autóctonos": [
+    "Native materials",
+    "本土材料"
+  ],
+  "Madera de copal (Bursera glabrifolia) de reforestación comunitaria, grana cochinilla, añil, cempasúchil y jugo de limón para fijar los pigmentos.": [
+    "Copal wood (Bursera glabrifolia) from community reforestation, cochineal, indigo, marigold and lemon juice to set the pigments.",
+    "来自社区造林的科帕木（Bursera glabrifolia）、胭脂虫红、靛蓝、万寿菊及用于固色的柠檬汁。"
+  ],
+  "Simbología cultural": [
+    "Cultural symbolism",
+    "文化象征"
+  ],
+  "El jaguar es tona o nahual protector en la cosmovisión zapoteca. Los puntos representan semillas de maíz; las flores, la fertilidad de la tierra.": [
+    "The jaguar is a protective tona or nahual in the Zapotec worldview. Dots represent corn seeds; flowers represent the land’s fertility.",
+    "在萨波特克世界观中，美洲豹是守护性的 tona 或 nahual。圆点象征玉米种子，花朵象征大地的丰饶。"
+  ],
+  "Panel Técnico de Auditoría Blockchain": [
+    "Blockchain Audit Panel",
+    "区块链审计面板"
+  ],
+  "Hash SHA-256 del expediente": [
+    "Record SHA-256 Hash",
+    "档案 SHA-256 哈希"
+  ],
+  "Smart Contract (Soroban)": [
+    "Smart Contract (Soroban)",
+    "智能合约（Soroban）"
+  ],
+  "Timestamp inmutable": [
+    "Immutable timestamp",
+    "不可篡改时间戳"
+  ],
+  "Hash SHA-256 verificado en ledger": [
+    "SHA-256 hash verified on ledger",
+    "SHA-256 哈希已在账本验证"
+  ],
+  "Re-verificar hash": [
+    "Re-verify hash",
+    "重新验证哈希"
+  ],
+  "Abriendo Stellar Expert (simulado)": [
+    "Opening Stellar Expert (simulation)",
+    "正在打开 Stellar Expert（模拟）"
+  ],
+  "Ver en Stellar Expert": [
+    "View in Stellar Expert",
+    "在 Stellar Expert 查看"
+  ],
+  "Apoyo directo al Maestro Aguilar": [
+    "Direct support for Master Aguilar",
+    "直接支持 Aguilar 大师"
+  ],
+  "El 100% de la propina llega a su billetera Stellar.": [
+    "100% of the tip reaches his Stellar wallet.",
+    "小费的 100% 直接到达他的 Stellar 钱包。"
+  ],
+  "Gracias por sostener el oficio.": [
+    "Thank you for supporting the craft.",
+    "感谢您支持传统工艺。"
+  ],
+  "Cerámica": [
+    "Ceramics",
+    "陶瓷"
+  ],
+  "Talla en Madera": [
+    "Wood Carving",
+    "木雕"
+  ],
+  "Textil": [
+    "Textiles",
+    "纺织"
+  ],
+  "Filigrana": [
+    "Filigree",
+    "金银丝工艺"
+  ],
+  "Laca": [
+    "Lacquer",
+    "漆艺"
+  ],
+  "Textil comercial": [
+    "Commercial textiles",
+    "商业纺织品"
+  ],
+  "Arquitectura": [
+    "Architecture",
+    "建筑"
+  ],
+  "Edición limitada": [
+    "Limited edition",
+    "限量版"
+  ],
+  "Licencia ética aprobada": [
+    "Ethical license approved",
+    "公平授权已批准"
+  ],
+  "Comprar Artesanías Físicas": [
+    "Buy Physical Crafts",
+    "购买实体工艺品"
+  ],
+  "Licenciamiento Ético para Marcas": [
+    "Ethical Licensing for Brands",
+    "品牌公平授权"
+  ],
+  "Región": [
+    "Region",
+    "地区"
+  ],
+  "Técnica": [
+    "Technique",
+    "技法"
+  ],
+  "Precio máximo: $": [
+    "Maximum price: $",
+    "最高价格：$"
+  ],
+  "piezas certificadas": [
+    "certified pieces",
+    "件认证作品"
+  ],
+  "Checkout rápido completado": [
+    "Quick checkout completed",
+    "快捷结账已完成"
+  ],
+  "Comprar": [
+    "Buy",
+    "购买"
+  ],
+  "No hay piezas con estos filtros.": [
+    "No pieces match these filters.",
+    "没有符合筛选条件的作品。"
+  ],
+  "Para diseñadores, moda y arquitectura": [
+    "For designers, fashion and architecture",
+    "面向设计、时尚与建筑"
+  ],
+  "Patrones y Expresiones Culturales Tradicionales Registradas": [
+    "Registered Traditional Cultural Patterns and Expressions",
+    "已登记的传统文化图案与表达"
+  ],
+  "Usa un diseño tradicional de forma legal y ética: el consentimiento comunitario y las regalías quedan grabados en un contrato Soroban.": [
+    "Use traditional designs legally and ethically: community consent and royalties are recorded in a Soroban contract.",
+    "合法且公平地使用传统设计：社区同意与版税均记录在 Soroban 合约中。"
+  ],
+  "Regalía sugerida": [
+    "Suggested royalty",
+    "建议版税"
+  ],
+  "Solicitar licencia": [
+    "Request license",
+    "申请授权"
+  ],
+  "Solicitud de licencia": [
+    "License request",
+    "授权申请"
+  ],
+  "Tipo de uso": [
+    "Type of use",
+    "使用类型"
+  ],
+  "Regalías automáticas para la comunidad:": [
+    "Automatic royalties for the community:",
+    "社区自动版税："
+  ],
+  "Firmar contrato en Soroban": [
+    "Sign contract on Soroban",
+    "在 Soroban 签署合约"
+  ],
+  "No se pudo confirmar la sesión.": [
+    "Unable to confirm your session.",
+    "无法确认您的登录状态。"
+  ],
+  "No se pudo iniciar sesión con Google. Inténtalo de nuevo.": [
+    "Unable to sign in with Google. Please try again.",
+    "无法通过 Google 登录，请重试。"
+  ],
+  "Acceso del Promotor": [
+    "Promoter Access",
+    "推广人登录"
+  ],
+  "Inicia sesión o crea tu cuenta con Google.": [
+    "Sign in or create your account with Google.",
+    "通过 Google 登录或创建账户。"
+  ],
+  "Continuar con Google": [
+    "Continue with Google",
+    "通过 Google 继续"
+  ],
+  "Volver a Inicio": [
+    "Back to Home",
+    "返回首页"
+  ],
+  "Registro del Promotor": [
+    "Promoter Registration",
+    "推广人登记"
+  ],
+  "Resumen / Métricas": [
+    "Overview / Metrics",
+    "概览／指标"
+  ],
+  "Catálogo de Artesanos": [
+    "Artisan Directory",
+    "匠人目录"
+  ],
+  "Kits Phygital QR": [
+    "Phygital QR Kits",
+    "实体数字二维码套件"
+  ],
+  "Liquidaciones SPEI": [
+    "SPEI Settlements",
+    "SPEI 结算"
+  ],
+  "Escribe el nombre del artesano": [
+    "Enter the artisan’s name",
+    "请输入匠人姓名"
+  ],
+  "Pendiente KYC": [
+    "Pending KYC",
+    "等待身份验证"
+  ],
+  "Verificada": [
+    "Verified",
+    "已验证"
+  ],
+  "Activa": [
+    "Active",
+    "活跃"
+  ],
+  "Artesano agregado": [
+    "Artisan added",
+    "匠人已添加"
+  ],
+  "Se generó su billetera Stellar custodiada.": [
+    "A custodial Stellar wallet was generated.",
+    "已生成托管 Stellar 钱包。"
+  ],
+  "Registro de Obras": [
+    "Register Craftwork",
+    "作品登记"
+  ],
+  "Artesanos apadrinados": [
+    "Supported artisans",
+    "受支持的匠人"
+  ],
+  "Piezas catalogadas": [
+    "Cataloged pieces",
+    "已编目作品"
+  ],
+  "Recibido para la comunidad": [
+    "Received for the community",
+    "社区收款"
+  ],
+  "Artesanos asociados": [
+    "Associated artisans",
+    "关联匠人"
+  ],
+  "Agregar Nuevo Artesano": [
+    "Add New Artisan",
+    "添加匠人"
+  ],
+  "Artesano": [
+    "Artisan",
+    "匠人"
+  ],
+  "Ubicación": [
+    "Location",
+    "地点"
+  ],
+  "Piezas": [
+    "Pieces",
+    "作品"
+  ],
+  "Estado": [
+    "Status",
+    "状态"
+  ],
+  "Etiquetas listas para adjuntar a cada pieza física del taller.": [
+    "Labels ready to attach to each physical workshop piece.",
+    "可附于工坊每件实体作品的标签。"
+  ],
+  "PDF de 6 etiquetas generado": [
+    "Six-label PDF generated",
+    "已生成六标签 PDF"
+  ],
+  "Enviando a impresión masiva…": [
+    "Sending to batch printing…",
+    "正在发送至批量打印…"
+  ],
+  "Imprimir lote": [
+    "Print batch",
+    "批量打印"
+  ],
+  "PASAPORTE CULTURAL ·": [
+    "CULTURAL PASSPORT ·",
+    "文化护照 ·"
+  ],
+  "Escanea · Verifica en Stellar": [
+    "Scan · Verify on Stellar",
+    "扫描 · 在 Stellar 验证"
+  ],
+  "Histórico de Liquidaciones Bancarias (SPEI)": [
+    "Bank Settlement History (SPEI)",
+    "银行结算记录（SPEI）"
+  ],
+  "Comprobantes Electrónicos de Pago (CEP de Banxico) emitidos a las tarjetas de débito de los artesanos.": [
+    "Electronic payment receipts (Banxico CEP) issued for artisans’ debit cards.",
+    "为匠人借记卡出具的电子付款凭证（Banxico CEP）。"
+  ],
+  "Transferido a Tarjeta de Débito (SPEI)": [
+    "Transferred to Debit Card (SPEI)",
+    "已转至借记卡（SPEI）"
+  ],
+  "Clave de Rastreo Banxico": [
+    "Banxico Tracking Reference",
+    "Banxico 追踪编号"
+  ],
+  "Abriendo Stellar Explorer (simulado)": [
+    "Opening Stellar Explorer (simulation)",
+    "正在打开 Stellar 浏览器（模拟）"
+  ],
+  "Ver auditoría en Stellar Explorer ↗": [
+    "View audit in Stellar Explorer ↗",
+    "在 Stellar 浏览器查看审计 ↗"
+  ],
+  "Nuevo artesano": [
+    "New artisan",
+    "新匠人"
+  ],
+  "Nombre completo": [
+    "Full name",
+    "姓名"
+  ],
+  "Comunidad / Estado": [
+    "Community / State",
+    "社区／州"
+  ],
+  "Agregar": [
+    "Add",
+    "添加"
+  ],
+  "Datos de la Pieza": [
+    "Piece Details",
+    "作品资料"
+  ],
+  "Evidencia del Saber": [
+    "Knowledge Evidence",
+    "传统知识证据"
+  ],
+  "Minting Criptográfico": [
+    "Cryptographic Minting",
+    "加密铸造"
+  ],
+  "Historia y metadatos generados": [
+    "Story and metadata generated",
+    "故事与元数据已生成"
+  ],
+  "Narrativa en español + traducción al inglés + etiquetas de materiales ancestrales.": [
+    "Spanish narrative + English translation + ancestral material tags.",
+    "西班牙语叙事、英语译文与传统材料标签。"
+  ],
+  "Agrega el título de la pieza": [
+    "Add the piece title",
+    "请添加作品标题"
+  ],
+  "Pasaporte Phygital anclado en Stellar": [
+    "Phygital passport anchored on Stellar",
+    "实体数字护照已锚定至 Stellar"
+  ],
+  "Registro de Obra & Pasaporte Cultural": [
+    "Craft Registration & Cultural Passport",
+    "作品登记与文化护照"
+  ],
+  "Cada dato que escribes se sella en vivo; nada sale de tu navegador hasta el anclaje.": [
+    "Every detail is sealed live; nothing leaves your browser until anchoring.",
+    "每项输入实时封存，锚定前数据不会离开您的浏览器。"
+  ],
+  "Asistente de Redacción Cultural con IA (OpenAI GPT-4o)": [
+    "AI Cultural Writing Assistant (OpenAI GPT-4o)",
+    "AI 文化写作助手（OpenAI GPT-4o）"
+  ],
+  "Redacta la narrativa y los metadatos de la obra a partir del relato del maestro.": [
+    "Write the piece’s story and metadata from the master’s account.",
+    "依据工艺大师的讲述撰写作品故事与元数据。"
+  ],
+  "Audio recibido": [
+    "Audio received",
+    "已收到音频"
+  ],
+  "relato_maestro.mp3 · transcribiendo…": [
+    "relato_maestro.mp3 · transcribing…",
+    "relato_maestro.mp3 · 正在转录…"
+  ],
+  "Subir Audio con Relato del Maestro": [
+    "Upload the Master’s Audio Story",
+    "上传大师讲述音频"
+  ],
+  "Foto analizada": [
+    "Photo analyzed",
+    "照片已分析"
+  ],
+  "Se detectaron pigmentos naturales y talla en copal.": [
+    "Natural pigments and copal carving detected.",
+    "已识别天然颜料与科帕木雕刻。"
+  ],
+  "Analizar Foto de la Obra": [
+    "Analyze Craft Photo",
+    "分析作品照片"
+  ],
+  "Generar Historia y Metadatos con IA": [
+    "Generate Story and Metadata with AI",
+    "通过 AI 生成故事与元数据"
+  ],
+  "Título de la obra": [
+    "Craft title",
+    "作品标题"
+  ],
+  "Ej. Alebrije Jaguar Nahual": [
+    "e.g. Alebrije Jaguar Nahual",
+    "例如：Alebrije Jaguar Nahual"
+  ],
+  "Categoría": [
+    "Category",
+    "类别"
+  ],
+  "Técnica ancestral": [
+    "Ancestral technique",
+    "传统技法"
+  ],
+  "Tallado a mano en copal, pintura con pigmentos naturales…": [
+    "Hand-carved copal, painted with natural pigments…",
+    "手工雕刻科帕木、天然颜料绘制…"
+  ],
+  "Copal, grana cochinilla, añil": [
+    "Copal, cochineal, indigo",
+    "科帕木、胭脂虫红、靛蓝"
+  ],
+  "Precio (MXN)": [
+    "Price (MXN)",
+    "价格（MXN）"
+  ],
+  "Arrastra fotos del proceso, audios o documentos": [
+    "Drag process photos, audio or documents",
+    "拖入制作照片、音频或文档"
+  ],
+  "o haz clic para seleccionar · JPG, MP3, PDF": [
+    "or click to select · JPG, MP3, PDF",
+    "或点击选择 · JPG、MP3、PDF"
+  ],
+  "Generación criptográfica": [
+    "Cryptographic generation",
+    "加密生成"
+  ],
+  "Contrato Soroban": [
+    "Soroban Contract",
+    "Soroban 合约"
+  ],
+  "Evidencias selladas": [
+    "Sealed evidence",
+    "已封存证据"
+  ],
+  "Anclar en Stellar Blockchain & Generar Pasaporte Phygital": [
+    "Anchor on Stellar & Generate Phygital Passport",
+    "锚定至 Stellar 并生成实体数字护照"
+  ],
+  "Atrás": [
+    "Back",
+    "返回"
+  ],
+  "Continuar": [
+    "Continue",
+    "继续"
+  ],
+  "Pasaporte Cultural": [
+    "Cultural Passport",
+    "文化护照"
+  ],
+  "Vista previa": [
+    "Preview",
+    "预览"
+  ],
+  "Precio": [
+    "Price",
+    "价格"
+  ],
+  "SHA-256 (en vivo)": [
+    "SHA-256 (live)",
+    "SHA-256（实时）"
+  ],
+  "Anclado en Stellar": [
+    "Anchored on Stellar",
+    "已锚定至 Stellar"
+  ],
+  "Pendiente de anclaje": [
+    "Awaiting anchoring",
+    "等待锚定"
+  ],
+  "¡Pasaporte emitido!": [
+    "Passport issued!",
+    "护照已签发！"
+  ],
+  "Anclando en Stellar…": [
+    "Anchoring on Stellar…",
+    "正在锚定至 Stellar…"
+  ],
+  "La pieza ya puede verificarse con su QR.": [
+    "The piece can now be verified with its QR code.",
+    "现在可通过二维码验证作品。"
+  ],
+  "No cierres esta ventana.": [
+    "Do not close this window.",
+    "请勿关闭此窗口。"
+  ],
+  "Calculando hash SHA-256": [
+    "Calculating SHA-256 hash",
+    "正在计算 SHA-256 哈希"
+  ],
+  "Firmando transacción con Freighter": [
+    "Signing transaction with Freighter",
+    "正在通过 Freighter 签署交易"
+  ],
+  "Invocando contrato Soroban": [
+    "Invoking Soroban contract",
+    "正在调用 Soroban 合约"
+  ],
+  "Emitiendo Pasaporte Phygital": [
+    "Issuing Phygital Passport",
+    "正在签发实体数字护照"
+  ],
+  "Nueva obra": [
+    "New craftwork",
+    "新作品"
+  ],
+  "Ver en verificador →": [
+    "View in verifier →",
+    "在验证页面查看 →"
+  ],
+  "Quitar": [
+    "Remove",
+    "移除"
+  ],
+  "Verified on Soroban Testnet": [
+    "Verified on Soroban Testnet",
+    "已在 Soroban 测试网验证"
+  ],
+  "El Guardián del Monte: Tecuani de Acatlán": [
+    "The Mountain Guardian: Tecuani of Acatlán",
+    "山林守护者：Acatlán 的 Tecuani"
+  ],
+  "Figuras de Danza / Madera & Textil": [
+    "Dance Figures / Wood & Textile",
+    "舞蹈人偶／木材与纺织"
+  ],
+  "Tallado en madera de copal/pino, confección textil pintada a mano y ensamble de ixtle natural": [
+    "Copal/pine wood carving, hand-painted textile work and natural ixtle assembly",
+    "科帕木／松木雕刻、手绘纺织制作及天然 ixtle 纤维组装"
+  ],
+  "En las entrañas de la Mixteca, el sonido del teponaztli y la flauta de carrizo anuncian la llegada del Tecuani. Esta pieza rinde homenaje a la danza ancestral de petición de lluvias y protección de las cosechas. Modelado y ensamblado a mano, viste el tradicional mazo amarillo salpicado con las rosetas del felino sagrado y una máscara decorada con cerdas naturales e hilos de ixtle trenzado.": [
+    "Deep in the Mixteca, the sound of the teponaztli and reed flute announces the Tecuani. This piece honors the ancestral dance for rain and harvest protection. Shaped and assembled by hand, it wears the traditional yellow outfit with the sacred feline’s rosettes and a mask decorated with natural bristles and braided ixtle threads.",
+    "在 Mixteca 腹地，teponaztli 鼓与芦笛声宣告 Tecuani 的到来。这件作品致敬祈雨与护佑丰收的古老舞蹈。人偶经手工塑造与组装，身着点缀神圣猫科动物斑纹的传统黄色服装，面具以天然鬃毛和编织 ixtle 纤维装饰。"
+  ],
+  "Plato de Talavera Poblana": [
+    "Puebla Talavera Plate",
+    "Puebla Talavera 陶盘"
+  ],
+  "Patrimonio Cultural Inmaterial (UNESCO) · Puebla": [
+    "Intangible Cultural Heritage (UNESCO) · Puebla",
+    "非物质文化遗产（UNESCO）· Puebla"
+  ],
+  "Alebrije Jaguar Nahual": [
+    "Alebrije Jaguar Nahual",
+    "Alebrije 美洲豹 Nahual"
+  ],
+  "Cántaro Calado de Barro Negro": [
+    "Openwork Black Clay Pitcher",
+    "镂空黑陶水罐"
+  ],
+  "Huipil de Telar de Cintura": [
+    "Backstrap-Loom Huipil",
+    "腰机织造 Huipil"
+  ],
+  "Baúl de Laca Rayada": [
+    "Etched Lacquer Chest",
+    "刻纹漆箱"
+  ],
+  "Cazo Martillado y Arracadas": [
+    "Hammered Copper Pot and Earrings",
+    "锤制铜锅与耳环"
+  ],
+  "Talla en copal": [
+    "Copal carving",
+    "科帕木雕刻"
+  ],
+  "Barro negro bruñido": [
+    "Burnished black clay",
+    "抛光黑陶"
+  ],
+  "Telar de cintura": [
+    "Backstrap loom",
+    "腰机织造"
+  ],
+  "Laca rayada": [
+    "Etched lacquer",
+    "刻纹漆艺"
+  ],
+  "Alfarería de alta temperatura": [
+    "High-fired pottery",
+    "高温陶艺"
+  ],
+  "Cobre martillado": [
+    "Hammered copper",
+    "锤制铜器"
+  ],
+  "Rombo del Universo Maya": [
+    "Diamond of the Maya Universe",
+    "玛雅宇宙菱形图案"
+  ],
+  "Cosmograma tejido que representa los cuatro rumbos y el centro del mundo.": [
+    "Woven cosmogram representing the four directions and the center of the world.",
+    "表现四方与世界中心的织造宇宙图。"
+  ],
+  "Greca Escalonada Mitla": [
+    "Mitla Stepped Fret",
+    "Mitla 阶梯回纹"
+  ],
+  "Xicalcoliuhqui: el movimiento del agua y la serpiente, tallado en piedra hace siglos.": [
+    "Xicalcoliuhqui: the movement of water and the serpent, carved in stone centuries ago.",
+    "Xicalcoliuhqui：水与蛇的运动，数世纪前刻于石上。"
+  ],
+  "Flor de Rayado Olinalteco": [
+    "Olinalá Etched Flower",
+    "Olinalá 刻纹花卉"
+  ],
+  "Motivo floral esgrafiado sobre laca de linaza y tierras minerales.": [
+    "Floral motif scratched into linseed lacquer and mineral earth pigments.",
+    "在亚麻籽漆与矿物土颜料上刻绘的花卉图案。"
+  ],
+  "Rosetón de Talavera": [
+    "Talavera Rosette",
+    "Talavera 蔷薇花纹"
+  ],
+  "Simetría radial en azul cobalto con Denominación de Origen.": [
+    "Radial cobalt-blue symmetry with protected designation of origin.",
+    "拥有原产地认证的钴蓝放射对称图案。"
+  ],
+  "Abrir pasaporte de {{title}}": [
+    "Open passport for {{title}}",
+    "打开 {{title}} 的护照"
+  ],
+  "{{count}} piezas certificadas": [
+    "{{count}} certified pieces",
+    "{{count}} 件认证作品"
+  ],
+  "{{count}} archivo(s) sellados con SHA-256": [
+    "{{count}} file(s) sealed with SHA-256",
+    "{{count}} 个文件已用 SHA-256 封存"
+  ],
+  "{{count}} archivo(s)": [
+    "{{count}} file(s)",
+    "{{count}} 个文件"
+  ],
+  "{{royalty}}% de regalías automáticas para {{community}}": [
+    "{{royalty}}% automatic royalties for {{community}}",
+    "{{community}} 自动获得 {{royalty}}% 版税"
+  ],
+  "07 nov 2026": [
+    "Nov 7, 2026",
+    "2026年11月7日"
+  ],
+  "02 nov 2026": [
+    "Nov 2, 2026",
+    "2026年11月2日"
+  ],
+  "28 oct 2026": [
+    "Oct 28, 2026",
+    "2026年10月28日"
+  ],
+  "Página no encontrada": [
+    "Page not found",
+    "页面未找到"
+  ],
+  "La página que buscas no existe o fue movida.": [
+    "The page you're looking for doesn't exist or has been moved.",
+    "您访问的页面不存在或已移动。"
+  ],
+  "Ir al inicio": [
+    "Go home",
+    "返回首页"
+  ],
+  "No se pudo cargar esta página": [
+    "This page didn't load",
+    "此页面无法加载"
+  ],
+  "Ocurrió un error. Puedes actualizar o volver al inicio.": [
+    "Something went wrong on our end. You can try refreshing or head back home.",
+    "发生错误，请刷新或返回首页。"
+  ],
+  "Intentar de nuevo": [
+    "Try again",
+    "重试"
+  ],
+  "Copiar {{label}}": [
+    "Copy {{label}}",
+    "复制 {{label}}"
+  ],
+  "{{amount}} USDC enviados a {{artisan}}": [
+    "{{amount}} USDC sent to {{artisan}}",
+    "已向 {{artisan}} 发送 {{amount}} USDC"
+  ],
+  "{{count}} piezas certificadas_one": [
+    "{{count}} certified piece",
+    "{{count}} 件认证作品"
+  ],
+  "{{count}} piezas certificadas_other": [
+    "{{count}} certified pieces",
+    "{{count}} 件认证作品"
+  ],
+  "{{count}} archivo(s)_one": [
+    "{{count}} file",
+    "{{count}} 个文件"
+  ],
+  "{{count}} archivo(s)_other": [
+    "{{count}} files",
+    "{{count}} 个文件"
+  ],
+  "Banco": [
+    "Bank",
+    "银行"
+  ],
+  "Cuenta": [
+    "Account",
+    "账户"
+  ],
+  "CLABE interbancaria": [
+    "Interbank CLABE",
+    "银行间 CLABE"
+  ],
+  "No se pudo proteger la información bancaria. Inténtalo de nuevo.": [
+    "Unable to protect the banking information. Please try again.",
+    "无法保护银行信息，请重试。"
+  ],
+  "Copiar": [
+    "Copy",
+    "复制"
+  ]
+}

@@ -6,6 +6,7 @@ import cobre from "@/assets/cobre.jpg";
 import talavera from "@/assets/talavera.jpg";
 import hero from "@/assets/hero.jpg";
 import tecuani from "@/assets/tecuani-tk0512.jpg.asset.json";
+import type { BankingHashes } from "./artisan-banking";
 
 export const images = { alebrije, barroNegro, huipil, olinala, cobre, talavera, hero };
 
@@ -73,6 +74,7 @@ export const toUsdc = (mxn: number) => (mxn / USDC_RATE).toFixed(2);
 export const fmtMxn = (n: number) => "$" + n.toLocaleString("es-MX") + " MXN";
 
 export type Artisan = {
+  bankingHashes?: BankingHashes | undefined;
   name: string;
   technique: string;
   location: string;
