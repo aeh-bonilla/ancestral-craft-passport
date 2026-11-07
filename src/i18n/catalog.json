@@ -1119,30 +1119,6 @@
     "Remove",
     "移除"
   ],
-  "Page not found": [
-    "Página no encontrada",
-    "页面未找到"
-  ],
-  "The page you're looking for doesn't exist or has been moved.": [
-    "La página que buscas no existe o fue movida.",
-    "您访问的页面不存在或已移动。"
-  ],
-  "Go home": [
-    "Ir al inicio",
-    "返回首页"
-  ],
-  "This page didn't load": [
-    "No se pudo cargar esta página",
-    "此页面无法加载"
-  ],
-  "Something went wrong on our end. You can try refreshing or head back home.": [
-    "Ocurrió un error. Puedes actualizar o volver al inicio.",
-    "发生错误，请刷新或返回首页。"
-  ],
-  "Try again": [
-    "Intentar de nuevo",
-    "重试"
-  ],
   "Verified on Soroban Testnet": [
     "Verified on Soroban Testnet",
     "已在 Soroban 测试网验证"
@@ -1278,5 +1254,53 @@
   "28 oct 2026": [
     "Oct 28, 2026",
     "2026年10月28日"
+  ],
+  "Página no encontrada": [
+    "Page not found",
+    "页面未找到"
+  ],
+  "La página que buscas no existe o fue movida.": [
+    "The page you're looking for doesn't exist or has been moved.",
+    "您访问的页面不存在或已移动。"
+  ],
+  "Ir al inicio": [
+    "Go home",
+    "返回首页"
+  ],
+  "No se pudo cargar esta página": [
+    "This page didn't load",
+    "此页面无法加载"
+  ],
+  "Ocurrió un error. Puedes actualizar o volver al inicio.": [
+    "Something went wrong on our end. You can try refreshing or head back home.",
+    "发生错误，请刷新或返回首页。"
+  ],
+  "Intentar de nuevo": [
+    "Try again",
+    "重试"
+  ],
+  "Copiar {{label}}": [
+    "Copy {{label}}",
+    "复制 {{label}}"
+  ],
+  "{{amount}} USDC enviados a {{artisan}}": [
+    "{{amount}} USDC sent to {{artisan}}",
+    "已向 {{artisan}} 发送 {{amount}} USDC"
+  ],
+  "{{count}} piezas certificadas_one": [
+    "{{count}} certified piece",
+    "{{count}} 件认证作品"
+  ],
+  "{{count}} piezas certificadas_other": [
+    "{{count}} certified pieces",
+    "{{count}} 件认证作品"
+  ],
+  "{{count}} archivo(s)_one": [
+    "{{count}} file",
+    "{{count}} 个文件"
+  ],
+  "{{count}} archivo(s)_other": [
+    "{{count}} files",
+    "{{count}} 个文件"
   ]
 }
