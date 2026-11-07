@@ -1,4 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getRouteApi } from "@tanstack/react-router";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { profileOptions } from "@/lib/promoter-profile";
+import { supabase } from "@/integrations/supabase/client";
 import { BadgeCheck, Camera, MapPin, ShieldCheck, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -14,27 +18,49 @@ const states = ["Oaxaca", "Chiapas", "Guerrero", "Michoacán", "Puebla", "Jalisc
 const sel = "flex h-10 w-full rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring";
 
 export function PromoterRegistration() {
-  const [photo, setPhoto] = useState<string | null>(null);
-  const [picked, setPicked] = useState<string[]>([]);
-  const [accept, setAccept] = useState(false);
+  const { user } = getRouteApi('/_authenticated').useRouteContext();
+  const { data: { profile, photo: savedPhoto } } = useSuspenseQuery(profileOptions(user.id));
+  const queryClient = useQueryClient();
+  const [photo, setPhoto] = useState<string | null>(savedPhoto);
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [picked, setPicked] = useState<string[]>(profile.specialties);
+  const [accept, setAccept] = useState(profile.ethics_accepted);
   const [busy, setBusy] = useState(false);
-  const [done, setDone] = useState(false);
-  const [f, setF] = useState({ name: "", curp: "", email: "", role: "", org: "", cedula: "", years: "", state: "", communities: "", bio: "" });
+  const [done, setDone] = useState(Boolean(profile.submitted_at));
+  const [f, setF] = useState({ name: profile.display_name, curp: profile.official_id, email: profile.professional_email, role: profile.professional_title, org: profile.organization, cedula: profile.credential, years: String(profile.experience_years), state: profile.region, communities: profile.communities, bio: profile.bio });
+  useEffect(() => () => { if (photo?.startsWith('blob:')) URL.revokeObjectURL(photo); }, [photo]);
   const set = (k: keyof typeof f) => (e: { target: { value: string } }) => setF({ ...f, [k]: e.target.value });
 
   const onPhoto = (file?: File) => {
     if (!file) return;
     if (file.size > 5 * 1024 * 1024) { toast.error("La foto debe pesar menos de 5 MB"); return; }
+    if (!['image/jpeg', 'image/png'].includes(file.type)) { toast.error("Selecciona una foto JPG o PNG"); return; }
+    setPhotoFile(file);
     setPhoto(URL.createObjectURL(file));
   };
   const toggle = (s: string) => setPicked((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]));
 
-  const submit = () => {
+  const submit = async () => {
     if (!f.name || !f.email || !f.role || !f.state || picked.length === 0) { toast.error("Completa nombre, correo, perfil, región y al menos una especialidad"); return; }
     if (!photo) { toast.error("Agrega una foto del promotor"); return; }
     if (!accept) { toast.error("Acepta el código de ética de certificación"); return; }
+    if (!Number.isInteger(Number(f.years)) || Number(f.years) < 0) { toast.error("Revisa los años de experiencia"); return; }
     setBusy(true);
-    setTimeout(() => { setBusy(false); setDone(true); toast.success("Registro enviado", { description: "Tu credencial de promotor certificador está en revisión." }); }, 1500);
+    try {
+      let avatarPath = profile.avatar_path;
+      if (photoFile) {
+        avatarPath = `${user.id}/${crypto.randomUUID()}.${photoFile.type === 'image/png' ? 'png' : 'jpg'}`;
+        const upload = await supabase.storage.from('promoter-photos').upload(avatarPath, photoFile);
+        if (upload.error) throw upload.error;
+      }
+      const result = await supabase.from('profiles').update({ display_name: f.name.trim(), official_id: f.curp, professional_email: f.email.trim(), professional_title: f.role, organization: f.org, credential: f.cedula, experience_years: Number(f.years), region: f.state, communities: f.communities, bio: f.bio, specialties: picked, ethics_accepted: accept, avatar_path: avatarPath, submitted_at: new Date().toISOString(), updated_at: new Date().toISOString() }).eq('id', user.id).select('id').single();
+      if (result.error) throw result.error;
+      await queryClient.invalidateQueries({ queryKey: ['promoter-profile', user.id] });
+      setPhotoFile(null);
+      setDone(true);
+      toast.success("Perfil guardado");
+    } catch { toast.error("No se pudo guardar el perfil. Inténtalo de nuevo."); }
+    finally { setBusy(false); }
   };
 
   if (done) return (
@@ -43,7 +69,7 @@ export function PromoterRegistration() {
       <BadgeCheck className="mx-auto mt-4 h-8 w-8 text-jade" />
       <h2 className="mt-2 font-display text-2xl">{f.name}</h2>
       <p className="text-sm text-muted-foreground">{f.role} · {f.state}</p>
-      <p className="mx-auto mt-3 max-w-md text-sm">Tu perfil será validado por el Consejo Tlamatik. Al aprobarse, podrás firmar pasaportes de autenticidad en Stellar para: <b>{picked.join(", ")}</b>.</p>
+      <p className="mx-auto mt-3 max-w-md text-sm">Perfil profesional guardado · <b>{picked.join(", ")}</b></p>
       <Button variant="outline" className="mt-5" onClick={() => setDone(false)}>Editar registro</Button>
     </div>
   );
@@ -61,7 +87,7 @@ export function PromoterRegistration() {
           </div>
           <span className="text-sm font-medium text-primary">{photo ? "Cambiar foto" : "Subir foto"}</span>
           <span className="text-center text-xs text-muted-foreground">Rostro visible · JPG/PNG · máx. 5 MB</span>
-          <input type="file" accept="image/*" className="hidden" onChange={(e) => onPhoto(e.target.files?.[0])} />
+          <input aria-label="Foto del promotor" type="file" accept="image/jpeg,image/png" className="hidden" onChange={(e) => onPhoto(e.target.files?.[0])} />
         </label>
 
         <div className="space-y-5">
