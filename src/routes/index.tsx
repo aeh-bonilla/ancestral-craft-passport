@@ -66,7 +66,7 @@ function Index() {
             <div key={s.label} className="text-center">
               <s.icon className="mx-auto h-6 w-6 text-gold" />
               <p className="mt-2 font-serif text-4xl font-semibold text-gold">{s.value}</p>
-              <p className="mt-1 text-sm opacity-75">{s.label}</p>
+              <p className="mt-1 text-sm opacity-75">{t(s.label)}</p>
             </div>
           ))}
         </div>

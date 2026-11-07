@@ -11,3 +11,4 @@
 
 - Protected pages live under the managed `_authenticated` layout; Google login returns to a public auth page before navigating to the intended protected destination.
 - Promoter profiles use owner-only database access and private photo storage; professional titles are descriptive data, never authorization roles.
+- Internationalization uses a per-render i18next instance with Spanish SSR defaults and browser-only preference restoration; translated labels never replace stored profile, filter, contract or hash values.

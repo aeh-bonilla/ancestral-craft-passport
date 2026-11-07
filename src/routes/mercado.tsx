@@ -147,7 +147,7 @@ function Chips({ title, items, value, onChange }: { title: string; items: string
       <p className="mb-2 text-sm font-semibold">{t(title)}</p>
       <div className="flex flex-wrap gap-2">
         {items.map((i) => (
-          <button key={i} onClick={() => onChange(value === i ? null : i)} className={cn("rounded-full border px-3 py-1 text-xs", value === i ? "border-primary bg-primary text-primary-foreground" : "bg-background")}>{i}</button>
+          <Button key={i} variant={value === i ? 'default' : 'outline'} size="sm" onClick={() => onChange(value === i ? null : i)} className="rounded-full text-xs">{t(i)}</Button>
         ))}
       </div>
     </div>

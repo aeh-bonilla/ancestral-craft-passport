@@ -11,7 +11,7 @@ export function validLanguage(value: unknown): Language {
 export function createTranslations() {
   const resources = Object.fromEntries(languages.map((language, index) => [language, { translation: Object.fromEntries(Object.entries(catalog).map(([key, values]) => [key, index === 0 ? key : values[index - 1]])) }]));
   const instance = createInstance();
-  void instance.init({ lng: 'es', fallbackLng: 'es', resources, initImmediate: false, keySeparator: false, nsSeparator: false, interpolation: { escapeValue: false }, returnNull: false });
+  void instance.init({ lng: 'es', fallbackLng: 'es', resources, initAsync: false, keySeparator: false, nsSeparator: false, interpolation: { escapeValue: false }, returnNull: false });
   return instance;
 }
 
