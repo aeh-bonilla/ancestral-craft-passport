@@ -1,0 +1,3 @@
+- [ ] Require Google authentication for Panel and Registro de Obras; preserve public pages.
+- [ ] Persist promoter profile and private photo; restore saved data.
+- [ ] Verify access rules, profile saving, and sign-out.
