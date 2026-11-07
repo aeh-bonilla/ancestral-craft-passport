@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { CodiButton, FullBreakdown, LedgerBadge, PriceBreakdown, QrCode, StellarBadge, StripeButton } from "@/components/toltek/ui";
-import { contractId, fmtMxn, getPiece, images, pieces, sampleHash, toUsdc, type Piece } from "@/lib/toltek";
+import { contractId, getPiece, images, pieces, sampleHash, toUsdc, type Piece } from "@/lib/toltek";
 
 export const Route = createFileRoute("/verificar")({
   validateSearch: (search: Record<string, unknown>): { id?: string | undefined } => ({
@@ -40,7 +40,7 @@ function Verify() {
 }
 
 function FeaturedVerify({ piece }: { piece: Piece }) {
-  const { t } = useI18n();
+  const { t, money } = useI18n();
   const available = piece.status === "available";
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
@@ -84,7 +84,7 @@ function FeaturedVerify({ piece }: { piece: Piece }) {
 }
 
 function DefaultVerify() {
-  const { t } = useI18n();
+  const { t, money } = useI18n();
   const [active, setActive] = useState(0);
   const cur = gallery[active]!;
   const [audit, setAudit] = useState(true);
@@ -145,7 +145,7 @@ function DefaultVerify() {
           </div>
 
           <div className="rounded-xl border bg-card p-5 shadow-float">
-            <p className="flex items-center gap-2 text-2xl font-semibold">{fmtMxn(price)} <PriceBreakdown priceMxn={price} /></p>
+            <p className="flex items-center gap-2 text-2xl font-semibold">{money(price)} <PriceBreakdown priceMxn={price} /></p>
             <p className="text-sm text-muted-foreground">≈ {toUsdc(price)}{" "}{t("USDC · 95.2% llega directo al taller")}</p>
             <div className="mt-4 grid gap-2 sm:grid-cols-2">
               <Button onClick={() => toast.success(t("Pago simulado enviado"), { description: `${toUsdc(price)} USDC → GBTK…AGUI` })}><ShoppingBag />{t("Comprar en USDC / MXN")}</Button>

@@ -29,7 +29,7 @@ const techniques = ["Textil", "Cerámica", "Talla en Madera", "Filigrana", "Laca
 const uses = ["Textil comercial", "Arquitectura", "Edición limitada"];
 
 function Market() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [mode, setMode] = useState<"fisico" | "b2b">("fisico");
   const [region, setRegion] = useState<string | null>(null);
   const [tech, setTech] = useState<string | null>(null);
@@ -64,7 +64,7 @@ function Market() {
             <Chips title={t("Región")} items={regions} value={region} onChange={setRegion} />
             <Chips title={t("Técnica")} items={techniques} value={tech} onChange={setTech} />
             <div>
-              <p className="mb-3 text-sm font-semibold">{t("Precio máximo: $")}{max.toLocaleString("es-MX")} MXN</p>
+              <p className="mb-3 text-sm font-semibold">{t("Precio máximo: $")}{max.toLocaleString(locale)} MXN</p>
               <Slider min={250} max={10000} step={250} value={[max]} onValueChange={(v) => setMax(v[0] ?? 10000)} />
             </div>
           </aside>
@@ -141,7 +141,7 @@ function Market() {
 }
 
 function Chips({ title, items, value, onChange }: { title: string; items: string[]; value: string | null; onChange: (v: string | null) => void }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   return (
     <div>
       <p className="mb-2 text-sm font-semibold">{t(title)}</p>

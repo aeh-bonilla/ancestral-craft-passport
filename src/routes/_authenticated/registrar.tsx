@@ -30,7 +30,7 @@ const steps = ["Datos de la Pieza", "Evidencia del Saber", "Minting Criptográfi
 const categories = ["Textil", "Cerámica", "Talla en Madera", "Filigrana", "Laca"];
 
 function Register() {
-  const { t } = useI18n();
+  const { t, money } = useI18n();
   const [step, setStep] = useState(0);
   const [d, setD] = useState({ title: "", artisan: artisans[0]?.name ?? "", category: "Talla en Madera", technique: "", materials: "", priceMxn: "" });
   const [files, setFiles] = useState<{ name: string; size: number; type: string }[]>([]);
@@ -204,7 +204,7 @@ function Register() {
                 <div className="rounded-lg bg-card p-2"><QrCode value={hash} size={112} /></div>
                 <div className="min-w-0 text-sm">
                   <p className="text-xs opacity-60">{t("Precio")}</p>
-                  <p className="font-semibold">{d.priceMxn ? `$${Number(d.priceMxn).toLocaleString("es-MX")} MXN` : "—"}</p>
+                  <p className="font-semibold">{d.priceMxn ? money(Number(d.priceMxn)) : "—"}</p>
                   <p className="text-xs text-gold">{usdc} USDC</p>
                 </div>
               </div>
@@ -248,12 +248,12 @@ function Register() {
 }
 
 function Field({ label, children, className }: { label: string; children: React.ReactNode; className?: string }) {
-  const { t } = useI18n();
+  const { t, money } = useI18n();
   return <div className={cn("space-y-1.5", className)}><Label>{t(label)}</Label>{children}</div>;
 }
 
 function Row({ k, v }: { k: string; v: string }) {
-  const { t } = useI18n();
+  const { t, money } = useI18n();
   return (
     <div className="rounded-lg bg-sand p-3">
       <dt className="text-xs uppercase tracking-wider text-muted-foreground">{t(k)}</dt>

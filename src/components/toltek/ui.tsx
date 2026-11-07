@@ -4,14 +4,14 @@ import { useState } from "react";
 import { Award, CheckCircle2, CreditCard, ExternalLink, Info, Loader2, MapPin, Ruler, Smartphone, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { fmtMxn, toUsdc, type Piece } from "@/lib/toltek";
+import { toUsdc, type Piece } from "@/lib/toltek";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import tlamatikMark from "@/assets/tlamatik-mark.png.asset.json";
 
 export function Logo({ className }: { className?: string }) {
-  const { t } = useI18n();
+  const { t, money } = useI18n();
   return (
     <span className={cn("flex items-center gap-2", className)}>
       <img src={tlamatikMark.url} alt={t("Sello Tlamatik")} width={36} height={36} className="h-9 w-9" />
@@ -21,7 +21,7 @@ export function Logo({ className }: { className?: string }) {
 }
 
 export function StellarBadge({ className, label = "Certificado en Stellar" }: { className?: string; label?: string }) {
-  const { t } = useI18n();
+  const { t, money } = useI18n();
   return (
     <span className={cn("inline-flex items-center gap-1 rounded-full bg-seal px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-gold-foreground shadow-sm", className)}>
       <img src={tlamatikMark.url} alt="" className="h-3.5 w-3.5 rounded-full" /> {t(label)}
@@ -30,7 +30,7 @@ export function StellarBadge({ className, label = "Certificado en Stellar" }: { 
 }
 
 export function SectionTitle({ eyebrow, title, sub, center }: { eyebrow?: string; title: string; sub?: string; center?: boolean }) {
-  const { t } = useI18n();
+  const { t, money } = useI18n();
   return (
     <div className={cn("max-w-2xl", center && "mx-auto text-center")}>
       {eyebrow && <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-primary">{t(eyebrow)}</p>}
@@ -41,7 +41,7 @@ export function SectionTitle({ eyebrow, title, sub, center }: { eyebrow?: string
 }
 
 export function PieceCard({ piece, action }: { piece: Piece; action?: React.ReactNode }) {
-  const { t } = useI18n();
+  const { t, money } = useI18n();
   const [open, setOpen] = useState(false);
   const clickable = !!piece.featured;
   return (
@@ -75,7 +75,7 @@ export function PieceCard({ piece, action }: { piece: Piece; action?: React.Reac
         <div className="flex flex-col gap-2 pt-2">
           <div className="flex items-end justify-between">
             <div>
-              <p className="flex items-center gap-1.5 font-semibold">{fmtMxn(piece.priceMxn)} <PriceBreakdown priceMxn={piece.priceMxn} /></p>
+              <p className="flex items-center gap-1.5 font-semibold">{money(piece.priceMxn)} <PriceBreakdown priceMxn={piece.priceMxn} /></p>
               <p className="text-xs text-muted-foreground">≈ {toUsdc(piece.priceMxn)} USDC</p>
             </div>
             {!action && (clickable ? (
@@ -95,23 +95,23 @@ export function PieceCard({ piece, action }: { piece: Piece; action?: React.Reac
 
 /** Desglose de compra completo: obra + certificado + envío. */
 export function FullBreakdown({ piece }: { piece: Piece }) {
-  const { t } = useI18n();
+  const { t, money } = useI18n();
   const cert = piece.certFeeMxn ?? 0;
   const ship = piece.shippingMxn ?? 0;
   const rows: [string, number][] = [["Obra", piece.priceMxn], ["Certificado Phygital", cert], ["Envío", ship]];
   return (
     <dl className="space-y-1.5 text-sm">
       {rows.map(([k, v]) => (
-        <div key={k} className="flex justify-between gap-3"><dt className="text-muted-foreground">{t(k)}</dt><dd className="font-mono">{fmtMxn(v)}</dd></div>
+        <div key={k} className="flex justify-between gap-3"><dt className="text-muted-foreground">{t(k)}</dt><dd className="font-mono">{money(v)}</dd></div>
       ))}
-      <div className="flex justify-between gap-3 border-t pt-2 font-semibold"><dt>{t("Total")}</dt><dd className="font-mono">{fmtMxn(piece.priceMxn + cert + ship)}</dd></div>
+      <div className="flex justify-between gap-3 border-t pt-2 font-semibold"><dt>{t("Total")}</dt><dd className="font-mono">{money(piece.priceMxn + cert + ship)}</dd></div>
       {piece.priceUsd && <p className="text-xs text-muted-foreground">{t("Precio internacional de la obra: USD $")}{" "}{piece.priceUsd}</p>}
     </dl>
   );
 }
 
 export function LedgerBadge({ piece }: { piece: Piece }) {
-  const { t } = useI18n();
+  const { t, money } = useI18n();
   const hash = piece.stellarTxHash ?? "";
   return (
     <a
@@ -130,7 +130,7 @@ export function LedgerBadge({ piece }: { piece: Piece }) {
 }
 
 export function StripeButton({ piece, className }: { piece: Piece; className?: string }) {
-  const { t } = useI18n();
+  const { t, money } = useI18n();
   return (
     <Button variant="outline" className={className} onClick={() => toast.success(t("Checkout de Stripe simulado"), { description: `USD $${piece.priceUsd ?? toUsdc(piece.priceMxn)} · ${piece.title}` })}>
       <CreditCard />{t("Buy in USD (Stripe)")}</Button>
@@ -139,7 +139,7 @@ export function StripeButton({ piece, className }: { piece: Piece; className?: s
 
 /** Modal de Pasaporte para piezas destacadas. */
 export function PassportModal({ piece, open, onOpenChange }: { piece: Piece; open: boolean; onOpenChange: (o: boolean) => void }) {
-  const { t } = useI18n();
+  const { t, money } = useI18n();
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[92vh] max-w-4xl overflow-y-auto p-0">
@@ -174,7 +174,7 @@ export function PassportModal({ piece, open, onOpenChange }: { piece: Piece; ope
 
 /** Deterministic pseudo-QR derived from a hex string (visual mock). */
 export function QrCode({ value, size = 140, className }: { value: string; size?: number; className?: string }) {
-  const { t } = useI18n();
+  const { t, money } = useI18n();
   const n = 25;
   const hex = (value || "0").padEnd(64, "0");
   const bits: boolean[] = [];
@@ -206,11 +206,11 @@ export function QrCode({ value, size = 140, className }: { value: string; size?:
   );
 }
 
-const fmt2 = (n: number) => "$" + n.toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " MXN";
+
 
 /** Desglose transparente "Buyer Premium": 95.2% artesano / 4.8% certificado. */
 export function PriceBreakdown({ priceMxn }: { priceMxn: number }) {
-  const { t } = useI18n();
+  const { t, money } = useI18n();
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -223,15 +223,15 @@ export function PriceBreakdown({ priceMxn }: { priceMxn: number }) {
         <dl className="mt-3 space-y-2">
           <div className="flex items-start justify-between gap-3">
             <dt className="text-muted-foreground">{t("Precio Base para el Artesano (95.2%)")}</dt>
-            <dd className="shrink-0 font-mono">{fmt2(priceMxn * 0.952)}</dd>
+            <dd className="shrink-0 font-mono">{money(priceMxn * 0.952, 2)}</dd>
           </div>
           <div className="flex items-start justify-between gap-3">
             <dt className="text-muted-foreground">{t("Certificado Phygital & Buyer Premium (4.8%)")}</dt>
-            <dd className="shrink-0 font-mono">{fmt2(priceMxn * 0.048)}</dd>
+            <dd className="shrink-0 font-mono">{money(priceMxn * 0.048, 2)}</dd>
           </div>
           <div className="flex items-start justify-between gap-3 border-t pt-2 font-semibold">
             <dt>{t("Total Transparentado")}</dt>
-            <dd className="shrink-0 font-mono">{fmt2(priceMxn)}</dd>
+            <dd className="shrink-0 font-mono">{money(priceMxn, 2)}</dd>
           </div>
         </dl>
       </PopoverContent>
@@ -241,7 +241,7 @@ export function PriceBreakdown({ priceMxn }: { priceMxn: number }) {
 
 /** Botón + modal de pago CoDi® / pey.mx (mockup interactivo). */
 export function CodiButton({ piece, className, primary }: { piece: Piece; className?: string; primary?: boolean }) {
-  const { t } = useI18n();
+  const { t, money } = useI18n();
   const [open, setOpen] = useState(false);
   const [state, setState] = useState<"qr" | "wait" | "done">("qr");
   const close = (o: boolean) => {
@@ -261,7 +261,7 @@ export function CodiButton({ piece, className, primary }: { piece: Piece; classN
         <DialogContent className="text-center">
           <DialogHeader className="text-center">
             <DialogTitle className="font-serif text-2xl">CoDi® · pey.mx</DialogTitle>
-            <DialogDescription>{t(piece.title)} · {fmtMxn(piece.priceMxn + (piece.certFeeMxn ?? 0) + (piece.shippingMxn ?? 0))}</DialogDescription>
+            <DialogDescription>{t(piece.title)} · {money(piece.priceMxn + (piece.certFeeMxn ?? 0) + (piece.shippingMxn ?? 0))}</DialogDescription>
           </DialogHeader>
           {state === "done" ? (
             <div className="rounded-xl border border-jade/30 bg-jade/10 p-6">
