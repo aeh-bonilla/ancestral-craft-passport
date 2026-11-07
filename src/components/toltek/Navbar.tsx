@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useHydrated } from "@tanstack/react-router";
 import { Menu, Wallet, X, LogOut } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -20,6 +20,7 @@ const links = [
 export function Navbar() {
   const { address, connect, disconnect } = useWallet();
   const { t, language, setLanguage } = useI18n();
+  const hydrated = useHydrated();
   const [open, setOpen] = useState(false);
   const { user } = useAccount();
   const queryClient = useQueryClient();
@@ -47,7 +48,7 @@ export function Navbar() {
         </nav>
         <div className="flex items-center gap-2">
           {user && <Button variant="ghost" size="icon" onClick={signOut} title={t("Cerrar sesión")} aria-label={t("Cerrar sesión")}><LogOut className="h-4 w-4" /></Button>}
-          <select aria-label={t("Idioma")} value={language} onChange={(e) => setLanguage(e.target.value)} className="h-9 max-w-28 rounded-md border bg-background px-2 text-xs font-semibold">
+          <select disabled={!hydrated} aria-label={t("Idioma")} value={language} onChange={(e) => setLanguage(e.target.value)} className="h-9 max-w-28 rounded-md border bg-background px-2 text-xs font-semibold">
             <option value="es">Español</option><option value="en">English</option><option value="zh-CN">简体中文</option>
           </select>
           <Button size="sm" onClick={address ? disconnect : connect} className="hidden sm:inline-flex" variant={address ? "outline" : "default"}>
