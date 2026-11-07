@@ -65,7 +65,7 @@ function Register() {
   const addFiles = (list: FileList | null) => {
     if (!list) return;
     setFiles((f) => [...f, ...Array.from(list).map((x) => ({ name: x.name, size: x.size, type: x.type }))]);
-    toast.success(`${list.length} archivo(s) sellados con SHA-256`);
+    toast.success(t("{{count}} archivo(s) sellados con SHA-256", { count: list.length }));
   };
 
   const next = () => {
@@ -93,7 +93,7 @@ function Register() {
 
       <ol className="mt-8 flex flex-wrap gap-3">
         {steps.map((s, i) => (
-          <li key={t(s)} className="flex items-center gap-2">
+          <li key={s} className="flex items-center gap-2">
             <button onClick={() => i <= step && setStep(i)} className={cn("flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm", i === step && "border-primary bg-primary text-primary-foreground", i < step && "border-jade text-jade")}>
               <span className="grid h-5 w-5 place-items-center rounded-full bg-background/20 text-xs">{i < step ? <Check className="h-3 w-3" /> : i + 1}</span>
               {t(s)}
@@ -112,7 +112,7 @@ function Register() {
             <Button variant="outline" size="sm" onClick={() => toast.success(t("Audio recibido"), { description: t("relato_maestro.mp3 · transcribiendo…") })}><Mic />{t("Subir Audio con Relato del Maestro")}</Button>
             <Button variant="outline" size="sm" onClick={() => toast.success(t("Foto analizada"), { description: t("Se detectaron pigmentos naturales y talla en copal.") })}><Camera />{t("Analizar Foto de la Obra")}</Button>
             <Button size="sm" onClick={generateWithAi} disabled={aiBusy}>
-              {aiBusy ? <Loader2 className="animate-spin" /> : <Sparkles />}{t("Generar Historia y Metadatos con IA")}</Button>
+              {aiBusy ? <Loader2 className="animate-spin" /> : <Sparkles />}{" "}{t("Generar Historia y Metadatos con IA")}</Button>
           </div>
         </div>
       </div>
@@ -129,7 +129,7 @@ function Register() {
               </Field>
               <Field label={t("Categoría")}>
                 <select value={d.category} onChange={set("category")} className="h-9 w-full rounded-md border bg-background px-3 text-sm">
-                  {categories.map((c) => <option key={c}>{c}</option>)}
+                  {categories.map((c) => <option key={c} value={c}>{t(c)}</option>)}
                 </select>
               </Field>
               <Field label={t("Técnica ancestral")} className="sm:col-span-2"><Textarea value={d.technique} onChange={set("technique")} placeholder={t("Tallado a mano en copal, pintura con pigmentos naturales…")} /></Field>
@@ -176,7 +176,7 @@ function Register() {
                 <Row k="Hash SHA-256 del expediente" v={hash} />
                 <Row k="Contrato Soroban" v={contractId} />
                 <Row k="Red" v="Stellar Testnet" />
-                <Row k="Evidencias selladas" v={`${files.length} archivo(s)`} />
+                <Row k="Evidencias selladas" v={t("{{count}} archivo(s)", { count: files.length })} />
               </dl>
               <Button size="lg" className="w-full" onClick={mint} disabled={minting === "running"}>
                 <Anchor />{t("Anclar en Stellar Blockchain & Generar Pasaporte Phygital")}</Button>
@@ -198,7 +198,7 @@ function Register() {
                 <span className="font-mono text-[10px] opacity-60">{t("Vista previa")}</span>
               </div>
               <h3 className="mt-3 font-serif text-2xl font-semibold">{d.title || "Título de la obra"}</h3>
-              <p className="text-sm opacity-75">{d.artisan} · {d.category}</p>
+              <p className="text-sm opacity-75">{d.artisan} · {t(d.category)}</p>
               {d.materials && <p className="mt-1 text-xs opacity-60">{d.materials}</p>}
               <div className="mt-5 flex items-center gap-4">
                 <div className="rounded-lg bg-card p-2"><QrCode value={hash} size={112} /></div>
@@ -225,7 +225,7 @@ function Register() {
           </DialogHeader>
           <ul className="space-y-3">
             {["Calculando hash SHA-256", "Firmando transacción con Freighter", "Invocando contrato Soroban", "Emitiendo Pasaporte Phygital"].map((l, i) => (
-              <li key={t(l)} className="flex items-center gap-3 text-sm">
+              <li key={l} className="flex items-center gap-3 text-sm">
                 {phase > i ? <Check className="h-5 w-5 text-jade" /> : phase === i ? <Loader2 className="h-5 w-5 animate-spin text-primary" /> : <span className="h-5 w-5 rounded-full border" />}
                 <span className={phase > i ? "" : "text-muted-foreground"}>{t(l)}</span>
               </li>

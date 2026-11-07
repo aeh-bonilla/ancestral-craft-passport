@@ -79,9 +79,9 @@ function Index() {
             <div key={s.n} className="relative rounded-xl border bg-card p-6 shadow-float">
               <span className="absolute right-5 top-4 font-serif text-5xl font-semibold text-primary/15">{s.n}</span>
               <span className="grid h-12 w-12 place-items-center rounded-lg bg-primary/10 text-primary"><s.icon /></span>
-              <p className="mt-5 text-xs font-semibold uppercase tracking-wider text-primary">{s.sub}</p>
-              <h3 className="mt-1 text-xl font-semibold">{s.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{s.text}</p>
+              <p className="mt-5 text-xs font-semibold uppercase tracking-wider text-primary">{t(s.sub)}</p>
+              <h3 className="mt-1 text-xl font-semibold">{t(s.title)}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{t(s.text)}</p>
             </div>
           ))}
         </div>

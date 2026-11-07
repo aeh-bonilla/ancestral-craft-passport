@@ -51,7 +51,7 @@ export function PieceCard({ piece, action }: { piece: Piece; action?: React.Reac
       onKeyDown={clickable ? (e) => { if (e.key === "Enter" && e.target === e.currentTarget) setOpen(true); } : undefined}
       tabIndex={clickable ? 0 : undefined}
       role={clickable ? "button" : undefined}
-      aria-label={clickable ? `Abrir pasaporte de ${piece.title}` : undefined}
+      aria-label={clickable ? t("Abrir pasaporte de {{title}}", { title: t(piece.title) }) : undefined}
       className={cn("group overflow-hidden rounded-xl border bg-card shadow-float transition-transform hover:-translate-y-1", clickable && "cursor-pointer ring-2 ring-gold/60")}>
       <div className="relative aspect-square overflow-hidden bg-sand">
         <img src={piece.image} alt={t(piece.title)} loading="lazy" width={816} height={816} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
@@ -102,10 +102,10 @@ export function FullBreakdown({ piece }: { piece: Piece }) {
   return (
     <dl className="space-y-1.5 text-sm">
       {rows.map(([k, v]) => (
-        <div key={t(k)} className="flex justify-between gap-3"><dt className="text-muted-foreground">{t(k)}</dt><dd className="font-mono">{fmtMxn(v)}</dd></div>
+        <div key={k} className="flex justify-between gap-3"><dt className="text-muted-foreground">{t(k)}</dt><dd className="font-mono">{fmtMxn(v)}</dd></div>
       ))}
       <div className="flex justify-between gap-3 border-t pt-2 font-semibold"><dt>{t("Total")}</dt><dd className="font-mono">{fmtMxn(piece.priceMxn + cert + ship)}</dd></div>
-      {piece.priceUsd && <p className="text-xs text-muted-foreground">{t("Precio internacional de la obra: USD $")}{piece.priceUsd}</p>}
+      {piece.priceUsd && <p className="text-xs text-muted-foreground">{t("Precio internacional de la obra: USD $")}{" "}{piece.priceUsd}</p>}
     </dl>
   );
 }
@@ -121,7 +121,7 @@ export function LedgerBadge({ piece }: { piece: Piece }) {
     >
       <img src={tlamatikMark.url} alt="" className="h-8 w-8 shrink-0" />
       <span className="min-w-0 flex-1">
-        <span className="block font-semibold text-jade">{t("Inmutable ·")}{t(piece.ledgerStatus)}</span>
+        <span className="block font-semibold text-jade">{t("Inmutable ·")}{" "}{t(piece.ledgerStatus)}</span>
         <span className="block truncate font-mono text-xs text-muted-foreground">{hash}</span>
       </span>
       <ExternalLink className="h-4 w-4 shrink-0 text-jade" />
@@ -156,7 +156,7 @@ export function PassportModal({ piece, open, onOpenChange }: { piece: Piece; ope
             <p className="text-sm leading-relaxed text-muted-foreground">{t(piece.story)}</p>
             <div className="space-y-1 text-xs text-muted-foreground">
               <p><span className="font-semibold text-foreground">{t("Técnica:")}</span> {t(piece.techniqueDetail)}</p>
-              <p className="flex items-center gap-1"><Ruler className="h-3.5 w-3.5" /> {piece.dimensions}{t("· Pasaporte")}{piece.id}</p>
+              <p className="flex items-center gap-1"><Ruler className="h-3.5 w-3.5" /> {piece.dimensions}{" "}{t("· Pasaporte")}{" "}{piece.id}</p>
             </div>
             <div className="rounded-xl border bg-card p-4"><FullBreakdown piece={piece} /></div>
             <div className="grid gap-2">
@@ -267,7 +267,7 @@ export function CodiButton({ piece, className, primary }: { piece: Piece; classN
             <div className="rounded-xl border border-jade/30 bg-jade/10 p-6">
               <CheckCircle2 className="mx-auto h-12 w-12 text-jade" />
               <p className="mt-3 font-semibold text-jade">{t("✓ Pago confirmado por pey.mx (SPEI)")}</p>
-              <p className="mt-1 text-sm text-muted-foreground">{t("Pasaporte grabado en Stellar Testnet: Hash")}{piece.stellarTxHash ? `${piece.stellarTxHash.slice(0, 6)}…${piece.stellarTxHash.slice(-4)}` : "0x7a8f…b855"}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{t("Pasaporte grabado en Stellar Testnet: Hash")}{" "}{piece.stellarTxHash ? `${piece.stellarTxHash.slice(0, 6)}…${piece.stellarTxHash.slice(-4)}` : "0x7a8f…b855"}</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -276,7 +276,7 @@ export function CodiButton({ piece, className, primary }: { piece: Piece; classN
               </div>
               <p className="text-sm text-muted-foreground">{t("Escanea desde cualquier app bancaria en México (Banxico)")}</p>
               <Button className="w-full" onClick={confirm} disabled={state === "wait"}>
-                {state === "wait" && <Loader2 className="animate-spin" />}{t("Simular Confirmación de Pago CoDi")}</Button>
+                {state === "wait" && <Loader2 className="animate-spin" />}{" "}{t("Simular Confirmación de Pago CoDi")}</Button>
             </div>
           )}
         </DialogContent>

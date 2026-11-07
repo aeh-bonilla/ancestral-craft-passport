@@ -46,7 +46,7 @@ function Market() {
     setTimeout(() => {
       setSigning(false);
       setLic(null);
-      toast.success(t("Licencia ética aprobada"), { description: `${royalty}% de regalías automáticas para ${lic?.community}` });
+      toast.success(t("Licencia ética aprobada"), { description: t("{{royalty}}% de regalías automáticas para {{community}}", { royalty, community: lic?.community }) });
     }, 1600);
   };
 
@@ -54,7 +54,7 @@ function Market() {
     <div className="mx-auto max-w-7xl px-4 py-10">
       <div className="mx-auto flex w-full max-w-md rounded-2xl border bg-sand p-1 sm:w-fit sm:rounded-full">
         {([["fisico", "Comprar Artesanías Físicas"], ["b2b", "Licenciamiento Ético para Marcas"]] as const).map(([k, l]) => (
-          <button key={t(k)} onClick={() => setMode(k)} className={cn("flex-1 rounded-xl px-3 py-2 text-center text-sm font-medium leading-tight transition-colors sm:rounded-full sm:px-4", mode === k ? "bg-indigo text-indigo-foreground" : "text-muted-foreground")}>{t(l)}</button>
+          <button key={k} onClick={() => setMode(k)} className={cn("flex-1 rounded-xl px-3 py-2 text-center text-sm font-medium leading-tight transition-colors sm:rounded-full sm:px-4", mode === k ? "bg-indigo text-indigo-foreground" : "text-muted-foreground")}>{t(l)}</button>
         ))}
       </div>
 
@@ -69,7 +69,7 @@ function Market() {
             </div>
           </aside>
           <div>
-            <p className="mb-4 text-sm text-muted-foreground">{list.length}{t("piezas certificadas")}</p>
+            <p className="mb-4 text-sm text-muted-foreground">{t("{{count}} piezas certificadas", { count: list.length })}</p>
             <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {list.map((p) => (
                 <PieceCard key={p.id} piece={p} action={
@@ -97,7 +97,7 @@ function Market() {
                   <p className="text-xs font-medium uppercase tracking-wider text-primary">{p.community}</p>
                   <p className="mt-2 flex-1 text-sm text-muted-foreground">{t(p.description)}</p>
                   <div className="mt-4 flex items-center justify-between">
-                    <span className="text-sm">{t("Regalía sugerida")}<b>{p.royalty}%</b></span>
+                    <span className="text-sm">{t("Regalía sugerida")}{" "}<b>{p.royalty}%</b></span>
                     <Button size="sm" onClick={() => { setLic(p); setRoyalty(p.royalty); }}><FileSignature />{t("Solicitar licencia")}</Button>
                   </div>
                 </div>
@@ -111,14 +111,14 @@ function Market() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="font-serif text-2xl">{t("Solicitud de licencia")}</DialogTitle>
-            <DialogDescription>{lic?.name} · {lic?.community}</DialogDescription>
+            <DialogDescription>{t(lic?.name)} · {lic?.community}</DialogDescription>
           </DialogHeader>
           <div className="space-y-5">
             <div>
               <p className="mb-2 text-sm font-semibold">{t("Tipo de uso")}</p>
               <div className="grid grid-cols-3 gap-2">
                 {uses.map((u) => (
-                  <button key={u} onClick={() => setUse(u)} className={cn("rounded-lg border p-2 text-xs font-medium", use === u && "border-primary bg-primary/10 text-primary")}>{u}</button>
+                  <button key={u} onClick={() => setUse(u)} className={cn("rounded-lg border p-2 text-xs font-medium", use === u && "border-primary bg-primary/10 text-primary")}>{t(u)}</button>
                 ))}
               </div>
             </div>
@@ -132,7 +132,7 @@ function Market() {
           </div>
           <DialogFooter>
             <Button onClick={sign} disabled={signing} className="w-full">
-              {signing ? <Loader2 className="animate-spin" /> : <FileSignature />}{t("Firmar contrato en Soroban")}</Button>
+              {signing ? <Loader2 className="animate-spin" /> : <FileSignature />}{" "}{t("Firmar contrato en Soroban")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

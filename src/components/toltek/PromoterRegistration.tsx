@@ -70,8 +70,8 @@ export function PromoterRegistration() {
       {photo && <img src={photo} alt={f.name} className="mx-auto h-24 w-24 rounded-full object-cover ring-4 ring-gold/60" />}
       <BadgeCheck className="mx-auto mt-4 h-8 w-8 text-jade" />
       <h2 className="mt-2 font-display text-2xl">{f.name}</h2>
-      <p className="text-sm text-muted-foreground">{f.role} · {f.state}</p>
-      <p className="mx-auto mt-3 max-w-md text-sm">{t("Perfil profesional guardado ·")}<b>{picked.join(", ")}</b></p>
+      <p className="text-sm text-muted-foreground">{t(f.role)} · {f.state}</p>
+      <p className="mx-auto mt-3 max-w-md text-sm">{t("Perfil profesional guardado ·")}{" "}<b>{picked.map((value) => t(value)).join(", ")}</b></p>
       <Button variant="outline" className="mt-5" onClick={() => setDone(false)}>{t("Editar registro")}</Button>
     </div>
   );
@@ -102,7 +102,7 @@ export function PromoterRegistration() {
 
           <fieldset className="grid gap-4 sm:grid-cols-2">
             <legend className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("Perfil profesional")}</legend>
-            <div className="space-y-1.5"><Label>{t("Perfil *")}</Label><select className={sel} value={f.role} onChange={set("role")}><option value="">{t("Selecciona…")}</option>{roles.map((r) => <option key={t(r)}>{t(r)}</option>)}</select></div>
+            <div className="space-y-1.5"><Label>{t("Perfil *")}</Label><select className={sel} value={f.role} onChange={set("role")}><option value="">{t("Selecciona…")}</option>{roles.map((r) => <option key={r} value={r}>{t(r)}</option>)}</select></div>
             <div className="space-y-1.5"><Label>{t("Institución / Cooperativa")}</Label><Input value={f.org} onChange={set("org")} placeholder="Cooperativa Guelaguetza" /></div>
             <div className="space-y-1.5"><Label>{t("Cédula o certificación")}</Label><Input value={f.cedula} onChange={set("cedula")} placeholder={t("Cédula 12345678 / FONART")} /></div>
             <div className="space-y-1.5"><Label>{t("Años de experiencia")}</Label><Input type="number" min={0} value={f.years} onChange={set("years")} placeholder="12" /></div>
@@ -112,14 +112,14 @@ export function PromoterRegistration() {
             <legend className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("Técnicas que puede autenticar *")}</legend>
             <div className="flex flex-wrap gap-2">
               {specialties.map((s) => (
-                <Button type="button" key={t(s)} variant={picked.includes(s) ? 'default' : 'outline'} size="sm" aria-pressed={picked.includes(s)} onClick={() => toggle(s)} className="rounded-full text-xs">{t(s)}</Button>
+                <Button type="button" key={s} variant={picked.includes(s) ? 'default' : 'outline'} size="sm" aria-pressed={picked.includes(s)} onClick={() => toggle(s)} className="rounded-full text-xs">{t(s)}</Button>
               ))}
             </div>
           </fieldset>
 
           <fieldset className="grid gap-4 sm:grid-cols-2">
             <legend className="mb-2 flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground"><MapPin className="h-3.5 w-3.5" />{t("Región de procedencia")}</legend>
-            <div className="space-y-1.5"><Label>{t("Estado / región *")}</Label><select className={sel} value={f.state} onChange={set("state")}><option value="">{t("Selecciona…")}</option>{states.map((r) => <option key={t(r)}>{t(r)}</option>)}</select></div>
+            <div className="space-y-1.5"><Label>{t("Estado / región *")}</Label><select className={sel} value={f.state} onChange={set("state")}><option value="">{t("Selecciona…")}</option>{states.map((r) => <option key={r} value={r}>{t(r)}</option>)}</select></div>
             <div className="space-y-1.5"><Label>{t("Comunidades que acompaña")}</Label><Input value={f.communities} onChange={set("communities")} placeholder="Tilcajete, Coyotepec, Arrazola" /></div>
             <div className="space-y-1.5 sm:col-span-2"><Label>{t("Trayectoria breve")}</Label><Textarea rows={3} value={f.bio} onChange={set("bio")} placeholder={t("Investigación de campo, curadurías, vínculo con talleres…")} /></div>
           </fieldset>

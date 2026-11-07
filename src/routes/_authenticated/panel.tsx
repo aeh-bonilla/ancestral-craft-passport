@@ -87,7 +87,7 @@ function Panel() {
                 { label: "Piezas catalogadas", value: "142", icon: Package },
                 { label: "Recibido para la comunidad", value: "$4,850 USDC", icon: Coins },
               ].map((m) => (
-                <div key={t(m.label)} className="rounded-xl border bg-card p-5 shadow-float">
+                <div key={m.label} className="rounded-xl border bg-card p-5 shadow-float">
                   <m.icon className="h-5 w-5 text-primary" />
                   <p className="mt-3 font-serif text-3xl font-semibold">{m.value}</p>
                   <p className="text-sm text-muted-foreground">{t(m.label)}</p>
@@ -144,7 +144,7 @@ function Panel() {
                   <div className="flex gap-3">
                     <QrCode value={sampleHash.slice(i) + p.id} size={88} />
                     <div className="min-w-0">
-                      <p className="font-mono text-[10px] text-muted-foreground">{t("PASAPORTE CULTURAL ·")}{p.id}</p>
+                      <p className="font-mono text-[10px] text-muted-foreground">{t("PASAPORTE CULTURAL ·")}{" "}{p.id}</p>
                       <p className="truncate font-serif font-semibold">{t(p.title)}</p>
                       <p className="truncate text-xs text-muted-foreground">{p.artisan}</p>
                       <p className="truncate text-xs text-muted-foreground">{p.community}</p>
@@ -168,7 +168,7 @@ function Panel() {
                   <p className="mt-3 font-semibold">{l.artisan}</p>
                   <p className="text-xs text-muted-foreground">{l.piece}</p>
                   <p className="mt-2 font-serif text-2xl font-semibold">{l.amount}</p>
-                  <p className="text-xs text-muted-foreground">{l.date} · CEP Banxico</p>
+                  <p className="text-xs text-muted-foreground">{t(l.date)} · CEP Banxico</p>
                   <div className="mt-3 rounded-lg bg-sand p-2">
                     <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{t("Clave de Rastreo Banxico")}</p>
                     <p className="break-all font-mono text-xs">{l.clave}</p>
@@ -186,8 +186,8 @@ function Panel() {
           <DialogHeader><DialogTitle className="font-serif">{t("Nuevo artesano")}</DialogTitle></DialogHeader>
           <div className="space-y-3">
             {(["name", "technique", "location"] as const).map((k) => (
-              <div key={t(k)} className="space-y-1">
-                <Label>{{ name: "Nombre completo", technique: "Técnica", location: "Comunidad / Estado" }[k]}</Label>
+              <div key={k} className="space-y-1">
+                <Label>{t({ name: "Nombre completo", technique: "Técnica", location: "Comunidad / Estado" }[k])}</Label>
                 <Input value={form[k]} onChange={(e) => setForm({ ...form, [k]: e.target.value })} />
               </div>
             ))}

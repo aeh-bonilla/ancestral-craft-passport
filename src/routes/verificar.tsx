@@ -49,7 +49,7 @@ function FeaturedVerify({ piece }: { piece: Piece }) {
           <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-jade text-jade-foreground"><BadgeCheck className="h-8 w-8" /></span>
           <div className="min-w-0">
             <p className="font-serif text-xl font-semibold text-jade sm:text-2xl md:text-3xl">{t("✓ PIEZA AUTÉNTICA & CERTIFICADA")}</p>
-            <p className="text-sm text-muted-foreground">{t("Pasaporte")}{piece.id} · {t(piece.ledgerStatus)} · {available ? t("Disponible") : t("No disponible")}</p>
+            <p className="text-sm text-muted-foreground">{t("Pasaporte")}{" "}{piece.id} · {t(piece.ledgerStatus)} · {available ? t("Disponible") : t("No disponible")}</p>
           </div>
         </div>
         <StellarBadge label={piece.badge ?? "Certificado en Stellar"} />
@@ -123,9 +123,9 @@ function DefaultVerify() {
           </div>
           <div className="mt-3 grid grid-cols-3 gap-3">
             {gallery.map((g, i) => (
-              <button key={g.label} onClick={() => setActive(i)} className={`overflow-hidden rounded-lg border-2 text-left ${i === active ? "border-primary" : "border-transparent"}`}>
-                <img src={g.src} alt={g.label} loading="lazy" className="aspect-video w-full object-cover" />
-                <p className="truncate px-1 py-1 text-xs text-muted-foreground">{g.video ? "▶ " : ""}{g.label}</p>
+              <button key={t(g.label)} onClick={() => setActive(i)} className={`overflow-hidden rounded-lg border-2 text-left ${i === active ? "border-primary" : "border-transparent"}`}>
+                <img src={g.src} alt={t(g.label)} loading="lazy" className="aspect-video w-full object-cover" />
+                <p className="truncate px-1 py-1 text-xs text-muted-foreground">{g.video ? "▶ " : ""}{t(g.label)}</p>
               </button>
             ))}
           </div>
@@ -146,7 +146,7 @@ function DefaultVerify() {
 
           <div className="rounded-xl border bg-card p-5 shadow-float">
             <p className="flex items-center gap-2 text-2xl font-semibold">{fmtMxn(price)} <PriceBreakdown priceMxn={price} /></p>
-            <p className="text-sm text-muted-foreground">≈ {toUsdc(price)}{t("USDC · 95.2% llega directo al taller")}</p>
+            <p className="text-sm text-muted-foreground">≈ {toUsdc(price)}{" "}{t("USDC · 95.2% llega directo al taller")}</p>
             <div className="mt-4 grid gap-2 sm:grid-cols-2">
               <Button onClick={() => toast.success(t("Pago simulado enviado"), { description: `${toUsdc(price)} USDC → GBTK…AGUI` })}><ShoppingBag />{t("Comprar en USDC / MXN")}</Button>
               <Button variant="outline" onClick={() => setTip(true)}><Gift />{t("Propina / Mecenazgo")}</Button>
@@ -188,7 +188,7 @@ function DefaultVerify() {
                 ["Timestamp inmutable", ts],
                 ["Ledger", "#52,184,907 · Testnet"],
               ] as [string, string][]).map(([k, v]) => (
-                <div key={t(k)}>
+                <div key={k}>
                   <dt className="text-xs uppercase tracking-wider opacity-60">{t(k)}</dt>
                   <dd className="mt-1 flex items-start gap-2 break-all font-mono text-gold">
                     {v}
