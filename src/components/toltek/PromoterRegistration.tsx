@@ -110,7 +110,7 @@ export function PromoterRegistration() {
             <legend className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Técnicas que puede autenticar *</legend>
             <div className="flex flex-wrap gap-2">
               {specialties.map((s) => (
-                <button type="button" key={s} onClick={() => toggle(s)} className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${picked.includes(s) ? "border-primary bg-primary text-primary-foreground" : "bg-background hover:border-primary"}`}>{s}</button>
+                <Button type="button" key={s} variant={picked.includes(s) ? 'default' : 'outline'} size="sm" aria-pressed={picked.includes(s)} onClick={() => toggle(s)} className="rounded-full text-xs">{s}</Button>
               ))}
             </div>
           </fieldset>
