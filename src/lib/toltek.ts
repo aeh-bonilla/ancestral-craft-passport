@@ -5,10 +5,10 @@ import olinala from "@/assets/olinala.jpg";
 import cobre from "@/assets/cobre.jpg";
 import talavera from "@/assets/talavera.jpg";
 import hero from "@/assets/hero.jpg";
-import tecuani from "@/assets/tecuani-tk0512.jpg.asset.json";
+import tecuani from "@/assets/tecuani-tk0512.jpg";
 import type { BankingHashes } from "./artisan-banking";
 
-export const images = { alebrije, barroNegro, huipil, olinala, cobre, talavera, hero };
+export const images = { alebrije, barroNegro, huipil, olinala, cobre, talavera, hero, tecuani };
 
 export const USDC_RATE = 17.2; // MXN por USDC (mock)
 
@@ -47,7 +47,7 @@ export const pieces: Piece[] = [
     region: "Puebla",
     technique: "Talla en Madera",
     priceMxn: 450,
-    image: tecuani.url,
+    image: tecuani,
     featured: true,
     badge: "Puebla · Mixteca",
     category: "Figuras de Danza / Madera & Textil",

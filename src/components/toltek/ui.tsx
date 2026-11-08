@@ -42,13 +42,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import tlamatikMark from "@/assets/tlamatik-mark.png.asset.json";
+import tlamatikMark from "@/assets/tlamatik-mark.png";
 
 export function Logo({ className }: { className?: string }) {
   const { t, money } = useI18n();
   return (
     <span className={cn("flex items-center gap-2", className)}>
-      <img src={tlamatikMark.url} alt={t("Sello Tlamatik")} width={36} height={36} className="h-9 w-9" />
+      <img src={tlamatikMark} alt={t("Sello Tlamatik")} width={36} height={36} className="h-9 w-9" />
       <span className="font-serif text-2xl font-semibold tracking-wide">Tlamatik</span>
     </span>
   );
@@ -58,7 +58,7 @@ export function StellarBadge({ className, label = "Certificado en Stellar" }: { 
   const { t, money } = useI18n();
   return (
     <span className={cn("inline-flex items-center gap-1 rounded-full bg-seal px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-gold-foreground shadow-sm", className)}>
-      <img src={tlamatikMark.url} alt="" className="h-3.5 w-3.5 rounded-full" /> {t(label)}
+      <img src={tlamatikMark} alt="" className="h-3.5 w-3.5 rounded-full" /> {t(label)}
     </span>
   );
 }
@@ -155,7 +155,7 @@ export function LedgerBadge({ piece }: { piece: Piece }) {
       rel="noreferrer"
       className="flex items-center gap-3 rounded-xl border border-jade/30 bg-jade/10 p-3 text-sm transition-colors hover:bg-jade/15"
     >
-      <img src={tlamatikMark.url} alt="" className="h-8 w-8 shrink-0" />
+      <img src={tlamatikMark} alt="" className="h-8 w-8 shrink-0" />
       <span className="min-w-0 flex-1">
         <span className="block font-semibold text-jade">{t("Inmutable ·")}{" "}{t(piece.ledgerStatus)}</span>
         <span className="block truncate font-mono text-xs text-muted-foreground">{hash || "Soroban Testnet"}</span>
