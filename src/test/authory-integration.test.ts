@@ -22,6 +22,7 @@ import {
   createPeyPaymentLinkOnServer,
   getPeyPaymentStatusOnServer,
 } from "@/lib/pey/pey.server";
+import { encodeQrMatrix } from "@/lib/qr-encoder";
 import {
   processPeyWebhookEvent,
   signPeyWebhookPayload,
@@ -210,6 +211,21 @@ describe("Authory × Tlamatik integration", () => {
       secretOverride: secret,
     });
     expect(duplicate.duplicate).toBe(true);
+
+    // Verify ISO/IEC 18004 QR matrix generation for live pey.mx checkout URL
+    const qrMatrix = encodeQrMatrix(
+      "https://app.mipey.mx/checkout/payment-link/01M6Y8H4YY0X3X7W669C28S065",
+    );
+    expect(qrMatrix.length).toBe(33);
+    expect(qrMatrix[0]?.slice(0, 7)).toEqual([
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+    ]);
   });
 });
 

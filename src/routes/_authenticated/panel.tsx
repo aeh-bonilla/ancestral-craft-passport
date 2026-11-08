@@ -427,7 +427,7 @@ function Panel() {
                   <div className="greca mb-3" />
                   <div className="flex gap-3">
                     <QrCode
-                      value={(p.stellarTxHash ?? sampleHash.slice(i)) + p.id}
+                      value={`https://tlamatik.vercel.app/verificar?id=${p.id}`}
                       size={88}
                     />
                     <div className="min-w-0 flex-1">

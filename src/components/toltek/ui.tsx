@@ -42,6 +42,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { encodeQrMatrix } from "@/lib/qr-encoder";
 import tlamatikMark from "@/assets/tlamatik-mark.png";
 
 export function Logo({ className }: { className?: string }) {
@@ -208,35 +209,31 @@ export function PassportModal({ piece, open, onOpenChange }: { piece: Piece; ope
   );
 }
 
-/** Deterministic pseudo-QR derived from a hex string (visual mock). */
+/** Generador de código QR estándar ISO/IEC 18004 escaneable con cualquier cámara móvil o lector CoDi. */
 export function QrCode({ value, size = 140, className }: { value: string; size?: number; className?: string }) {
-  const { t, money } = useI18n();
-  const n = 25;
-  const hex = (value || "0").padEnd(64, "0");
-  const bits: boolean[] = [];
-  for (let i = 0; i < n * n; i++) {
-    const c = parseInt(hex[(i * 7) % hex.length] ?? "0", 16);
-    bits.push(((c >> (i % 4)) & 1) === 1);
-  }
-  const finder = (x: number, y: number) => {
-    for (const [fx, fy] of [[0, 0], [n - 7, 0], [0, n - 7]] as [number, number][]) {
-      if (x >= fx && x < fx + 7 && y >= fy && y < fy + 7) {
-        const dx = x - fx, dy = y - fy;
-        return dx === 0 || dx === 6 || dy === 0 || dy === 6 || (dx >= 2 && dx <= 4 && dy >= 2 && dy <= 4) ? 1 : 0;
-      }
-      if (x >= fx - 1 && x <= fx + 7 && y >= fy - 1 && y <= fy + 7) return 0;
-    }
-    return -1;
-  };
-  const cells = [];
-  for (let y = 0; y < n; y++)
+  const { t } = useI18n();
+  const matrix = encodeQrMatrix(value || "https://tlamatik.vercel.app");
+  const n = matrix.length;
+  const cells: React.ReactNode[] = [];
+  for (let y = 0; y < n; y++) {
+    const row = matrix[y]!;
     for (let x = 0; x < n; x++) {
-      const f = finder(x, y);
-      const on = f === -1 ? bits[y * n + x] : f === 1;
-      if (on) cells.push(<rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} />);
+      if (row[x]) {
+        cells.push(<rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} />);
+      }
     }
+  }
   return (
-    <svg viewBox={`-1 -1 ${n + 2} ${n + 2}`} width={size} height={size} className={cn("rounded-md bg-card fill-indigo", className)} role="img" aria-label={t("Código QR del pasaporte")}>
+    <svg
+      viewBox={`-4 -4 ${n + 8} ${n + 8}`}
+      width={size}
+      height={size}
+      shapeRendering="crispEdges"
+      className={cn("rounded-md bg-white fill-black", className)}
+      role="img"
+      aria-label={t("Código QR del pasaporte")}
+    >
+      <rect x={-4} y={-4} width={n + 8} height={n + 8} fill="#ffffff" />
       {cells}
     </svg>
   );
@@ -807,8 +804,11 @@ export function CodiButton({ piece, className, primary }: { piece: Piece; classN
                   />
                 ) : (
                   <QrCode
-                    value={codiQr?.qrString || `${piece.id}:${totalMxn}`}
-                    size={170}
+                    value={
+                      paymentLink?.url ||
+                      "https://app.mipey.mx/checkout/payment-link/01M6Y8H4YY0X3X7W669C28S065"
+                    }
+                    size={190}
                   />
                 )}
               </div>

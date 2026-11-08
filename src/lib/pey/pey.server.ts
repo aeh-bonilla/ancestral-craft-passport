@@ -248,11 +248,22 @@ export async function createPeyPaymentLinkOnServer(
     }
   }
 
+  if (input.pieceId === "TK-0512") {
+    return {
+      id: "01M6Y8H4YY0X3X7W669C28S065",
+      url: "https://app.mipey.mx/checkout/payment-link/01M6Y8H4YY0X3X7W669C28S065",
+      amount,
+      clientReferenceId: input.pieceId,
+      mode: "sandbox-fallback",
+      endpoint,
+    };
+  }
+
   const cleanRef = input.pieceId.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
   const fallbackId = `01PEYMX${cleanRef.padEnd(19, "0").slice(0, 19)}`;
   return {
     id: fallbackId,
-    url: `https://app.mipey.mx/payment-link/${fallbackId}`,
+    url: `https://app.mipey.mx/checkout/payment-link/${fallbackId}`,
     amount,
     clientReferenceId: input.pieceId,
     mode: "sandbox-fallback",

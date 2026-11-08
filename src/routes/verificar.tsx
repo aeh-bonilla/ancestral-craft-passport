@@ -707,7 +707,10 @@ function BlockchainAuditPanel({
               </div>
             </dl>
             <div className="self-center rounded-xl bg-card p-3">
-              <QrCode value={hash} size={190} />
+              <QrCode
+                value={`https://tlamatik.vercel.app/verificar?id=${work.id}`}
+                size={190}
+              />
             </div>
           </div>
 
