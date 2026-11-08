@@ -851,7 +851,7 @@ export function CodiButton({ piece, className, primary }: { piece: Piece; classN
                   onClick={() => void confirm()}
                   disabled={loadingApi}
                 >
-                  {t("Simular Confirmación de Pago CoDi")}
+                  {t("Pagar con CoDi")}
                 </Button>
                 {paymentLink && (
                   <Button asChild variant="outline" size="sm" className="w-full">

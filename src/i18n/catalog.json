@@ -1482,5 +1482,9 @@
   "Hash SHA-256 de la Pieza / Pasaporte:": [
     "Piece / Passport SHA-256 Hash:",
     "作品／护照 SHA-256 哈希："
+  ],
+  "Pagar con CoDi": [
+    "Pay with CoDi",
+    "使用 CoDi 支付"
   ]
 }

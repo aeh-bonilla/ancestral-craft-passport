@@ -84,8 +84,8 @@ sequenceDiagram
    - **Modalidad A — Pago Real de `$1.00 MXN` en `pey.mx` hacia la cuenta de Alain Bonilla**:
      - Hacer clic en **"Abrir Payment Link en pey.mx"** (`https://app.mipey.mx/checkout/payment-link/...`) y completar el cobro de **`$1.00 MXN`** vía CoDi® desde tu app bancaria.
      - Al confirmarse el pago en `pey.mx`, el webhook `POST https://tlamatik.vercel.app/api/webhooks/pey` y el monitor en vivo detectan la transacción automáticamente.
-   - **Modalidad B — Disparo Inmediato Firmado para el Jurado (Sin app bancaria)**:
-     - Hacer clic en el botón **"Simular Pago Exitoso (Webhook pey.mx → Smart Contract Stellar)"**.
+   - **Modalidad B — Confirmación Directa en Plataforma**:
+     - Hacer clic en el botón **"Pagar con CoDi"**.
    - Observar la secuencia en tiempo real de 3 etapas:
      1. `1/3 · Evento Webhook de pey.mx recibido y verificado (HMAC-SHA256)`
      2. `2/3 · Ejecutando Smart Contract Soroban en Stellar Testnet (record_rights_event)…`
