@@ -493,3 +493,4 @@ export function encodeQrMatrix(text: string): boolean[][] {
 
   return modules;
 }
+
