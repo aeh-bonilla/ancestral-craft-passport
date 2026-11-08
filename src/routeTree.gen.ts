@@ -16,6 +16,7 @@ import { Route as MercadoRouteImport } from './routes/mercado'
 import { Route as VerificarRouteImport } from './routes/verificar'
 import { Route as AuthenticatedPanelRouteImport } from './routes/_authenticated/panel'
 import { Route as AuthenticatedRegistrarRouteImport } from './routes/_authenticated/registrar'
+import { Route as ApiWebhooksPeyRouteImport } from './routes/api/webhooks/pey'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -51,6 +52,11 @@ const AuthenticatedRegistrarRoute = AuthenticatedRegistrarRouteImport.update({
   path: '/registrar',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiWebhooksPeyRoute = ApiWebhooksPeyRouteImport.update({
+  id: '/api/webhooks/pey',
+  path: '/api/webhooks/pey',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/verificar': typeof VerificarRoute
   '/panel': typeof AuthenticatedPanelRoute
   '/registrar': typeof AuthenticatedRegistrarRoute
+  '/api/webhooks/pey': typeof ApiWebhooksPeyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/verificar': typeof VerificarRoute
   '/panel': typeof AuthenticatedPanelRoute
   '/registrar': typeof AuthenticatedRegistrarRoute
+  '/api/webhooks/pey': typeof ApiWebhooksPeyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -77,12 +85,27 @@ export interface FileRoutesById {
   '/verificar': typeof VerificarRoute
   '/_authenticated/panel': typeof AuthenticatedPanelRoute
   '/_authenticated/registrar': typeof AuthenticatedRegistrarRoute
+  '/api/webhooks/pey': typeof ApiWebhooksPeyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/mercado' | '/verificar' | '/panel' | '/registrar'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/mercado'
+    | '/verificar'
+    | '/panel'
+    | '/registrar'
+    | '/api/webhooks/pey'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/mercado' | '/verificar' | '/panel' | '/registrar'
+  to:
+    | '/'
+    | '/auth'
+    | '/mercado'
+    | '/verificar'
+    | '/panel'
+    | '/registrar'
+    | '/api/webhooks/pey'
   id:
     | '__root__'
     | '/'
@@ -92,6 +115,7 @@ export interface FileRouteTypes {
     | '/verificar'
     | '/_authenticated/panel'
     | '/_authenticated/registrar'
+    | '/api/webhooks/pey'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -100,6 +124,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   MercadoRoute: typeof MercadoRoute
   VerificarRoute: typeof VerificarRoute
+  ApiWebhooksPeyRoute: typeof ApiWebhooksPeyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -153,6 +178,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRegistrarRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/webhooks/pey': {
+      id: '/api/webhooks/pey'
+      path: '/api/webhooks/pey'
+      fullPath: '/api/webhooks/pey'
+      preLoaderRoute: typeof ApiWebhooksPeyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -175,6 +207,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   MercadoRoute: MercadoRoute,
   VerificarRoute: VerificarRoute,
+  ApiWebhooksPeyRoute: ApiWebhooksPeyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

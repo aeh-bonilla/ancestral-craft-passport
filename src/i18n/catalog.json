@@ -1322,5 +1322,165 @@
   "Copiar": [
     "Copy",
     "复制"
+  ],
+  "Descargar Certificado": [
+    "Download Certificate",
+    "下载证书"
+  ],
+  "Verificar ID / Hash": [
+    "Verify ID / Hash",
+    "验证 ID / 哈希"
+  ],
+  "Auditar archivo local (SHA-256)": [
+    "Audit local file (SHA-256)",
+    "校验本地文件 (SHA-256)"
+  ],
+  "Buscar por ID de pasaporte (ej. TK-0042, TK-0512, AUTH-2026-000101) o hash SHA-256…": [
+    "Search by Passport ID (e.g. TK-0042, TK-0512, AUTH-2026-000101) or SHA-256 hash…",
+    "按护照 ID（如 TK-0042、TK-0512、AUTH-2026-000101）或 SHA-256 哈希搜索…"
+  ],
+  "Huella binaria coincide con pasaporte registrado": [
+    "Binary fingerprint matches registered passport",
+    "二进制指纹与已登记护照一致"
+  ],
+  "Huella SHA-256 calculada localmente": [
+    "SHA-256 fingerprint computed locally",
+    "已在本地计算 SHA-256 指纹"
+  ],
+  "ID de Pasaporte / Obra": [
+    "Passport / Work ID",
+    "护照／作品 ID"
+  ],
+  "Contrato Soroban": [
+    "Soroban Contract",
+    "Soroban 合约"
+  ],
+  "Historial de Derechos y Evidencia (Soroban Rights Events)": [
+    "Rights & Evidence History (Soroban Rights Events)",
+    "权益与证据记录（Soroban Rights Events）"
+  ],
+  "Registro de Autoría": [
+    "Authorship Registration",
+    "作者登记"
+  ],
+  "Anclaje de Evidencia SHA-256": [
+    "SHA-256 Evidence Anchoring",
+    "SHA-256 证据锚定"
+  ],
+  "Licencia Ética B2B": [
+    "Ethical B2B License",
+    "B2B 道德许可"
+  ],
+  "Cesión / Transferencia": [
+    "Assignment / Transfer",
+    "权利转让"
+  ],
+  "Función Soroban:": [
+    "Soroban Function:",
+    "Soroban 函数："
+  ],
+  "Abrir →": [
+    "Open →",
+    "打开 →"
+  ],
+  "Avance del expediente": [
+    "Dossier progress",
+    "档案完成度"
+  ],
+  "Vista previa de credencial": [
+    "Credential preview",
+    "凭证预览"
+  ],
+  "Contrato Soroban Authory · Testnet": [
+    "Soroban Authory Contract · Testnet",
+    "Soroban Authory 合约 · 测试网"
+  ],
+  "Abrir Payment Link en pey.mx": [
+    "Open Payment Link on pey.mx",
+    "在 pey.mx 打开支付链接"
+  ],
+  "Configurar Bearer API Key de pey.mx (opcional)": [
+    "Configure pey.mx Bearer API Key (optional)",
+    "配置 pey.mx Bearer API 密钥（可选）"
+  ],
+  "Conectar": [
+    "Connect",
+    "连接"
+  ],
+  "No se pudo conectar con pey.mx": [
+    "Unable to connect to pey.mx",
+    "无法连接到 pey.mx"
+  ],
+  "No se pudo verificar el pago en pey.mx": [
+    "Unable to verify payment on pey.mx",
+    "无法在 pey.mx 验证付款"
+  ],
+  "Webhook Listener pey.mx (CoDi & Payment Links)": [
+    "pey.mx Webhook Listener (CoDi & Payment Links)",
+    "pey.mx Webhook 监听器（CoDi 与支付链接）"
+  ],
+  "Simular Webhook Tecuani (TK-0512)": [
+    "Simulate Tecuani Webhook (TK-0512)",
+    "模拟 Tecuani Webhook (TK-0512)"
+  ],
+  "Webhook de pey.mx procesado": [
+    "pey.mx webhook processed",
+    "已处理 pey.mx Webhook"
+  ],
+  "No se pudo procesar el webhook de prueba": [
+    "Unable to process test webhook",
+    "无法处理测试 Webhook"
+  ],
+  "Compra acreditada en pey.mx y Stellar Testnet": [
+    "Purchase accredited on pey.mx and Stellar Testnet",
+    "购买已在 pey.mx 与 Stellar 测试网认证"
+  ],
+  "Certificado de Compra Acreditada": [
+    "Accredited Purchase Certificate",
+    "认证购买凭证"
+  ],
+  "Procesando notificación de pago y Smart Contract…": [
+    "Processing payment notification and Smart Contract…",
+    "正在处理付款通知与智能合约…"
+  ],
+  "1/3 · Evento Webhook de pey.mx recibido y verificado (HMAC-SHA256)": [
+    "1/3 · pey.mx Webhook event received and verified (HMAC-SHA256)",
+    "1/3 · 已接收并验证 pey.mx Webhook 事件 (HMAC-SHA256)"
+  ],
+  "2/3 · Ejecutando Smart Contract Soroban en Stellar Testnet (record_rights_event)…": [
+    "2/3 · Executing Soroban Smart Contract on Stellar Testnet (record_rights_event)…",
+    "2/3 · 正在 Stellar 测试网执行 Soroban 智能合约 (record_rights_event)…"
+  ],
+  "3/3 · Generando comprobante dual (SPEI Banxico + Hash Stellar)": [
+    "3/3 · Generating dual receipt (SPEI Banxico + Stellar Hash)",
+    "3/3 · 正在生成双重凭证（SPEI Banxico + Stellar 哈希）"
+  ],
+  "Simular Pago Exitoso (Webhook pey.mx → Smart Contract Stellar)": [
+    "Simulate Successful Payment (pey.mx Webhook → Stellar Smart Contract)",
+    "模拟成功付款（pey.mx Webhook → Stellar 智能合约）"
+  ],
+  "✓ Compra Acreditada: Cobro SPEI + Smart Contract Stellar": [
+    "✓ Purchase Accredited: SPEI Settlement + Stellar Smart Contract",
+    "✓ 购买已认证：SPEI 结算 + Stellar 智能合约"
+  ],
+  "Resumen del Cobro Liquidado": [
+    "Settled Charge Summary",
+    "已结算费用摘要"
+  ],
+  "1. Evento de Pago (Webhook pey.mx · SPEI)": [
+    "1. Payment Event (pey.mx Webhook · SPEI)",
+    "1. 付款事件（pey.mx Webhook · SPEI）"
+  ],
+  "2. Smart Contract Stellar Testnet (Soroban)": [
+    "2. Stellar Testnet Smart Contract (Soroban)",
+    "2. Stellar 测试网智能合约（Soroban）"
+  ],
+  "Hash de Transacción Stellar Testnet:": [
+    "Stellar Testnet Transaction Hash:",
+    "Stellar 测试网交易哈希："
+  ],
+  "Hash SHA-256 de la Pieza / Pasaporte:": [
+    "Piece / Passport SHA-256 Hash:",
+    "作品／护照 SHA-256 哈希："
   ]
 }

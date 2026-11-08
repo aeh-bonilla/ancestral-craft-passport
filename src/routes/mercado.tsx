@@ -1,13 +1,36 @@
 import { useI18n } from "@/i18n";
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { FileSignature, ShoppingCart, Loader2 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { FileSignature, ShoppingCart, Loader2, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { CodiButton, PieceCard, SectionTitle, StellarBadge } from "@/components/toltek/ui";
-import { patterns, pieces, toUsdc, type Pattern } from "@/lib/toltek";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  CodiButton,
+  PieceCard,
+  SectionTitle,
+  StellarBadge,
+} from "@/components/toltek/ui";
+import {
+  contractId,
+  patterns,
+  pieces as seedPieces,
+  shortHash,
+  toUsdc,
+  type Pattern,
+  type Piece,
+} from "@/lib/toltek";
+import { listAllCatalogPieces, recordRightsEvent } from "@/lib/authory-service";
+import { recordRightsServerFn } from "@/lib/stellar/soroban.functions";
+import { getContractExplorerUrl } from "@/lib/stellar/config";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/mercado")({
@@ -16,9 +39,17 @@ export const Route = createFileRoute("/mercado")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { title: "Mercado Ético y Licenciamiento B2B — Tlamatik" },
-      { name: "description", content: "Compra artesanías certificadas o licencia patrones tradicionales con regalías para la comunidad." },
+      {
+        name: "description",
+        content:
+          "Compra artesanías certificadas o licencia patrones tradicionales con regalías para la comunidad.",
+      },
       { property: "og:title", content: "Mercado Ético — Tlamatik" },
-      { property: "og:description", content: "Artesanías con origen comunitario y licencias éticas firmadas en Soroban." },
+      {
+        property: "og:description",
+        content:
+          "Artesanías con origen comunitario y licencias éticas firmadas en Soroban.",
+      },
     ],
   }),
   component: Market,
@@ -31,30 +62,102 @@ const uses = ["Textil comercial", "Arquitectura", "Edición limitada"];
 function Market() {
   const { t, locale } = useI18n();
   const [mode, setMode] = useState<"fisico" | "b2b">("fisico");
+  const [catalog, setCatalog] = useState<Piece[]>(seedPieces);
   const [region, setRegion] = useState<string | null>(null);
   const [tech, setTech] = useState<string | null>(null);
   const [max, setMax] = useState(10000);
   const [lic, setLic] = useState<Pattern | null>(null);
-  const [use, setUse] = useState(uses[0]);
+  const [use, setUse] = useState(uses[0] ?? "Textil comercial");
   const [royalty, setRoyalty] = useState(12);
   const [signing, setSigning] = useState(false);
 
-  const list = useMemo(() => pieces.filter((p) => (!region || p.region === region) && (!tech || p.technique === tech) && p.priceMxn <= max), [region, tech, max]);
+  useEffect(() => {
+    let active = true;
+    listAllCatalogPieces().then((all) => {
+      if (active && all.length > 0) setCatalog(all);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
-  const sign = () => {
+  const list = useMemo(
+    () =>
+      catalog.filter(
+        (p) =>
+          (!region || p.region === region) &&
+          (!tech || p.technique === tech) &&
+          p.priceMxn <= max,
+      ),
+    [catalog, region, tech, max],
+  );
+
+  const sign = async () => {
+    if (!lic) return;
     setSigning(true);
-    setTimeout(() => {
+    try {
+      const eventId = `EVT-LIC-${Date.now().toString(36).toUpperCase()}`;
+      const terms = `Uso: ${use} · Regalías automáticas: ${royalty}% (${royalty * 100} bps)`;
+
+      const sorobanRes = await recordRightsServerFn({
+        data: {
+          eventId,
+          workId: lic.id,
+          eventType: "license",
+          actor: lic.community,
+          recipient: "Marca Licenciataria B2B",
+          terms,
+        },
+      });
+
+      const nowIso = new Date().toISOString();
+      await recordRightsEvent({
+        id: eventId,
+        workId: lic.id,
+        type: "license",
+        actor: lic.community,
+        recipient: "Marca Licenciataria B2B",
+        effectiveDate: sorobanRes.timestampIso || nowIso,
+        terms,
+        notes: `Soroban Tx: ${sorobanRes.txHash}`,
+        stellarTransactionId: sorobanRes.txHash,
+        createdAt: nowIso,
+      });
+
+      const communityName = lic.community;
       setSigning(false);
       setLic(null);
-      toast.success(t("Licencia ética aprobada"), { description: t("{{royalty}}% de regalías automáticas para {{community}}", { royalty, community: lic?.community }) });
-    }, 1600);
+      toast.success(t("Licencia ética aprobada"), {
+        description: `${t("{{royalty}}% de regalías automáticas para {{community}}", {
+          royalty,
+          community: communityName,
+        })} · Tx ${shortHash(sorobanRes.txHash)}`,
+      });
+    } catch {
+      setSigning(false);
+      toast.error(t("No se pudo firmar la licencia en Soroban"));
+    }
   };
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10">
       <div className="mx-auto flex w-full max-w-md rounded-2xl border bg-sand p-1 sm:w-fit sm:rounded-full">
-        {([["fisico", "Comprar Artesanías Físicas"], ["b2b", "Licenciamiento Ético para Marcas"]] as const).map(([k, l]) => (
-          <button key={k} onClick={() => setMode(k)} className={cn("flex-1 rounded-xl px-3 py-2 text-center text-sm font-medium leading-tight transition-colors sm:rounded-full sm:px-4", mode === k ? "bg-indigo text-indigo-foreground" : "text-muted-foreground")}>{t(l)}</button>
+        {(
+          [
+            ["fisico", "Comprar Artesanías Físicas"],
+            ["b2b", "Licenciamiento Ético para Marcas"],
+          ] as const
+        ).map(([k, l]) => (
+          <button
+            key={k}
+            onClick={() => setMode(k)}
+            className={cn(
+              "flex-1 rounded-xl px-3 py-2 text-center text-sm font-medium leading-tight transition-colors sm:rounded-full sm:px-4",
+              mode === k ? "bg-indigo text-indigo-foreground" : "text-muted-foreground",
+            )}
+          >
+            {t(l)}
+          </button>
         ))}
       </div>
 
@@ -64,41 +167,102 @@ function Market() {
             <Chips title={t("Región")} items={regions} value={region} onChange={setRegion} />
             <Chips title={t("Técnica")} items={techniques} value={tech} onChange={setTech} />
             <div>
-              <p className="mb-3 text-sm font-semibold">{t("Precio máximo: $")}{max.toLocaleString(locale)} MXN</p>
-              <Slider min={250} max={10000} step={250} value={[max]} onValueChange={(v) => setMax(v[0] ?? 10000)} />
+              <p className="mb-3 text-sm font-semibold">
+                {t("Precio máximo: $")}
+                {max.toLocaleString(locale)} MXN
+              </p>
+              <Slider
+                min={250}
+                max={10000}
+                step={250}
+                value={[max]}
+                onValueChange={(v) => setMax(v[0] ?? 10000)}
+              />
             </div>
           </aside>
           <div>
-            <p className="mb-4 text-sm text-muted-foreground">{t("{{count}} piezas certificadas", { count: list.length })}</p>
+            <p className="mb-4 text-sm text-muted-foreground">
+              {t("{{count}} piezas certificadas", { count: list.length })}
+            </p>
             <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {list.map((p) => (
-                <PieceCard key={p.id} piece={p} action={
-                  <div className="flex w-full flex-col gap-1.5">
-                    <Button size="sm" className="w-full" onClick={() => toast.success(t("Checkout rápido completado"), { description: t("{{amount}} USDC enviados a {{artisan}}", { amount: toUsdc(p.priceMxn), artisan: p.artisan }) })}>
-                      <ShoppingCart />{t("Comprar")}</Button>
-                    <CodiButton piece={p} className="w-full" />
-                  </div>
-                } />
+                <PieceCard
+                  key={p.id}
+                  piece={p}
+                  action={
+                    <div className="flex w-full flex-col gap-1.5">
+                      <Button
+                        size="sm"
+                        className="w-full"
+                        onClick={() =>
+                          toast.success(t("Checkout rápido completado"), {
+                            description: t("{{amount}} USDC enviados a {{artisan}}", {
+                              amount: toUsdc(p.priceMxn),
+                              artisan: p.artisan,
+                            }),
+                          })
+                        }
+                      >
+                        <ShoppingCart />
+                        {t("Comprar")}
+                      </Button>
+                      <CodiButton piece={p} className="w-full" />
+                    </div>
+                  }
+                />
               ))}
-              {list.length === 0 && <p className="text-muted-foreground">{t("No hay piezas con estos filtros.")}</p>}
+              {list.length === 0 && (
+                <p className="text-muted-foreground">
+                  {t("No hay piezas con estos filtros.")}
+                </p>
+              )}
             </div>
           </div>
         </div>
       ) : (
         <div className="mt-10">
-          <SectionTitle eyebrow={t("Para diseñadores, moda y arquitectura")} title={t("Patrones y Expresiones Culturales Tradicionales Registradas")} sub={t("Usa un diseño tradicional de forma legal y ética: el consentimiento comunitario y las regalías quedan grabados en un contrato Soroban.")} />
+          <SectionTitle
+            eyebrow={t("Para diseñadores, moda y arquitectura")}
+            title={t("Patrones y Expresiones Culturales Tradicionales Registradas")}
+            sub={t(
+              "Usa un diseño tradicional de forma legal y ética: el consentimiento comunitario y las regalías quedan grabados en un contrato Soroban.",
+            )}
+          />
           <div className="mt-10 grid gap-6 md:grid-cols-2">
             {patterns.map((p) => (
-              <article key={p.id} className="flex flex-col overflow-hidden rounded-xl border bg-card shadow-float sm:flex-row">
-                <img src={p.image} alt={t(p.name)} loading="lazy" className="aspect-video w-full object-cover sm:aspect-auto sm:w-44" />
+              <article
+                key={p.id}
+                className="flex flex-col overflow-hidden rounded-xl border bg-card shadow-float sm:flex-row"
+              >
+                <img
+                  src={p.image}
+                  alt={t(p.name)}
+                  loading="lazy"
+                  className="aspect-video w-full object-cover sm:aspect-auto sm:w-44"
+                />
                 <div className="flex flex-1 flex-col p-5">
                   <StellarBadge label={`ECT · ${p.id}`} className="self-start" />
                   <h3 className="mt-3 text-xl font-semibold">{t(p.name)}</h3>
-                  <p className="text-xs font-medium uppercase tracking-wider text-primary">{p.community}</p>
-                  <p className="mt-2 flex-1 text-sm text-muted-foreground">{t(p.description)}</p>
+                  <p className="text-xs font-medium uppercase tracking-wider text-primary">
+                    {p.community}
+                  </p>
+                  <p className="mt-2 flex-1 text-sm text-muted-foreground">
+                    {t(p.description)}
+                  </p>
                   <div className="mt-4 flex items-center justify-between">
-                    <span className="text-sm">{t("Regalía sugerida")}{" "}<b>{p.royalty}%</b></span>
-                    <Button size="sm" onClick={() => { setLic(p); setRoyalty(p.royalty); }}><FileSignature />{t("Solicitar licencia")}</Button>
+                    <span className="text-sm">
+                      {t("Regalía sugerida")} <b>{p.royalty}%</b>
+                    </span>
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        setLic(p);
+                        setRoyalty(p.royalty);
+                      }}
+                    >
+                      <FileSignature />
+                      {t("Solicitar licencia")}
+                    </Button>
                   </div>
                 </div>
               </article>
@@ -110,29 +274,69 @@ function Market() {
       <Dialog open={!!lic} onOpenChange={(o) => !o && setLic(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="font-serif text-2xl">{t("Solicitud de licencia")}</DialogTitle>
-            <DialogDescription>{t(lic?.name)} · {lic?.community}</DialogDescription>
+            <DialogTitle className="font-serif text-2xl">
+              {t("Solicitud de licencia")}
+            </DialogTitle>
+            <DialogDescription>
+              {t(lic?.name)} · {lic?.community}
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-5">
             <div>
               <p className="mb-2 text-sm font-semibold">{t("Tipo de uso")}</p>
               <div className="grid grid-cols-3 gap-2">
                 {uses.map((u) => (
-                  <button key={u} onClick={() => setUse(u)} className={cn("rounded-lg border p-2 text-xs font-medium", use === u && "border-primary bg-primary/10 text-primary")}>{t(u)}</button>
+                  <button
+                    key={u}
+                    onClick={() => setUse(u)}
+                    className={cn(
+                      "rounded-lg border p-2 text-xs font-medium",
+                      use === u && "border-primary bg-primary/10 text-primary",
+                    )}
+                  >
+                    {t(u)}
+                  </button>
                 ))}
               </div>
             </div>
             <div>
-              <p className="mb-3 text-sm font-semibold">{t("Regalías automáticas para la comunidad:")}<span className="text-primary">{royalty}%</span></p>
-              <Slider min={5} max={25} step={1} value={[royalty]} onValueChange={(v) => setRoyalty(v[0] ?? 12)} />
+              <p className="mb-3 text-sm font-semibold">
+                {t("Regalías automáticas para la comunidad:")}{" "}
+                <span className="text-primary">{royalty}%</span>
+              </p>
+              <Slider
+                min={5}
+                max={25}
+                step={1}
+                value={[royalty]}
+                onValueChange={(v) => setRoyalty(v[0] ?? 12)}
+              />
             </div>
-            <div className="rounded-lg bg-sand p-3 font-mono text-xs text-muted-foreground">
-              contract.license(pattern="{lic?.id}", use="{use}", royalty_bps={royalty * 100})
+            <div className="space-y-2 rounded-lg bg-sand p-3 font-mono text-xs text-muted-foreground">
+              <p className="break-all">
+                record_rights_event(work_id=&quot;{lic?.id}&quot;, type=&quot;license&quot;,
+                use=&quot;{use}&quot;, royalty_bps={royalty * 100})
+              </p>
+              <a
+                href={getContractExplorerUrl(contractId)}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 text-[11px] text-primary underline"
+              >
+                Soroban: {contractId.slice(0, 10)}…{contractId.slice(-6)}{" "}
+                <ExternalLink className="h-3 w-3" />
+              </a>
             </div>
           </div>
           <DialogFooter>
-            <Button onClick={sign} disabled={signing} className="w-full">
-              {signing ? <Loader2 className="animate-spin" /> : <FileSignature />}{" "}{t("Firmar contrato en Soroban")}</Button>
+            <Button
+              onClick={() => void sign()}
+              disabled={signing}
+              className="w-full"
+            >
+              {signing ? <Loader2 className="animate-spin" /> : <FileSignature />}{" "}
+              {t("Firmar contrato en Soroban")}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -140,14 +344,32 @@ function Market() {
   );
 }
 
-function Chips({ title, items, value, onChange }: { title: string; items: string[]; value: string | null; onChange: (v: string | null) => void }) {
-  const { t, locale } = useI18n();
+function Chips({
+  title,
+  items,
+  value,
+  onChange,
+}: {
+  title: string;
+  items: string[];
+  value: string | null;
+  onChange: (v: string | null) => void;
+}) {
+  const { t } = useI18n();
   return (
     <div>
       <p className="mb-2 text-sm font-semibold">{t(title)}</p>
       <div className="flex flex-wrap gap-2">
         {items.map((i) => (
-          <Button key={i} variant={value === i ? 'default' : 'outline'} size="sm" onClick={() => onChange(value === i ? null : i)} className="rounded-full text-xs">{t(i)}</Button>
+          <Button
+            key={i}
+            variant={value === i ? "default" : "outline"}
+            size="sm"
+            onClick={() => onChange(value === i ? null : i)}
+            className="rounded-full text-xs"
+          >
+            {t(i)}
+          </Button>
         ))}
       </div>
     </div>

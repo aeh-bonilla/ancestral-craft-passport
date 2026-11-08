@@ -58,7 +58,7 @@ export const pieces: Piece[] = [
     certFeeMxn: 25,
     shippingMxn: 120,
     status: "available",
-    stellarTxHash: "0x8f3b2a1c0e9d7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a",
+    stellarTxHash: "725e126cc7998b795f328f99e9ba60d863202d06aa1166016d0cd573eadd48cf",
     ledgerStatus: "Verified on Soroban Testnet",
     story: "En las entrañas de la Mixteca, el sonido del teponaztli y la flauta de carrizo anuncian la llegada del Tecuani. Esta pieza rinde homenaje a la danza ancestral de petición de lluvias y protección de las cosechas. Modelado y ensamblado a mano, viste el tradicional mazo amarillo salpicado con las rosetas del felino sagrado y una máscara decorada con cerdas naturales e hilos de ixtle trenzado.",
   },
@@ -109,8 +109,8 @@ export const patterns: Pattern[] = [
   { id: "PCT-04", name: "Rosetón de Talavera", community: "Gremio Alfarero de Puebla", description: "Simetría radial en azul cobalto con Denominación de Origen.", image: talavera, royalty: 8 },
 ];
 
-export const sampleHash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
-export const contractId = "CAOAFGPATXWJ7Q4R2NHLM3YEVZK5D6TSUB8PXCWQ2LJ9TLAMATIK";
+export const sampleHash = "c0ffee112233445566778899aabbccddeeff00112233445566778899aabbccdd";
+export const contractId = "CAOAFGPATXWJ6KKGXFYHY42Q4N75NOWSR3NH3K2DT7QR3YSMDGT5P2HO";
 
 export async function sha256(text: string): Promise<string> {
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));

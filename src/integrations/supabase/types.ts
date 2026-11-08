@@ -71,6 +71,135 @@ export type Database = {
         }
         Relationships: []
       }
+      works: {
+        Row: {
+          artisan: string
+          author: string
+          community: string
+          created_at: string
+          description: string
+          dimensions: string
+          file_mime_type: string | null
+          file_size: string | null
+          file_url: string | null
+          filename: string | null
+          hash: string
+          id: string
+          materials: string
+          network: string
+          notes: string | null
+          preview_base64: string | null
+          price_mxn: number
+          promoter_id: string | null
+          region: string
+          registered_at: string
+          source_url: string | null
+          status: string
+          stellar_transaction_id: string | null
+          technique: string
+          title: string
+          type: string
+        }
+        Insert: {
+          artisan?: string
+          author: string
+          community?: string
+          created_at?: string
+          description?: string
+          dimensions?: string
+          file_mime_type?: string | null
+          file_size?: string | null
+          file_url?: string | null
+          filename?: string | null
+          hash: string
+          id: string
+          materials?: string
+          network?: string
+          notes?: string | null
+          preview_base64?: string | null
+          price_mxn?: number
+          promoter_id?: string | null
+          region?: string
+          registered_at?: string
+          source_url?: string | null
+          status?: string
+          stellar_transaction_id?: string | null
+          technique?: string
+          title: string
+          type?: string
+        }
+        Update: {
+          artisan?: string
+          author?: string
+          community?: string
+          created_at?: string
+          description?: string
+          dimensions?: string
+          file_mime_type?: string | null
+          file_size?: string | null
+          file_url?: string | null
+          filename?: string | null
+          hash?: string
+          id?: string
+          materials?: string
+          network?: string
+          notes?: string | null
+          preview_base64?: string | null
+          price_mxn?: number
+          promoter_id?: string | null
+          region?: string
+          registered_at?: string
+          source_url?: string | null
+          status?: string
+          stellar_transaction_id?: string | null
+          technique?: string
+          title?: string
+          type?: string
+        }
+        Relationships: []
+      }
+      rights_events: {
+        Row: {
+          actor: string
+          created_at: string
+          effective_date: string
+          id: string
+          notes: string | null
+          promoter_id: string | null
+          recipient: string | null
+          stellar_transaction_id: string | null
+          terms: string | null
+          type: string
+          work_id: string
+        }
+        Insert: {
+          actor: string
+          created_at?: string
+          effective_date?: string
+          id: string
+          notes?: string | null
+          promoter_id?: string | null
+          recipient?: string | null
+          stellar_transaction_id?: string | null
+          terms?: string | null
+          type: string
+          work_id: string
+        }
+        Update: {
+          actor?: string
+          created_at?: string
+          effective_date?: string
+          id?: string
+          notes?: string | null
+          promoter_id?: string | null
+          recipient?: string | null
+          stellar_transaction_id?: string | null
+          terms?: string | null
+          type?: string
+          work_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
