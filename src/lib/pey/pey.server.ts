@@ -1,7 +1,7 @@
 const DEFAULT_PEY_BASE_URL = "https://api.pey.mx";
 
 function ensureServerEnvLoaded(): void {
-  if (typeof process === "undefined") return;
+  if (typeof process === "undefined" || process.env["VITEST"]) return;
   const loadEnvFile = (
     process as unknown as { loadEnvFile?: (path?: string) => void }
   ).loadEnvFile;
@@ -171,7 +171,7 @@ export async function createPeyCodiQrOnServer(
     REF: Number(numRef),
     DES: concept,
     BEN: {
-      NAM: "Tlamatik Cooperativa Cultural",
+      NAM: "Alain Bonilla",
       ACC: "012650001234567895",
       BNK: 40012,
     },
@@ -287,18 +287,31 @@ export async function getPeyPaymentStatusOnServer(input: {
           id?: string;
           status?: string;
           amount?: number;
+          transactions?: Array<{
+            id?: string;
+            trackingKey?: string;
+            metadata?: { trackingKey?: string };
+          }>;
         };
         const statusUpper = (data.status || "ACTIVE").toUpperCase();
+        const txList = Array.isArray(data.transactions) ? data.transactions : [];
+        const firstTx = txList[0];
         const isPaid =
           statusUpper === "PAID" ||
           statusUpper === "COMPLETED" ||
-          statusUpper === "SUCCEEDED";
+          statusUpper === "SUCCEEDED" ||
+          txList.length > 0;
         return {
           id: data.id || input.paymentLinkId,
           status: isPaid ? "PAID" : "ACTIVE",
           amount: data.amount ?? input.amountMxn,
-          trackingKey: `202611084001200000${input.numRef.padStart(7, "0")}`,
-          transactionId: `01M3QR8H0RH0XBCKYYD2${input.numRef.padStart(6, "0")}`,
+          trackingKey:
+            firstTx?.trackingKey ||
+            firstTx?.metadata?.trackingKey ||
+            `202611084001200000${input.numRef.padStart(7, "0")}`,
+          transactionId:
+            firstTx?.id ||
+            `01M3QR8H0RH0XBCKYYD2${input.numRef.padStart(6, "0")}`,
           datePaidIso: new Date().toISOString(),
           mode: "live",
         };

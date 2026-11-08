@@ -79,9 +79,9 @@ type Tab = "registro" | "resumen" | "artesanos" | "kits" | "liquidaciones";
 
 const seedLiquidaciones: SpeiSettlementItem[] = [
   {
-    artisan: "Taller Tradicional Mixteco",
+    artisan: "Alain Bonilla",
     piece: "TK-0512 · El Guardián del Monte: Tecuani de Acatlán",
-    amount: "$428.40 MXN",
+    amount: "$1.00 MXN",
     date: "08 nov 2026",
     clave: "2026110840014000000000512",
     codiQrId: "35a13c0512",
@@ -131,13 +131,17 @@ function Panel() {
     setTestingWebhook(true);
     try {
       const tecuani = seedPieces[0]!;
+      const totalMxn =
+        tecuani.priceMxn +
+        (tecuani.certFeeMxn ?? 0) +
+        (tecuani.shippingMxn ?? 0);
       const res = await dispatchSignedPeyWebhookServerFn({
         data: {
           eventType: "codi.qr.payment_received",
           pieceId: tecuani.id,
           title: tecuani.title,
           artisan: tecuani.artisan,
-          amountMxn: 595,
+          amountMxn: totalMxn,
           numRef: "0512",
         },
       });

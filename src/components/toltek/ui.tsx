@@ -341,7 +341,7 @@ export function CodiButton({ piece, className, primary }: { piece: Piece; classN
     }
   }, [open, piece.id]);
 
-  // Escucha eventos entrantes del webhook POST /api/webhooks/pey para esta pieza
+  // Escucha eventos entrantes del webhook POST /api/webhooks/pey y el estado en vivo del Payment Link
   useEffect(() => {
     if (!open || state !== "qr") return;
     const openedAtMs = Date.now() - 2000;
@@ -350,9 +350,40 @@ export function CodiButton({ piece, className, primary }: { piece: Piece; classN
         const events = await listPeyWebhookEventsServerFn({
           data: { pieceId: piece.id },
         });
-        const recent = events.find(
+        let recent = events.find(
           (e) => new Date(e.datePaidIso).getTime() >= openedAtMs,
         );
+
+        // Si el Payment Link en vivo de pey.mx cambió a PAID, disparar el procesamiento del webhook + Smart Contract Stellar
+        if (!recent && paymentLink?.mode === "live" && paymentLink.id) {
+          const numRef = codiQr?.numRef || piece.id.replace(/\D/g, "") || "0512";
+          const liveStatus = await confirmPeyPaymentServerFn({
+            data: {
+              paymentLinkId: paymentLink.id,
+              codiQrId: codiQr?.id,
+              amountMxn: totalMxn,
+              numRef,
+              apiKeyOverride: apiKeyOverride || undefined,
+            },
+          });
+          if (liveStatus.status === "PAID") {
+            recent = await dispatchSignedPeyWebhookServerFn({
+              data: {
+                eventType: "payment_link.payment_received",
+                pieceId: piece.id,
+                title: piece.title,
+                artisan: piece.artisan,
+                amountMxn: totalMxn,
+                codiQrId: codiQr?.id || paymentLink.id,
+                numRef,
+                concept: codiQr?.concept,
+                trackingKey: liveStatus.trackingKey,
+                transactionId: liveStatus.transactionId,
+              },
+            });
+          }
+        }
+
         if (recent) {
           const netArtisanMxn = recent.netArtisanMxn.toLocaleString("es-MX", {
             minimumFractionDigits: 2,
@@ -380,7 +411,7 @@ export function CodiButton({ piece, className, primary }: { piece: Piece; classN
       }
     }, 3000);
     return () => window.clearInterval(timer);
-  }, [open, state, piece.id]);
+  }, [open, state, piece.id, paymentLink?.id, paymentLink?.mode]);
 
   const close = (o: boolean) => {
     setOpen(o);

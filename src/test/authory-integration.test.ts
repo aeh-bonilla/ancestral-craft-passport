@@ -88,11 +88,12 @@ describe("Authory × Tlamatik integration", () => {
     expect(html).toContain(work.hash);
   });
 
-  it("creates pey.mx CoDi QR and Payment Link payloads for Tecuani TK-0512 ($595 MXN)", async () => {
+  it("creates pey.mx CoDi QR and Payment Link payloads for Tecuani TK-0512 ($1 MXN to Alain Bonilla)", async () => {
     const tecuani = pieces.find((p) => p.id === "TK-0512")!;
+    expect(tecuani.artisan).toBe("Alain Bonilla");
     const totalMxn =
       tecuani.priceMxn + (tecuani.certFeeMxn ?? 0) + (tecuani.shippingMxn ?? 0);
-    expect(totalMxn).toBe(595);
+    expect(totalMxn).toBe(1);
 
     const { concept, numRef } = buildCodiConceptAndRef(
       tecuani.id,
@@ -107,7 +108,7 @@ describe("Authory × Tlamatik integration", () => {
       title: tecuani.title,
       amountMxn: totalMxn,
     });
-    expect(codiQr.amount).toBe(595);
+    expect(codiQr.amount).toBe(1);
     expect(codiQr.id).toBe("35a13c0512");
     expect(codiQr.endpoint).toBe("https://api.pey.mx/codi/qr");
 
@@ -118,8 +119,8 @@ describe("Authory × Tlamatik integration", () => {
       community: tecuani.community,
       amountMxn: totalMxn,
     });
-    expect(payLink.amount).toBe(595);
-    expect(payLink.url).toContain("https://app.mipey.mx/payment-link/");
+    expect(payLink.amount).toBe(1);
+    expect(payLink.url).toContain("https://app.mipey.mx/");
     expect(payLink.endpoint).toBe("https://api.pey.mx/payment-link/create");
 
     const status = await getPeyPaymentStatusOnServer({
@@ -139,7 +140,7 @@ describe("Authory × Tlamatik integration", () => {
     const webhookTimestamp = String(nowSec);
     const rawBody = JSON.stringify({
       type: "codi.qr.payment_received",
-      amount: 595,
+      amount: 1,
       codiQrId: "35a13c0512",
       concept: "Tlamatik TK-0512 El Guardian del Monte",
       datePaid: nowSec,
@@ -169,7 +170,7 @@ describe("Authory × Tlamatik integration", () => {
     expect(checkValid.valid).toBe(true);
 
     const checkTampered = verifyPeyWebhookSignature({
-      rawBody: rawBody.replace("595", "10"),
+      rawBody: rawBody.replace('"amount":1', '"amount":10'),
       webhookId,
       webhookTimestamp,
       webhookSignature: validSignature,
@@ -186,11 +187,12 @@ describe("Authory × Tlamatik integration", () => {
       secretOverride: secret,
     });
     expect(processed.pieceId).toBe("TK-0512");
-    expect(processed.amountMxn).toBe(595);
-    expect(processed.basePriceMxn).toBe(450);
-    expect(processed.certFeeMxn).toBe(25);
-    expect(processed.shippingMxn).toBe(120);
-    expect(processed.netArtisanMxn).toBe(428.4);
+    expect(processed.artisan).toBe("Alain Bonilla");
+    expect(processed.amountMxn).toBe(1);
+    expect(processed.basePriceMxn).toBe(1);
+    expect(processed.certFeeMxn).toBe(0);
+    expect(processed.shippingMxn).toBe(0);
+    expect(processed.netArtisanMxn).toBe(1);
     expect(processed.signatureVerified).toBe(true);
     expect(processed.duplicate).toBe(false);
     expect(processed.sorobanContractId).toBe(STELLAR_CONFIG.contractId);

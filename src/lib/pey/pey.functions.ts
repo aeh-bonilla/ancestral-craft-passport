@@ -68,6 +68,8 @@ export const dispatchSignedPeyWebhookServerFn = createServerFn({ method: "POST" 
       codiQrId?: string | undefined;
       numRef?: string | undefined;
       concept?: string | undefined;
+      trackingKey?: string | undefined;
+      transactionId?: string | undefined;
     }) => data,
   )
   .handler(async ({ data }): Promise<ProcessedPeyWebhookEvent> => {
@@ -83,8 +85,10 @@ export const dispatchSignedPeyWebhookServerFn = createServerFn({ method: "POST" 
       .toISOString()
       .slice(0, 10)
       .replace(/-/g, "");
-    const trackingKey = `${dateCompact}4001400000${numRef.padStart(7, "0")}`;
-    const transactionId = `01M3QR8H0RH0XBCKYYD2${numRef.padStart(6, "0")}`;
+    const trackingKey =
+      data.trackingKey || `${dateCompact}4001400000${numRef.padStart(7, "0")}`;
+    const transactionId =
+      data.transactionId || `01M3QR8H0RH0XBCKYYD2${numRef.padStart(6, "0")}`;
     const webhookId = `msg_${Date.now().toString(36)}_${numRef}`;
     const webhookTimestamp = String(nowSec);
 
