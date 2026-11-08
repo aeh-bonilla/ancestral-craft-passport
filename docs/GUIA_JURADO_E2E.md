@@ -38,6 +38,8 @@ sequenceDiagram
 
 | Componente | Valor / Identificador |
 | :--- | :--- |
+| **URL de Producción (Vercel)** | https://tlamatik.vercel.app/ |
+| **Endpoint Webhook `pey.mx` (Vivo)** | `https://tlamatik.vercel.app/api/webhooks/pey` (`POST` eventos / `GET` healthcheck) |
 | **Red Blockchain** | `Stellar Testnet` (`Test SDF Network ; September 2015`) |
 | **Smart Contract ID (Soroban)** | `CAOAFGPATXWJ6KKGXFYHY42Q4N75NOWSR3NH3K2DT7QR3YSMDGT5P2HO` |
 | **WASM Hash Desplegado** | `ba7d1753ecf002984aee4a87c80b64af6bc1a819ed27bfa98162a9b4cfd2bcaa` |
@@ -45,20 +47,20 @@ sequenceDiagram
 | **Tx Hash Ejemplo (`register_work`)** | `725e126cc7998b795f328f99e9ba60d863202d06aa1166016d0cd573eadd48cf` |
 | **Tx Hash Ejemplo (`record_rights_event`)** | `30f6f7e9a1df1187d0a6c57ba86eaecebafcb4d8e2af7e12930a160930359199` |
 | **Pieza Insignia para Compra E2E** | `TK-0512` — *El Guardián del Monte: Tecuani de Acatlán* (`$595.00 MXN`) |
-| **Endpoint Webhook `pey.mx`** | `POST /api/webhooks/pey` (salud y esquema en `GET /api/webhooks/pey`) |
 
 ---
 
-## 2. Preparación del Entorno (1 minuto)
+## 2. Acceso Directo en Producción o Preparación Local
 
-Si el jurado evalúa la aplicación localmente:
-
-1. Instalar dependencias e iniciar el servidor de desarrollo:
-   ```bash
-   npm install
-   npm run dev
-   ```
-2. Abrir en el navegador: `http://localhost:8080` (o el puerto que indique la terminal, por ejemplo `http://localhost:3000`).
+- **Opción A — Evaluación inmediata en la nube (Recomendada)**:
+  Abrir directamente **https://tlamatik.vercel.app/** en cualquier navegador (no requiere instalación local).
+- **Opción B — Evaluación en entorno local**:
+  1. Instalar dependencias e iniciar el servidor de desarrollo:
+     ```bash
+     npm install
+     npm run dev
+     ```
+  2. Abrir en el navegador: `http://localhost:8080`.
 
 ---
 

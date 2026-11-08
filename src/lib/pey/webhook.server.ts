@@ -127,8 +127,27 @@ export function verifyPeyWebhookSignature(params: {
   secret?: string | undefined;
   nowEpochSeconds?: number | undefined;
 }): { valid: boolean; reason?: string | undefined } {
-  const configuredSecret =
-    params.secret?.trim() || process.env["PEY_WEBHOOK_SECRET"]?.trim();
+  const serialize = () => {
+    if (typeof process !== "undefined") {
+      const loadEnvFile = (
+        process as unknown as { loadEnvFile?: (path?: string) => void }
+      ).loadEnvFile;
+      if (typeof loadEnvFile === "function" && !process.env["PEY_WEBHOOK_SECRET"]) {
+        try {
+          loadEnvFile(".env.local");
+        } catch {
+          // ignore
+        }
+        try {
+          loadEnvFile(".env");
+        } catch {
+          // ignore
+        }
+      }
+    }
+    return params.secret?.trim() || process.env["PEY_WEBHOOK_SECRET"]?.trim();
+  };
+  const configuredSecret = serialize();
 
   if (!configuredSecret) {
     return { valid: true, reason: "no-secret-configured-sandbox" };

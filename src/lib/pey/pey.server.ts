@@ -1,5 +1,25 @@
 const DEFAULT_PEY_BASE_URL = "https://api.pey.mx";
 
+function ensureServerEnvLoaded(): void {
+  if (typeof process === "undefined") return;
+  const loadEnvFile = (
+    process as unknown as { loadEnvFile?: (path?: string) => void }
+  ).loadEnvFile;
+  if (typeof loadEnvFile !== "function") return;
+  if (!process.env["PEY_API_KEY"]) {
+    try {
+      loadEnvFile(".env.local");
+    } catch {
+      // ignore if .env.local does not exist
+    }
+    try {
+      loadEnvFile(".env");
+    } catch {
+      // ignore if .env does not exist
+    }
+  }
+}
+
 export interface CreatePeyCodiQrInput {
   pieceId: string;
   title: string;
@@ -50,6 +70,7 @@ export interface PeyPaymentStatusResponse {
 }
 
 function getPeyBaseUrl(): string {
+  ensureServerEnvLoaded();
   return (
     process.env["PEY_API_BASE_URL"]?.trim() ||
     process.env["VITE_PEY_API_BASE_URL"]?.trim() ||
@@ -58,6 +79,7 @@ function getPeyBaseUrl(): string {
 }
 
 function getPeyApiKey(override?: string | undefined): string | undefined {
+  ensureServerEnvLoaded();
   const key =
     override?.trim() ||
     process.env["PEY_API_KEY"]?.trim() ||
