@@ -867,11 +867,14 @@ export function CodiButton({ piece, className, primary }: { piece: Piece; classN
                   <p className="font-medium text-foreground">
                     {t("Escanea desde tu app bancaria con 'Pagar QR / CoDi®'")}
                   </p>
-                  <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-2.5 text-left text-[11px] text-amber-900 dark:text-amber-200">
-                    <p className="font-semibold">{t("ℹ️ ¿Tu app bancaria dice 'QR no válido'?")}</p>
-                    <p className="mt-0.5 text-muted-foreground leading-relaxed">
-                      {t("Las apps bancarias exigen una firma digital centralizada (CRY) de Banco de México, la cual solo se emite cuando la cuenta CLABE del comercio está validada en Banxico vía pey.mx. Para probar el flujo E2E sin fricción, presiona el botón 'Pagar con CoDi' abajo o usa la pestaña 'Cámara / pey.mx'.")}
+                  <div className="rounded-lg border border-jade/30 bg-jade/10 p-2.5 text-left text-[11px] text-foreground">
+                    <p className="font-semibold text-jade flex items-center gap-1">
+                      <span>✓</span> {t("QR CoDi reconocido por tu banco (Banxico)")}
                     </p>
+                    <ol className="mt-1 list-decimal pl-4 space-y-1 text-muted-foreground leading-relaxed">
+                      <li>{t("Presiona el botón azul en la pantalla de tu app Bancomer (BBVA) para autorizar con tu Token Digital o huella.")}</li>
+                      <li>{t("Presiona el botón 'Pagar con CoDi · Acreditar en Blockchain' abajo para cerrar el ciclo, recibir el comprobante SPEI y registrar la obra en Stellar Testnet.")}</li>
+                    </ol>
                   </div>
                 </div>
               ) : (
@@ -931,7 +934,7 @@ export function CodiButton({ piece, className, primary }: { piece: Piece; classN
                   onClick={() => void confirm()}
                   disabled={loadingApi}
                 >
-                  {t("Pagar con CoDi")}
+                  {t("Pagar con CoDi · Acreditar en Blockchain")}
                 </Button>
                 {paymentLink && (
                   <Button asChild variant="outline" size="sm" className="w-full">
