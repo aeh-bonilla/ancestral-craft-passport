@@ -47,6 +47,7 @@ import {
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/registrar")({
+  ssr: false,
   head: () => ({
     meta: [
       { property: "og:type", content: "website" },

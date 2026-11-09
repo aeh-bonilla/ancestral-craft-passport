@@ -52,8 +52,13 @@ import {
 } from "@/lib/pey/pey.functions";
 
 export const Route = createFileRoute("/_authenticated/panel")({
-  loader: ({ context }) =>
-    context.queryClient.ensureQueryData(profileOptions(context.user.id)),
+  ssr: false,
+  loader: ({ context }) => {
+    if (!context?.user?.id) return null;
+    return context.queryClient
+      .ensureQueryData(profileOptions(context.user.id))
+      .catch(() => null);
+  },
   head: () => ({
     meta: [
       { property: "og:type", content: "website" },
