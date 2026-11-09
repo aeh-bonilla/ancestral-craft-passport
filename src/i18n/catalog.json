@@ -1391,9 +1391,13 @@
     "Credential preview",
     "凭证预览"
   ],
-  "Contrato Soroban Authory · Testnet": [
-    "Soroban Authory Contract · Testnet",
-    "Soroban Authory 合约 · 测试网"
+  "Padrón de Certificadores · Tlamatik": [
+    "Certifiers Registry · Tlamatik",
+    "认证者名录 · Tlamatik"
+  ],
+  "Contrato Soroban · Testnet": [
+    "Soroban Contract · Testnet",
+    "Soroban 合约 · 测试网"
   ],
   "Abrir Payment Link en pey.mx": [
     "Open Payment Link on pey.mx",

@@ -32,8 +32,8 @@ import { pieces } from "@/lib/toltek";
 
 beforeAll(() => vi.stubGlobal("crypto", webcrypto));
 
-describe("Authory × Tlamatik integration", () => {
-  it("uses the deployed Authory Soroban contract on Stellar Testnet", () => {
+describe("Tlamatik Stellar integration", () => {
+  it("uses the deployed Soroban contract on Stellar Testnet", () => {
     expect(STELLAR_CONFIG.contractId).toBe(
       "CAOAFGPATXWJ6KKGXFYHY42Q4N75NOWSR3NH3K2DT7QR3YSMDGT5P2HO",
     );
@@ -68,7 +68,7 @@ describe("Authory × Tlamatik integration", () => {
     expect(dossierHash).toMatch(/^[a-f0-9]{64}$/);
   });
 
-  it("maps pieces and Authory works bidirectionally and generates initial rights events", () => {
+  it("maps pieces and works bidirectionally and generates initial rights events", () => {
     const seed = pieces[0]!;
     const work = pieceToWork(seed);
     expect(work.id).toBe(seed.id);

@@ -286,7 +286,7 @@ export function buildInitialWorkEvents(work: AuthoryWork): AuthoryRightsEvent[] 
       workId: work.id,
       promoterId: work.promoterId,
       type: "evidence",
-      actor: "Authory × Tlamatik Protocol (Soroban)",
+      actor: "Tlamatik Protocol (Soroban)",
       effectiveDate: regTime,
       terms: `Huella SHA-256 anclada en contrato Soroban ${STELLAR_CONFIG.contractId.slice(0, 8)}…`,
       notes: `SHA-256: ${work.hash}`,
@@ -581,7 +581,7 @@ export function generatePassportCertificateHtml(
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pasaporte Cultural Tlamatik × Authory — ${safeId}</title>
+  <title>Pasaporte Cultural Tlamatik — ${safeId}</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -662,7 +662,7 @@ export function generatePassportCertificateHtml(
   <div class="cert">
     <div class="banner">
       <div>
-        <div class="brand">Tlamatik × Authory</div>
+        <div class="brand">Tlamatik</div>
         <div style="font-size: 12px; opacity: 0.8;">Pasaporte Cultural Físico-Digital · Stellar Soroban Testnet</div>
       </div>
       <div class="badge">Certificado en Stellar</div>
@@ -688,7 +688,7 @@ export function generatePassportCertificateHtml(
           <div class="val mono">${safeHash}</div>
         </div>
         <div class="cell full">
-          <div class="label">Smart Contract Soroban (Authory Registry)</div>
+          <div class="label">Smart Contract Soroban (Tlamatik Registry)</div>
           <div class="val mono"><a href="${contractExplorerUrl}" target="_blank" rel="noopener noreferrer">${safeContract}</a></div>
         </div>
         <div class="cell full">
@@ -705,7 +705,7 @@ export function generatePassportCertificateHtml(
         }
       </div>
       <div class="footer">
-        <span>Tlamatik · Memoria viva del patrimonio respaldada por Authory Protocol</span>
+        <span>Tlamatik · Memoria viva del patrimonio cultural</span>
         <span>Imprimible / Guardable como PDF</span>
       </div>
     </div>

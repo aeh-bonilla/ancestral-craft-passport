@@ -225,7 +225,7 @@ export function PromoterRegistration() {
             </div>
 
             <p className="mt-4 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-              {t("Padrón de Certificadores · Authory × Tlamatik")}
+              {t("Padrón de Certificadores · Tlamatik")}
             </p>
             <h2 className="mt-1 font-serif text-3xl font-semibold">{f.name}</h2>
             <p className="mt-1 text-sm text-muted-foreground">
