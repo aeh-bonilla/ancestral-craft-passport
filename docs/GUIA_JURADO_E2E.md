@@ -1,6 +1,6 @@
 # Guía de Evaluación End-to-End (E2E) para el Jurado — Tlamatik · Pasaporte Cultural & Comercio Justo
 
-> **Propósito de este documento**: Guiar al jurado paso a paso a través de una prueba integral **End-to-End (E2E)** de **Tlamatik**, validando el registro criptográfico de una pieza artesanal en **Stellar Soroban Testnet**, su compra por **$1.00 MXN** mediante **CoDi® / SPEI (`pey.mx`)** con depósito directo a la cuenta de **Alain Bonilla**, la recepción del **Webhook firmado (HMAC-SHA256)** y la **acreditación dual on-chain + bancaria** sin intermediarios.
+> **Propósito de este documento**: Guiar al jurado paso a paso a través de una prueba integral **End-to-End (E2E)** de **Tlamatik**, validando el registro criptográfico de una pieza artesanal en **Stellar Soroban Testnet**, su compra por **$1.00 MXN** mediante **CoDi® / SPEI (`pey.mx`)** con depósito directo a la cuenta activa de la maestra artesana **Miriam Nava** (CLABE: `012180015355682429`), la recepción del **Webhook firmado (HMAC-SHA256)** y la **acreditación dual on-chain + bancaria** sin intermediarios.
 
 ---
 
@@ -12,7 +12,7 @@ sequenceDiagram
     actor Juez as Jurado / Comprador / Promotor
     participant UI as Tlamatik Frontend (https://tlamatik.vercel.app)
     participant Crypto as Web Crypto API (SHA-256 Local)
-    participant Pey as API & Webhook pey.mx (Cuenta: Alain Bonilla)
+    participant Pey as API & Webhook pey.mx (Cuenta: Miriam Nava)
     participant Soroban as Smart Contract Stellar Testnet
     participant DB as Supabase (works + rights_events)
 
@@ -23,13 +23,13 @@ sequenceDiagram
     Soroban-->>UI: Devuelve Tx Hash en Stellar Testnet (64 hex)
     UI->>DB: Persiste pasaporte y eventos iniciales
 
-    Note over Juez,Soroban: Fase B — Compra del Tecuani (TK-0512 · $1.00 MXN → Cuenta de Alain Bonilla)
+    Note over Juez,Soroban: Fase B — Compra del Tecuani (TK-0512 · $1.00 MXN → Cuenta de Miriam Nava)
     Juez->>UI: Abre "Pagar con CoDi® / SPEI (pey.mx)" en TK-0512 ($1.00 MXN)
-    UI->>Pey: POST /payment-link/create & POST /codi/qr ($1.00 MXN · Beneficiario: Alain Bonilla)
+    UI->>Pey: POST /payment-link/create & POST /codi/qr ($1.00 MXN · Beneficiario: Miriam Nava)
     Pey-->>UI: Link de Pago en Vivo (app.mipey.mx) + QR CoDi (ref: 0512)
     Pey->>UI: POST /api/webhooks/pey (payment_received + firma HMAC-SHA256)
     UI->>UI: Verifica firma Standard Webhooks (webhook-id, timestamp, signature)
-    UI->>Soroban: Invoca record_rights_event(event_id, "TK-0512", "assignment", "Alain Bonilla", ...)
+    UI->>Soroban: Invoca record_rights_event(event_id, "TK-0512", "assignment", "Miriam Nava", ...)
     Soroban-->>UI: Devuelve Tx Hash de acreditación en Stellar Testnet
     UI-->>Juez: Muestra Certificado de Compra Acreditada ($1.00 MXN SPEI + Hash Stellar)
 ```
@@ -42,7 +42,7 @@ sequenceDiagram
 | **Endpoint Webhook `pey.mx` (Vivo)** | `https://tlamatik.vercel.app/api/webhooks/pey` (`POST` eventos / `GET` healthcheck) |
 | **Pieza Insignia para Prueba E2E** | `TK-0512` — *El Guardián del Monte: Tecuani de Acatlán* |
 | **Precio de Prueba E2E** | **`$1.00 MXN`** (`$1.00` obra + `$0.00` certificado + `$0.00` envío = **`$1.00 MXN`**) |
-| **Cuenta Beneficiaria del Cobro (`pey.mx`)** | **Alain Bonilla** |
+| **Cuenta Beneficiaria Activa (`pey.mx`)** | **Miriam Nava** (CLABE: `012180015355682429` · BBVA) |
 | **Red Blockchain** | `Stellar Testnet` (`Test SDF Network ; September 2015`) |
 | **Smart Contract ID (Soroban)** | `CAOAFGPATXWJ6KKGXFYHY42Q4N75NOWSR3NH3K2DT7QR3YSMDGT5P2HO` |
 | **WASM Hash Desplegado** | `ba7d1753ecf002984aee4a87c80b64af6bc1a819ed27bfa98162a9b4cfd2bcaa` |
@@ -68,22 +68,22 @@ sequenceDiagram
 
 ## 3. Recorrido Paso a Paso para el Jurado (5 Escenarios E2E)
 
-### Escenario 1: Compra del Tecuani (`TK-0512`) por `$1.00 MXN` → Cuenta de Alain Bonilla (`pey.mx` + Webhook + Smart Contract Stellar)
+### Escenario 1: Compra del Tecuani (`TK-0512`) por `$1.00 MXN` → Cuenta de Miriam Nava (`pey.mx` + Webhook + Smart Contract Stellar)
 
-**Objetivo**: Comprobar cómo el cobro de **`$1.00 MXN`** dirigido a la cuenta de **Alain Bonilla** en `pey.mx` dispara el webhook firmado (`HMAC-SHA256`), ejecuta automáticamente el Smart Contract en **Stellar Testnet** (`record_rights_event`) y entrega al comprador el comprobante con ambos acuses (bancario SPEI y blockchain).
+**Objetivo**: Comprobar cómo el cobro de **`$1.00 MXN`** dirigido a la cuenta bancaria activa de **Miriam Nava** (CLABE: `012180015355682429`) en `pey.mx` dispara el webhook firmado (`HMAC-SHA256`), ejecuta automáticamente el Smart Contract en **Stellar Testnet** (`record_rights_event`) y entrega al comprador el comprobante con ambos acuses (bancario SPEI y blockchain).
 
 1. **Ir al Mercado o Verificador**:
    - Navegar a [`https://tlamatik.vercel.app/mercado`](https://tlamatik.vercel.app/mercado) o abrir directamente el pasaporte del Tecuani en [`https://tlamatik.vercel.app/verificar?id=TK-0512`](https://tlamatik.vercel.app/verificar?id=TK-0512).
 2. **Abrir la Pasarela CoDi® / SPEI (`pey.mx`)**:
-   - En la tarjeta de **"El Guardián del Monte: Tecuani de Acatlán"** (`TK-0512` · Beneficiario: **Alain Bonilla** · Precio: **`$1 MXN`**), hacer clic en el botón verde **"Pagar con CoDi® / SPEI (pey.mx)"**.
+   - En la tarjeta de **"El Guardián del Monte: Tecuani de Acatlán"** (`TK-0512` · Artesana: **Miriam Nava** · Precio: **`$1 MXN`**), hacer clic en el botón verde **"Pagar con CoDi® / SPEI (pey.mx)"**.
 3. **Revisar la Orden de `$1.00 MXN` y el Beneficiario**:
    - **Pieza**: `TK-0512` — *El Guardián del Monte: Tecuani de Acatlán*.
-   - **Cuenta Beneficiaria**: **Alain Bonilla** (`Acatlán de Osorio, Puebla`).
+   - **Cuenta Beneficiaria Activa**: **Miriam Nava** (CLABE: `012180015355682429` · `Acatlán de Osorio, Puebla`).
    - **Valor de la Obra (Prueba E2E)**: **`$1.00 MXN`** (`$0.00 MXN` certificado + `$0.00 MXN` envío = **`$1.00 MXN` total a liquidar**).
 4. **Escanear el Código QR y Realizar el Pago de `$1.00 MXN`**:
    - **Modalidad A — App Bancaria con CoDi® (Lector "Pagar QR")**:
      - En el modal de pago, seleccionar la pestaña **"📱 App Bancaria (CoDi®)"**.
-     - El código QR contiene la trama estructurada estándar de **Banco de México CoDi** (`TYP: 20`, Beneficiario `Alain Bonilla`, Clave CLABE, Monto `$1.00 MXN`, Referencia `0512`).
+     - El código QR contiene la trama estructurada estándar de **Banco de México CoDi** (`TYP: 20`, Beneficiaria `Miriam Nava`, CLABE `012180015355682429`, Monto `$1.00 MXN`, Referencia `0512`).
      - *Nota técnica sobre lectores bancarios CoDi*: Ciertas apps bancarias en México (como BBVA o Santander) exigen que el QR contenga una firma criptográfica centralizada (`CRY`) emitida en tiempo real por el HSM de Banxico vinculada a una cuenta enrolada en su padrón. Si la app bancaria indica *"Este QR no es válido"*, se debe a la ausencia de dicha firma criptográfica de Banxico. En ese caso, puedes presionar directamente el botón **"Pagar con CoDi"** abajo o usar la Modalidad B con la cámara normal.
    - **Modalidad B — Escaneo con la Cámara del Celular / Portal pey.mx**:
      - Seleccionar la pestaña **"📷 Cámara / pey.mx"**.
@@ -96,9 +96,9 @@ sequenceDiagram
      3. `3/3 · Generando comprobante dual (SPEI Banxico + Hash Stellar)`
 5. **Auditar el Certificado de Compra Acreditada**:
    - Verificar en pantalla la respuesta consolidada de ambos eventos:
-     - **Resumen del Cobro Liquidado**: **`$1.00 MXN`** acreditado a **Alain Bonilla**.
+     - **Resumen del Cobro Liquidado**: **`$1.00 MXN`** acreditado a **Miriam Nava**.
      - **1. Evento de Pago (`Webhook pey.mx · SPEI`)**:
-       - `Beneficiario`: **Alain Bonilla**
+       - `Beneficiaria`: **Miriam Nava** (CLABE: `012180015355682429`)
        - `Webhook ID`: `msg_...` con insignia **`HMAC-SHA256 OK`**
        - `Transaction ID`: identificador de transacción de `pey.mx`
        - `CoDi QR ID` (`35a13c0512`) y `Referencia` (`0512`)

@@ -842,8 +842,8 @@ export function CodiButton({ piece, className, primary }: { piece: Piece; classN
                           REF: Number(piece.id.replace(/\D/g, "") || "512"),
                           DES: `Tlamatik ${piece.id} ${piece.title}`.slice(0, 40),
                           BEN: {
-                            NAM: "Alain Bonilla",
-                            ACC: "012650001234567895",
+                            NAM: "Miriam Nava",
+                            ACC: "012180015355682429",
                             BNK: 40012,
                           },
                         })
@@ -893,7 +893,11 @@ export function CodiButton({ piece, className, primary }: { piece: Piece; classN
                   </div>
                   <div className="mt-1 flex justify-between gap-2">
                     <span className="text-muted-foreground">Beneficiario SPEI:</span>
-                    <span className="font-semibold text-foreground">Alain Bonilla</span>
+                    <span className="font-semibold text-foreground">Miriam Nava</span>
+                  </div>
+                  <div className="mt-1 flex justify-between gap-2">
+                    <span className="text-muted-foreground">CLABE Interbancaria:</span>
+                    <span className="font-semibold text-foreground font-mono">012180015355682429</span>
                   </div>
                   <div className="mt-1 flex justify-between gap-2">
                     <span className="text-muted-foreground">Monto:</span>

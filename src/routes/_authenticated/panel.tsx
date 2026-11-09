@@ -79,11 +79,11 @@ type Tab = "registro" | "resumen" | "artesanos" | "kits" | "liquidaciones";
 
 const seedLiquidaciones: SpeiSettlementItem[] = [
   {
-    artisan: "Alain Bonilla",
+    artisan: "Miriam Nava",
     piece: "TK-0512 · El Guardián del Monte: Tecuani de Acatlán",
     amount: "$1.00 MXN",
     date: "08 nov 2026",
-    clave: "2026110840014000000000512",
+    clave: "2026110840012000000000512",
     codiQrId: "35a13c0512",
   },
   {

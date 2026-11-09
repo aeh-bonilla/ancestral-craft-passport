@@ -172,8 +172,8 @@ export async function createPeyCodiQrOnServer(
     REF: Number(numRef),
     DES: concept,
     BEN: {
-      NAM: "Alain Bonilla",
-      ACC: "012650001234567895",
+      NAM: "Miriam Nava",
+      ACC: "012180015355682429",
       BNK: 40012,
     },
   });

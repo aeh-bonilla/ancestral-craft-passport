@@ -42,14 +42,14 @@ export const pieces: Piece[] = [
   {
     id: "TK-0512",
     title: "El Guardián del Monte: Tecuani de Acatlán",
-    artisan: "Alain Bonilla",
+    artisan: "Miriam Nava",
     community: "Acatlán de Osorio",
     region: "Puebla",
     technique: "Talla en Madera",
     priceMxn: 1,
     image: tecuani,
     featured: true,
-    badge: "Puebla · Mixteca · Prueba E2E $1 MXN",
+    badge: "Puebla · Mixteca · Cuenta CoDi Activa $1 MXN",
     category: "Figuras de Danza / Madera & Textil",
     location: "Acatlán de Osorio, Puebla, México",
     techniqueDetail: "Tallado en madera de copal/pino, confección textil pintada a mano y ensamble de ixtle natural",
@@ -60,7 +60,7 @@ export const pieces: Piece[] = [
     status: "available",
     stellarTxHash: "725e126cc7998b795f328f99e9ba60d863202d06aa1166016d0cd573eadd48cf",
     ledgerStatus: "Verified on Soroban Testnet",
-    story: "En las entrañas de la Mixteca, el sonido del teponaztli y la flauta de carrizo anuncian la llegada del Tecuani. Esta pieza rinde homenaje a la danza ancestral de petición de lluvias y protección de las cosechas. Modelado y ensamblado a mano, viste el tradicional mazo amarillo salpicado con las rosetas del felino sagrado y una máscara decorada con cerdas naturales e hilos de ixtle trenzado.",
+    story: "En las entrañas de la Mixteca, el sonido del teponaztli y la flauta de carrizo anuncian la llegada del Tecuani. Esta pieza rinde homenaje a la danza ancestral de petición de lluvias y protección de las cosechas. Modelado y ensamblado a mano por la maestra artesana Miriam Nava, viste el tradicional mazo amarillo salpicado con las rosetas del felino sagrado y una máscara decorada con cerdas naturales e hilos de ixtle trenzado.",
   },
   { id: "TK-0388", title: "Plato de Talavera Poblana", artisan: "Uriarte Talavera", community: "Puebla de Zaragoza", region: "Puebla", technique: "Cerámica", priceMxn: 2650, image: talavera, unesco: "Patrimonio Cultural Inmaterial (UNESCO) · Puebla" },
   { id: "TK-0042", title: "Alebrije Jaguar Nahual", artisan: "Jacobo y María Ángeles", community: "San Martín Tilcajete", region: "Oaxaca", technique: "Talla en Madera", priceMxn: 8900, image: alebrije },
@@ -85,7 +85,8 @@ export type Artisan = {
 };
 
 export const artisans: Artisan[] = [
-  { name: "Alain Bonilla", technique: "Talla en copal", location: "Acatlán de Osorio, Pue.", status: "Verificada", pieces: 1, usdc: 1, initials: "AB" },
+  { name: "Miriam Nava", technique: "Talla en madera & textil", location: "Acatlán de Osorio, Pue.", status: "Verificada", pieces: 1, usdc: 1, initials: "MN" },
+  { name: "Alain Bonilla", technique: "Promotor Comunitario", location: "Acatlán de Osorio, Pue.", status: "Verificada", pieces: 0, usdc: 0, initials: "AB" },
   { name: "Don Miguel Aguilar", technique: "Talla en copal", location: "San Antonio Arrazola, Oax.", status: "Verificada", pieces: 18, usdc: 920, initials: "MA" },
   { name: "Doña Rosa Real", technique: "Barro negro bruñido", location: "San Bartolo Coyotepec, Oax.", status: "Verificada", pieces: 26, usdc: 1140, initials: "RR" },
   { name: "Petrona Gómez", technique: "Telar de cintura", location: "Zinacantán, Chis.", status: "Activa", pieces: 12, usdc: 610, initials: "PG" },

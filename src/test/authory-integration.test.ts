@@ -89,9 +89,9 @@ describe("Authory × Tlamatik integration", () => {
     expect(html).toContain(work.hash);
   });
 
-  it("creates pey.mx CoDi QR and Payment Link payloads for Tecuani TK-0512 ($1 MXN to Alain Bonilla)", async () => {
+  it("creates pey.mx CoDi QR and Payment Link payloads for Tecuani TK-0512 ($1 MXN to Miriam Nava)", async () => {
     const tecuani = pieces.find((p) => p.id === "TK-0512")!;
-    expect(tecuani.artisan).toBe("Alain Bonilla");
+    expect(tecuani.artisan).toBe("Miriam Nava");
     const totalMxn =
       tecuani.priceMxn + (tecuani.certFeeMxn ?? 0) + (tecuani.shippingMxn ?? 0);
     expect(totalMxn).toBe(1);
@@ -188,7 +188,7 @@ describe("Authory × Tlamatik integration", () => {
       secretOverride: secret,
     });
     expect(processed.pieceId).toBe("TK-0512");
-    expect(processed.artisan).toBe("Alain Bonilla");
+    expect(processed.artisan).toBe("Miriam Nava");
     expect(processed.amountMxn).toBe(1);
     expect(processed.basePriceMxn).toBe(1);
     expect(processed.certFeeMxn).toBe(0);
