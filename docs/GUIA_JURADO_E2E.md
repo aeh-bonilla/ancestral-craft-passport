@@ -80,11 +80,15 @@ sequenceDiagram
    - **Pieza**: `TK-0512` — *El Guardián del Monte: Tecuani de Acatlán*.
    - **Cuenta Beneficiaria**: **Alain Bonilla** (`Acatlán de Osorio, Puebla`).
    - **Valor de la Obra (Prueba E2E)**: **`$1.00 MXN`** (`$0.00 MXN` certificado + `$0.00 MXN` envío = **`$1.00 MXN` total a liquidar**).
-4. **Realizar o Simular el Pago de `$1.00 MXN`**:
-   - **Modalidad A — Pago Real de `$1.00 MXN` en `pey.mx` hacia la cuenta de Alain Bonilla**:
-     - Hacer clic en **"Abrir Payment Link en pey.mx"** (`https://app.mipey.mx/checkout/payment-link/...`) y completar el cobro de **`$1.00 MXN`** vía CoDi® desde tu app bancaria.
-     - Al confirmarse el pago en `pey.mx`, el webhook `POST https://tlamatik.vercel.app/api/webhooks/pey` y el monitor en vivo detectan la transacción automáticamente.
-   - **Modalidad B — Confirmación Directa en Plataforma**:
+4. **Escanear el Código QR y Realizar el Pago de `$1.00 MXN`**:
+   - **Modalidad A — App Bancaria con CoDi® (Lector "Pagar QR")**:
+     - En el modal de pago, seleccionar la pestaña **"📱 App Bancaria (CoDi®)"**.
+     - El código QR contiene la trama estructurada estándar de **Banco de México CoDi** (`TYP: 20`, Beneficiario `Alain Bonilla`, Clave CLABE, Monto `$1.00 MXN`, Referencia `0512`).
+     - *Nota técnica sobre lectores bancarios CoDi*: Ciertas apps bancarias en México (como BBVA o Santander) exigen que el QR contenga una firma criptográfica centralizada (`CRY`) emitida en tiempo real por el HSM de Banxico vinculada a una cuenta enrolada en su padrón. Si la app bancaria indica *"Este QR no es válido"*, se debe a la ausencia de dicha firma criptográfica de Banxico. En ese caso, puedes presionar directamente el botón **"Pagar con CoDi"** abajo o usar la Modalidad B con la cámara normal.
+   - **Modalidad B — Escaneo con la Cámara del Celular / Portal pey.mx**:
+     - Seleccionar la pestaña **"📷 Cámara / pey.mx"**.
+     - Escanear el QR con la **cámara estándar de tu teléfono** o hacer clic en **"Abrir Payment Link en pey.mx"** (`https://app.mipey.mx/checkout/payment-link/...`) para abrir la pasarela web de `pey.mx`.
+   - **Modalidad C — Acreditación Directa E2E en Plataforma**:
      - Hacer clic en el botón **"Pagar con CoDi"**.
    - Observar la secuencia en tiempo real de 3 etapas:
      1. `1/3 · Evento Webhook de pey.mx recibido y verificado (HMAC-SHA256)`

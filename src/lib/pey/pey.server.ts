@@ -161,13 +161,14 @@ export async function createPeyCodiQrOnServer(
     }
   }
 
-  // Deterministic Banxico CoDi QR payload compatible with pey.mx schema
+  // Deterministic Banxico CoDi QR payload compatible with Banxico / pey.mx schema
   const idcSuffix = numRef.padStart(4, "0");
   const fallbackId = `35a13c${idcSuffix}`;
   const qrPayload = JSON.stringify({
+    v: { DEV: "TLAMATIK-POS" },
     TYP: 20,
     IDC: fallbackId,
-    AMO: amount,
+    AMO: Number(amount.toFixed(2)),
     REF: Number(numRef),
     DES: concept,
     BEN: {

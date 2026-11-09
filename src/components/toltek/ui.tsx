@@ -284,6 +284,7 @@ export function CodiButton({ piece, className, primary }: { piece: Piece; classN
   const [dualReceipt, setDualReceipt] = useState<ProcessedPeyWebhookEvent | null>(null);
   const [showKeyInput, setShowKeyInput] = useState(false);
   const [apiKeyOverride, setApiKeyOverride] = useState("");
+  const [scanMode, setScanMode] = useState<"bank" | "camera">("bank");
 
   const certFeeMxn = piece.certFeeMxn ?? 0;
   const shippingMxn = piece.shippingMxn ?? 0;
@@ -787,21 +788,69 @@ export function CodiButton({ piece, className, primary }: { piece: Piece; classN
 
           {state === "qr" && (
             <div className="space-y-4">
+              {/* Selector de modo de escaneo: App Bancaria vs. Cámara / pey.mx */}
+              <div className="flex rounded-lg border bg-sand/40 p-1 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setScanMode("bank")}
+                  className={`flex-1 rounded-md py-1.5 font-medium transition-all ${
+                    scanMode === "bank"
+                      ? "bg-card text-foreground shadow-xs font-semibold"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  📱 {t("App Bancaria (CoDi®)")}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setScanMode("camera")}
+                  className={`flex-1 rounded-md py-1.5 font-medium transition-all ${
+                    scanMode === "camera"
+                      ? "bg-card text-foreground shadow-xs font-semibold"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  📷 {t("Cámara / pey.mx")}
+                </button>
+              </div>
+
               <div className="mx-auto w-fit rounded-2xl border-4 border-primary/25 bg-card p-3 shadow-sm">
                 {loadingApi ? (
                   <div className="grid h-[170px] w-[170px] place-items-center">
                     <Loader2 className="h-8 w-8 animate-spin text-primary" />
                   </div>
-                ) : codiQr?.qrImage ? (
-                  <img
-                    src={
-                      codiQr.qrImage.startsWith("data:")
-                        ? codiQr.qrImage
-                        : `data:image/png;base64,${codiQr.qrImage}`
-                    }
-                    alt={t("Código QR del pasaporte")}
-                    className="h-[170px] w-[170px] rounded-md object-contain"
-                  />
+                ) : scanMode === "bank" ? (
+                  codiQr?.qrImage ? (
+                    <img
+                      src={
+                        codiQr.qrImage.startsWith("data:")
+                          ? codiQr.qrImage
+                          : `data:image/png;base64,${codiQr.qrImage}`
+                      }
+                      alt={t("Código QR CoDi Banxico")}
+                      className="h-[170px] w-[170px] rounded-md object-contain"
+                    />
+                  ) : (
+                    <QrCode
+                      value={
+                        codiQr?.qrString ||
+                        JSON.stringify({
+                          v: { DEV: "TLAMATIK-POS" },
+                          TYP: 20,
+                          IDC: `35a13c${piece.id.replace(/\D/g, "").slice(0, 4).padStart(4, "0")}`,
+                          AMO: totalMxn,
+                          REF: Number(piece.id.replace(/\D/g, "") || "512"),
+                          DES: `Tlamatik ${piece.id} ${piece.title}`.slice(0, 40),
+                          BEN: {
+                            NAM: "Alain Bonilla",
+                            ACC: "012650001234567895",
+                            BNK: 40012,
+                          },
+                        })
+                      }
+                      size={190}
+                    />
+                  )
                 ) : (
                   <QrCode
                     value={
@@ -813,11 +862,42 @@ export function CodiButton({ piece, className, primary }: { piece: Piece; classN
                 )}
               </div>
 
+              {scanMode === "bank" ? (
+                <div className="space-y-2 text-xs">
+                  <p className="font-medium text-foreground">
+                    {t("Escanea desde tu app bancaria con 'Pagar QR / CoDi®'")}
+                  </p>
+                  <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-2.5 text-left text-[11px] text-amber-900 dark:text-amber-200">
+                    <p className="font-semibold">{t("ℹ️ ¿Tu app bancaria dice 'QR no válido'?")}</p>
+                    <p className="mt-0.5 text-muted-foreground leading-relaxed">
+                      {t("Las apps bancarias exigen una firma digital centralizada (CRY) de Banco de México, la cual solo se emite cuando la cuenta CLABE del comercio está validada en Banxico vía pey.mx. Para probar el flujo E2E sin fricción, presiona el botón 'Pagar con CoDi' abajo o usa la pestaña 'Cámara / pey.mx'.")}
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-2 text-xs">
+                  <p className="font-medium text-foreground">
+                    {t("Escanea con la app de Cámara normal de tu celular")}
+                  </p>
+                  <p className="text-[11px] text-muted-foreground">
+                    {t("Abre directamente el portal seguro de checkout de pey.mx para pagar con tarjeta o solicitud CoDi push.")}
+                  </p>
+                </div>
+              )}
+
               {codiQr && (
                 <div className="rounded-xl border bg-sand/70 p-3 text-left font-mono text-xs">
                   <div className="flex justify-between gap-2">
                     <span className="text-muted-foreground">IDC CoDi (Banxico):</span>
                     <span className="font-semibold text-foreground">{codiQr.id}</span>
+                  </div>
+                  <div className="mt-1 flex justify-between gap-2">
+                    <span className="text-muted-foreground">Beneficiario SPEI:</span>
+                    <span className="font-semibold text-foreground">Alain Bonilla</span>
+                  </div>
+                  <div className="mt-1 flex justify-between gap-2">
+                    <span className="text-muted-foreground">Monto:</span>
+                    <span className="font-semibold text-foreground">{money(totalMxn)}</span>
                   </div>
                   <div className="mt-1 flex justify-between gap-2">
                     <span className="text-muted-foreground">Ref. Numérica:</span>
@@ -840,10 +920,6 @@ export function CodiButton({ piece, className, primary }: { piece: Piece; classN
                   </div>
                 </div>
               )}
-
-              <p className="text-sm text-muted-foreground">
-                {t("Escanea desde cualquier app bancaria en México (Banxico)")}
-              </p>
 
               <div className="grid gap-2">
                 <Button
