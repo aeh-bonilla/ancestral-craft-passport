@@ -72,6 +72,42 @@ type DbRightsEventRow = Database["public"]["Tables"]["rights_events"]["Row"];
 
 const LOCAL_WORKS_KEY = "tlamatik_authory_works";
 const LOCAL_EVENTS_KEY = "tlamatik_authory_events";
+const LOCAL_SPEI_SETTLEMENTS_KEY = "tlamatik_spei_settlements";
+
+const SEED_DRAFT_WORKS: AuthoryWork[] = [
+  {
+    id: "TK-0419",
+    title: "Vasija Bruñida de Alta Temperatura",
+    type: "photography",
+    description:
+      "Vasija ceremonial bruñida con piedra de río y engobes minerales de la ribera de Pátzcuaro. Pendiente de validación final antes de su sellado en Soroban.",
+    author: "Juana Morales",
+    artisan: "Juana Morales",
+    community: "Tzintzuntzan",
+    region: "Michoacán",
+    technique: "Cerámica",
+    materials: "Barro rojo local, engobe mineral y bruñido con piedra de ágata",
+    dimensions: "26cm x 22cm x 22cm",
+    priceMxn: 2950,
+    hash: "9f4b8c2a1d7e6035a2f4b8c9d0e1f2a3b4c5d6e7f8091a2b3c4d5e6f708192a3",
+    network: "testnet",
+    status: "draft",
+    fileUrl: images.barroNegro,
+    createdAt: "2026-11-09T16:20:00.000Z",
+    registeredAt: "2026-11-09T16:20:00.000Z",
+  },
+];
+
+/** Returns true only once the work has a confirmed Stellar/Soroban transaction and is no longer editable. */
+export function isWorkAnchoredOnBlockchain(
+  work: Pick<AuthoryWork, "status" | "stellarTransactionId">,
+): boolean {
+  return (
+    Boolean(work.stellarTransactionId?.trim()) &&
+    work.status !== "draft" &&
+    work.status !== "processing"
+  );
+}
 
 const VALID_REGIONS: ReadonlySet<Piece["region"]> = new Set([
   "Oaxaca",
@@ -439,6 +475,10 @@ export async function findWorkByIdOrHash(query: string): Promise<AuthoryWork | n
   if (!isHash) {
     const seedMatch = pieces.find((p) => p.id.toUpperCase() === cleaned.toUpperCase());
     if (seedMatch) return pieceToWork(seedMatch);
+    const seedDraftMatch = SEED_DRAFT_WORKS.find(
+      (w) => w.id.toUpperCase() === cleaned.toUpperCase(),
+    );
+    if (seedDraftMatch) return seedDraftMatch;
     if (cleaned.toUpperCase() === "AUTH-2026-000101") {
       return {
         ...pieceToWork(pieces[0]!),
@@ -458,8 +498,238 @@ export async function findWorkByIdOrHash(query: string): Promise<AuthoryWork | n
   return null;
 }
 
+export type WorkSaleStatus = "draft" | "available" | "licensed" | "sold";
+
+export interface RegisteredWorkSummary {
+  work: AuthoryWork;
+  anchoredOnChain: boolean;
+  saleStatus: WorkSaleStatus;
+  eventsCount: number;
+  settlementTrackingKey?: string | undefined;
+  image: string;
+}
+
+/** Saves an unanchored cultural work draft so it can still be edited prior to blockchain anchoring. */
+export async function saveWorkDraft(work: AuthoryWork): Promise<AuthoryWork> {
+  const draft: AuthoryWork = {
+    ...work,
+    status: "draft",
+    stellarTransactionId: undefined,
+  };
+  writeLocalWork(draft);
+  try {
+    await supabase.from("works").upsert({
+      id: draft.id,
+      promoter_id: draft.promoterId ?? null,
+      title: draft.title,
+      type: draft.type,
+      description: draft.description,
+      author: draft.author,
+      artisan: draft.artisan,
+      community: draft.community,
+      region: draft.region,
+      technique: draft.technique,
+      materials: draft.materials,
+      dimensions: draft.dimensions ?? "",
+      price_mxn: draft.priceMxn,
+      hash: draft.hash.toLowerCase(),
+      stellar_transaction_id: null,
+      network: draft.network,
+      status: "draft",
+      filename: draft.filename ?? null,
+      file_size: draft.fileSize ?? null,
+      file_mime_type: draft.fileMimeType ?? null,
+      source_url: draft.sourceUrl ?? null,
+      file_url: draft.fileUrl ?? null,
+      notes: draft.notes ?? null,
+      created_at: draft.createdAt,
+      registered_at: draft.registeredAt,
+    });
+  } catch {
+    // Keep local draft when remote insert is unavailable
+  }
+  return draft;
+}
+
+/** Updates metadata of an unanchored cultural work; throws if already anchored on blockchain. */
+export async function updateUnanchoredWork(
+  workId: string,
+  updates: {
+    title: string;
+    artisan: string;
+    community: string;
+    region: Piece["region"];
+    technique: Piece["technique"];
+    materials: string;
+    dimensions: string;
+    priceMxn: number;
+    description: string;
+    hash?: string;
+  },
+): Promise<AuthoryWork> {
+  const existing = await findWorkByIdOrHash(workId);
+  if (!existing) {
+    throw new Error("No se encontró la obra solicitada.");
+  }
+  if (isWorkAnchoredOnBlockchain(existing)) {
+    throw new Error(
+      "Esta obra ya fue anclada en la blockchain y su información es inmutable.",
+    );
+  }
+
+  const updated: AuthoryWork = {
+    ...existing,
+    title: updates.title.trim(),
+    artisan: updates.artisan.trim(),
+    author: updates.artisan.trim(),
+    community: updates.community.trim(),
+    region: updates.region,
+    technique: updates.technique,
+    materials: updates.materials.trim(),
+    dimensions: updates.dimensions.trim(),
+    priceMxn: Number(updates.priceMxn) || existing.priceMxn,
+    description: updates.description.trim(),
+    hash: updates.hash || existing.hash,
+  };
+
+  writeLocalWork(updated);
+  try {
+    await supabase
+      .from("works")
+      .update({
+        title: updated.title,
+        artisan: updated.artisan,
+        author: updated.author,
+        community: updated.community,
+        region: updated.region,
+        technique: updated.technique,
+        materials: updated.materials,
+        dimensions: updated.dimensions ?? "",
+        price_mxn: updated.priceMxn,
+        description: updated.description,
+        hash: updated.hash.toLowerCase(),
+      })
+      .eq("id", updated.id);
+  } catch {
+    // Keep local update if Supabase is unreachable
+  }
+
+  return updated;
+}
+
+function readSettlementPieceKeys(): Map<string, string> {
+  const map = new Map<string, string>();
+  if (typeof window === "undefined") return map;
+  try {
+    const raw = window.localStorage.getItem(LOCAL_SPEI_SETTLEMENTS_KEY);
+    if (!raw) return map;
+    const list = JSON.parse(raw) as Array<{ piece?: string; clave?: string }>;
+    if (!Array.isArray(list)) return map;
+    for (const item of list) {
+      const pieceId = item.piece?.split("·")[0]?.trim().toUpperCase();
+      if (pieceId && item.clave) map.set(pieceId, item.clave);
+    }
+  } catch {
+    // ignore malformed storage
+  }
+  return map;
+}
+
+/** Lists all platform works (drafts, anchored works, and seed catalog) with lifecycle statuses. */
+export async function listAllRegisteredWorks(): Promise<RegisteredWorkSummary[]> {
+  const mergedMap = new Map<string, AuthoryWork>();
+
+  for (const local of readLocalWorks()) {
+    mergedMap.set(local.id.toUpperCase(), local);
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from("works")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(50);
+    if (!error && data) {
+      for (const row of data) {
+        const mapped = mapDbRowToWork(row);
+        if (!mergedMap.has(mapped.id.toUpperCase())) {
+          mergedMap.set(mapped.id.toUpperCase(), mapped);
+        }
+      }
+    }
+  } catch {
+    // Fallback to local & seed works
+  }
+
+  for (const draft of SEED_DRAFT_WORKS) {
+    if (!mergedMap.has(draft.id.toUpperCase())) {
+      mergedMap.set(draft.id.toUpperCase(), draft);
+    }
+  }
+
+  for (const seedPiece of pieces) {
+    if (!mergedMap.has(seedPiece.id.toUpperCase())) {
+      mergedMap.set(seedPiece.id.toUpperCase(), pieceToWork(seedPiece));
+    }
+  }
+
+  const allEvents = readLocalEvents();
+  const settlements = readSettlementPieceKeys();
+
+  const summaries: RegisteredWorkSummary[] = Array.from(mergedMap.values()).map(
+    (work) => {
+      const anchoredOnChain = isWorkAnchoredOnBlockchain(work);
+      const workEvents = allEvents.filter(
+        (evt) => evt.workId.toUpperCase() === work.id.toUpperCase(),
+      );
+      const settlementKey = settlements.get(work.id.toUpperCase());
+      const seedMatch = pieces.find(
+        (p) => p.id.toUpperCase() === work.id.toUpperCase(),
+      );
+
+      let saleStatus: WorkSaleStatus = "available";
+      if (!anchoredOnChain) {
+        saleStatus = "draft";
+      } else if (
+        seedMatch?.status === "sold" ||
+        Boolean(settlementKey) ||
+        workEvents.some((e) => e.type === "transfer")
+      ) {
+        saleStatus = "sold";
+      } else if (workEvents.some((e) => e.type === "license")) {
+        saleStatus = "licensed";
+      }
+
+      return {
+        work,
+        anchoredOnChain,
+        saleStatus,
+        eventsCount: anchoredOnChain ? Math.max(2, workEvents.length) : workEvents.length,
+        settlementTrackingKey: settlementKey,
+        image:
+          work.fileUrl ||
+          seedMatch?.image ||
+          defaultImageForTechnique(work.technique),
+      };
+    },
+  );
+
+  return summaries.sort((a, b) => {
+    if (a.anchoredOnChain !== b.anchoredOnChain) {
+      return a.anchoredOnChain ? 1 : -1;
+    }
+    return b.work.createdAt.localeCompare(a.work.createdAt);
+  });
+}
+
 export async function listAllCatalogPieces(): Promise<Piece[]> {
   const customWorks: AuthoryWork[] = [];
+  for (const local of readLocalWorks()) {
+    if (isWorkAnchoredOnBlockchain(local)) {
+      customWorks.push(local);
+    }
+  }
+
   try {
     const { data, error } = await supabase
       .from("works")
@@ -467,16 +737,18 @@ export async function listAllCatalogPieces(): Promise<Piece[]> {
       .order("created_at", { ascending: false })
       .limit(30);
     if (!error && data) {
-      customWorks.push(...data.map(mapDbRowToWork));
+      for (const row of data) {
+        const mapped = mapDbRowToWork(row);
+        if (
+          isWorkAnchoredOnBlockchain(mapped) &&
+          !customWorks.some((w) => w.id === mapped.id)
+        ) {
+          customWorks.push(mapped);
+        }
+      }
     }
   } catch {
     // Fallback to local works
-  }
-
-  for (const local of readLocalWorks()) {
-    if (!customWorks.some((w) => w.id === local.id)) {
-      customWorks.push(local);
-    }
   }
 
   const customPieces = customWorks.map(workToPiece);

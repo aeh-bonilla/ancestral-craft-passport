@@ -1602,5 +1602,165 @@
   "Pagar con CoDi": [
     "Pay with CoDi",
     "使用 CoDi 支付"
+  ],
+  "Obras Registradas": [
+    "Registered Works",
+    "已登记作品"
+  ],
+  "Obras registradas": [
+    "Registered works",
+    "已登记作品"
+  ],
+  "Pendientes de anclaje (Editables)": [
+    "Pending anchoring (Editable)",
+    "待上链（可编辑）"
+  ],
+  "Ancladas en Stellar Soroban": [
+    "Anchored on Stellar Soroban",
+    "已上链至 Stellar Soroban"
+  ],
+  "Vendidas o licenciadas": [
+    "Sold or licensed",
+    "已售出或已授权"
+  ],
+  "Catálogo de Obras Registradas": [
+    "Registered Works Catalog",
+    "已登记作品目录"
+  ],
+  "Consulta el estado de registro, anclaje en Stellar Soroban y venta. Las piezas sin anclar pueden editarse antes de quedar inmutables en blockchain.": [
+    "Check registration, Stellar Soroban anchoring, and sale status. Unanchored works can be edited before becoming immutable on the blockchain.",
+    "查看登记状态、Stellar Soroban 上链状态及销售状态。未上链作品在写入区块链前均可编辑。"
+  ],
+  "Registrar nueva obra": [
+    "Register new work",
+    "登记新作品"
+  ],
+  "Todas": [
+    "All",
+    "全部"
+  ],
+  "Sin anclar (Editables)": [
+    "Unanchored (Editable)",
+    "未上链（可编辑）"
+  ],
+  "Ancladas en Blockchain": [
+    "Anchored on Blockchain",
+    "已上链"
+  ],
+  "Vendidas / Licenciadas": [
+    "Sold / Licensed",
+    "已售出／已授权"
+  ],
+  "Buscar por ID, título o artesano…": [
+    "Search by ID, title, or artisan…",
+    "按编号、标题或工匠搜索…"
+  ],
+  "No hay obras que coincidan con el filtro seleccionado": [
+    "No works match the selected filter",
+    "没有符合所选筛选条件的作品"
+  ],
+  "Prueba otro filtro o registra una nueva pieza en la plataforma.": [
+    "Try another filter or register a new piece on the platform.",
+    "请尝试其他筛选条件或在平台上登记新作品。"
+  ],
+  "En preparación (No publicada)": [
+    "In preparation (Unpublished)",
+    "准备中（未发布）"
+  ],
+  "Disponible en Mercado Ético": [
+    "Available on Ethical Marketplace",
+    "道德市场可售"
+  ],
+  "Licenciada B2B": [
+    "B2B Licensed",
+    "B2B 已授权"
+  ],
+  "Vendida · Liquidada SPEI": [
+    "Sold · SPEI Settled",
+    "已售出 · SPEI 已结算"
+  ],
+  "Anclada en Blockchain": [
+    "Anchored on Blockchain",
+    "已上链至区块链"
+  ],
+  "Registrada · Sin anclar en blockchain": [
+    "Registered · Not anchored on blockchain",
+    "已登记 · 尚未上链"
+  ],
+  "Editar información": [
+    "Edit information",
+    "编辑信息"
+  ],
+  "Anclar en Blockchain": [
+    "Anchor on Blockchain",
+    "上链存证"
+  ],
+  "Anclando…": [
+    "Anchoring…",
+    "正在上链…"
+  ],
+  "Edición bloqueada (Inmutable)": [
+    "Editing locked (Immutable)",
+    "编辑已锁定（不可篡改）"
+  ],
+  "Editar información de la obra": [
+    "Edit work information",
+    "编辑作品信息"
+  ],
+  "Esta obra aún no ha sido anclada en Stellar Soroban. Al guardar los cambios se recalculará su huella SHA-256.": [
+    "This work has not yet been anchored on Stellar Soroban. Saving changes will recalculate its SHA-256 digest.",
+    "该作品尚未上链至 Stellar Soroban。保存修改后将重新计算其 SHA-256 哈希。"
+  ],
+  "Título de la obra *": [
+    "Work title *",
+    "作品标题 *"
+  ],
+  "Maestro Artesano *": [
+    "Master Artisan *",
+    "工艺大师 *"
+  ],
+  "Descripción / Historia de la pieza": [
+    "Piece description / story",
+    "作品描述／故事"
+  ],
+  "Cancelar": [
+    "Cancel",
+    "取消"
+  ],
+  "Guardando…": [
+    "Saving…",
+    "正在保存…"
+  ],
+  "Guardar cambios": [
+    "Save changes",
+    "保存修改"
+  ],
+  "Obra actualizada correctamente": [
+    "Work updated successfully",
+    "作品更新成功"
+  ],
+  "Obra inmutable en blockchain": [
+    "Work immutable on blockchain",
+    "作品已在区块链上不可篡改"
+  ],
+  "Esta pieza ya fue anclada en Stellar Soroban y no puede modificarse.": [
+    "This piece has already been anchored on Stellar Soroban and cannot be modified.",
+    "该作品已上链至 Stellar Soroban，无法修改。"
+  ],
+  "Obra anclada en Stellar Soroban": [
+    "Work anchored on Stellar Soroban",
+    "作品已上链至 Stellar Soroban"
+  ],
+  "Guardar sin anclar en blockchain (editable)": [
+    "Save without blockchain anchoring (editable)",
+    "保存暂不上链（可编辑）"
+  ],
+  "Obra guardada sin anclar en blockchain": [
+    "Work saved without blockchain anchoring",
+    "作品已保存（暂未上链）"
+  ],
+  "Puedes editarla desde Panel Promotor → Obras Registradas.": [
+    "You can edit it from Promoter Panel → Registered Works.",
+    "您可在推广人面板 → 已登记作品中进行编辑。"
   ]
 }

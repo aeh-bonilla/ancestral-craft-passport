@@ -16,6 +16,7 @@ import {
   Download,
   ExternalLink,
   ShieldCheck,
+  Save,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -40,6 +41,7 @@ import { getContractExplorerUrl, getTxExplorerUrl } from "@/lib/stellar/config";
 import {
   downloadPassportCertificate,
   saveWorkAndInitialEvents,
+  saveWorkDraft,
   uploadWorkFileToSupabase,
   type AuthoryRightsEvent,
   type AuthoryWork,
@@ -95,6 +97,7 @@ function Register() {
   const [drag, setDrag] = useState(false);
   const [hash, setHash] = useState("");
   const [minting, setMinting] = useState<"idle" | "running" | "done">("idle");
+  const [savingDraft, setSavingDraft] = useState(false);
   const [phase, setPhase] = useState(0);
   const [aiBusy, setAiBusy] = useState(false);
   const [mintedWork, setMintedWork] = useState<AuthoryWork | null>(null);
@@ -240,6 +243,53 @@ function Register() {
     } catch {
       setMinting("idle");
       toast.error(t("No se pudo completar el anclaje en Stellar Testnet"));
+    }
+  };
+
+  const saveDraft = async () => {
+    setSavingDraft(true);
+    try {
+      const workId = `TK-${Math.floor(1000 + Math.random() * 9000)}`;
+      const selectedArtisan = artisans.find((a) => a.name === d.artisan);
+      const locationParts = (selectedArtisan?.location ?? "Oaxaca, Oaxaca").split(",");
+      const community = locationParts[0]?.trim() || "Comunidad Artesanal";
+      const region = locationParts[1]?.trim() || "Oaxaca";
+      const nowIso = new Date().toISOString();
+      const primaryFile = files[0]?.file;
+
+      await saveWorkDraft({
+        id: workId,
+        promoterId: user.id,
+        title: d.title.trim() || "Obra Artesanal (Borrador)",
+        type: primaryFile?.type.startsWith("image") ? "photography" : "other",
+        description:
+          d.technique.trim() ||
+          `Obra artesanal en ${d.category} elaborada por ${d.artisan}.`,
+        author: d.artisan,
+        artisan: d.artisan,
+        community,
+        region: (region as AuthoryWork["region"]) || "Oaxaca",
+        technique: (d.category as AuthoryWork["technique"]) || "Talla en Madera",
+        materials: d.materials.trim() || d.category,
+        dimensions: "Pieza única en preparación",
+        priceMxn: Number(d.priceMxn) || 3800,
+        hash,
+        network: "testnet",
+        status: "draft",
+        filename: primaryFile?.name,
+        fileSize: primaryFile ? `${(primaryFile.size / 1024).toFixed(1)} KB` : undefined,
+        fileMimeType: primaryFile?.type,
+        createdAt: nowIso,
+        registeredAt: nowIso,
+      });
+
+      toast.success(t("Obra guardada sin anclar en blockchain"), {
+        description: `${workId} · ${t("Puedes editarla desde Panel Promotor → Obras Registradas.")}`,
+      });
+    } catch {
+      toast.error(t("No se pudo guardar el borrador"));
+    } finally {
+      setSavingDraft(false);
     }
   };
 
@@ -483,10 +533,21 @@ function Register() {
                 size="lg"
                 className="w-full"
                 onClick={() => void mint()}
-                disabled={minting === "running"}
+                disabled={minting === "running" || savingDraft}
               >
                 <Anchor />
                 {t("Anclar en Stellar Blockchain & Generar Pasaporte Phygital")}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="lg"
+                className="w-full"
+                onClick={() => void saveDraft()}
+                disabled={minting === "running" || savingDraft}
+              >
+                {savingDraft ? <Loader2 className="animate-spin" /> : <Save />}
+                {t("Guardar sin anclar en blockchain (editable)")}
               </Button>
             </div>
           )}
