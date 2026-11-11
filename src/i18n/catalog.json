@@ -747,25 +747,137 @@
     "Sign contract on Soroban",
     "在 Soroban 签署合约"
   ],
-  "No se pudo confirmar la sesión.": [
-    "Unable to confirm your session.",
-    "无法确认您的登录状态。"
-  ],
-  "No se pudo iniciar sesión con Google. Inténtalo de nuevo.": [
-    "Unable to sign in with Google. Please try again.",
-    "无法通过 Google 登录，请重试。"
-  ],
   "Acceso del Promotor": [
     "Promoter Access",
     "推广人登录"
   ],
-  "Inicia sesión o crea tu cuenta con Google.": [
-    "Sign in or create your account with Google.",
-    "通过 Google 登录或创建账户。"
+  "Inicia sesión con tu usuario y contraseña para continuar.": [
+    "Sign in with your username and password to continue.",
+    "请使用您的用户名和密码登录以继续。"
   ],
-  "Continuar con Google": [
-    "Continue with Google",
-    "通过 Google 继续"
+  "Regístrate dentro de la plataforma para gestionar obras y artesanos.": [
+    "Register on the platform to manage works and artisans.",
+    "在平台内注册以管理作品和工匠。"
+  ],
+  "Método de acceso": [
+    "Access method",
+    "登录方式"
+  ],
+  "Iniciar sesión": [
+    "Sign in",
+    "登录"
+  ],
+  "Crear cuenta": [
+    "Create account",
+    "创建账户"
+  ],
+  "Nombre completo (opcional)": [
+    "Full name (optional)",
+    "姓名（可选）"
+  ],
+  "Ej. Miriam Nava / Taller Mixteco": [
+    "e.g. Miriam Nava / Taller Mixteco",
+    "例如：Miriam Nava / Taller Mixteco"
+  ],
+  "Usuario": [
+    "Username",
+    "用户名"
+  ],
+  "Ej. miriam.nava": [
+    "e.g. miriam.nava",
+    "例如：miriam.nava"
+  ],
+  "Contraseña": [
+    "Password",
+    "密码"
+  ],
+  "Mínimo 6 caracteres": [
+    "Minimum 6 characters",
+    "至少 6 个字符"
+  ],
+  "Ocultar contraseña": [
+    "Hide password",
+    "隐藏密码"
+  ],
+  "Mostrar contraseña": [
+    "Show password",
+    "显示密码"
+  ],
+  "Confirmar contraseña": [
+    "Confirm password",
+    "确认密码"
+  ],
+  "Repite tu contraseña": [
+    "Repeat your password",
+    "再次输入密码"
+  ],
+  "Registrarme e ingresar": [
+    "Register and sign in",
+    "注册并登录"
+  ],
+  "¿Aún no tienes cuenta?": [
+    "Don't have an account yet?",
+    "还没有账户？"
+  ],
+  "Regístrate aquí": [
+    "Register here",
+    "在此注册"
+  ],
+  "¿Ya tienes una cuenta?": [
+    "Already have an account?",
+    "已有账户？"
+  ],
+  "Inicia sesión": [
+    "Sign in",
+    "立即登录"
+  ],
+  "Las contraseñas no coinciden.": [
+    "Passwords do not match.",
+    "两次输入的密码不一致。"
+  ],
+  "Cuenta creada e inicio de sesión exitoso": [
+    "Account created and signed in successfully",
+    "账户创建并登录成功"
+  ],
+  "Sesión iniciada correctamente": [
+    "Signed in successfully",
+    "登录成功"
+  ],
+  "No se pudo completar el registro.": [
+    "Could not complete registration.",
+    "无法完成注册。"
+  ],
+  "No se pudo iniciar sesión. Verifica tus datos.": [
+    "Could not sign in. Please check your credentials.",
+    "无法登录，请检查您的用户名和密码。"
+  ],
+  "El usuario debe tener al menos 3 caracteres.": [
+    "Username must be at least 3 characters long.",
+    "用户名至少需要 3 个字符。"
+  ],
+  "El usuario no debe exceder 48 caracteres.": [
+    "Username must not exceed 48 characters.",
+    "用户名不能超过 48 个字符。"
+  ],
+  "El usuario solo puede contener letras, números y . _ - @ (sin espacios).": [
+    "Username may only contain letters, numbers, and . _ - @ (no spaces).",
+    "用户名只能包含字母、数字以及 . _ - @（不能有空格）。"
+  ],
+  "La contraseña debe tener al menos 6 caracteres.": [
+    "Password must be at least 6 characters long.",
+    "密码至少需要 6 个字符。"
+  ],
+  "Este nombre de usuario ya está registrado.": [
+    "This username is already registered.",
+    "该用户名已被注册。"
+  ],
+  "Ingresa tu usuario y contraseña.": [
+    "Enter your username and password.",
+    "请输入您的用户名和密码。"
+  ],
+  "Usuario o contraseña incorrectos.": [
+    "Incorrect username or password.",
+    "用户名或密码错误。"
   ],
   "Volver a Inicio": [
     "Back to Home",

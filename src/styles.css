@@ -101,23 +101,7 @@
   --sidebar-ring: oklch(0.663 0.062 222.9);
   --shadow-float: 0 18px 40px -18px color-mix(in oklab, var(--indigo) 45%, transparent);
   --gradient-seal: linear-gradient(135deg, var(--gold), color-mix(in oklab, var(--gold) 60%, var(--primary)));
-  --google-background: #ffffff;
-  --google-border: #747775;
-  --google-foreground: #1f1f1f;
 }
-
-.google-sign-in {
-  background: var(--google-background);
-  border: 1px solid var(--google-border);
-  color: var(--google-foreground);
-  font-family: "Google Sans", var(--font-sans);
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
-  gap: 10px;
-  padding-inline: 12px;
-}
-.google-sign-in:hover { background: var(--google-background); }
 
 @layer base {
   * {

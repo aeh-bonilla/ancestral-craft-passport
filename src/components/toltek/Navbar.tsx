@@ -1,8 +1,8 @@
 import { Link, useNavigate, useHydrated } from "@tanstack/react-router";
-import { Menu, Wallet, X, LogOut } from "lucide-react";
+import { Menu, Wallet, X, LogOut, UserRound } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { signOutPlatform } from "@/lib/platform-auth";
 import { useAccount } from "./AuthProvider";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -28,8 +28,12 @@ export function Navbar() {
   const signOut = async () => {
     await queryClient.cancelQueries();
     queryClient.clear();
-    const { error } = await supabase.auth.signOut();
-    if (error) { toast.error(t("No se pudo cerrar sesión")); return; }
+    try {
+      await signOutPlatform();
+    } catch {
+      toast.error(t("No se pudo cerrar sesión"));
+      return;
+    }
     setOpen(false);
     await navigate({ to: "/auth", search: { next: "/panel" }, replace: true });
   };
@@ -47,7 +51,15 @@ export function Navbar() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          {user && <Button variant="ghost" size="icon" onClick={signOut} title={t("Cerrar sesión")} aria-label={t("Cerrar sesión")}><LogOut className="h-4 w-4" /></Button>}
+          {user && (
+            <div className="flex items-center gap-1.5 rounded-lg border bg-sand/70 px-2.5 py-1 text-xs font-medium text-foreground">
+              <UserRound className="h-3.5 w-3.5 text-primary" />
+              <span className="hidden max-w-28 truncate md:inline">{user.displayName || user.username}</span>
+              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={signOut} title={t("Cerrar sesión")} aria-label={t("Cerrar sesión")}>
+                <LogOut className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+          )}
           <select disabled={!hydrated} aria-label={t("Idioma")} value={language} onChange={(e) => setLanguage(e.target.value)} className="h-9 max-w-28 rounded-md border bg-background px-2 text-xs font-semibold">
             <option value="es">Español</option><option value="en">English</option><option value="zh-CN">简体中文</option>
           </select>

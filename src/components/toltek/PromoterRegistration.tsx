@@ -2,8 +2,7 @@ import { useI18n } from "@/i18n";
 import { useEffect, useState } from "react";
 import { getRouteApi } from "@tanstack/react-router";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import { profileOptions } from "@/lib/promoter-profile";
-import { supabase } from "@/integrations/supabase/client";
+import { profileOptions, savePromoterProfile } from "@/lib/promoter-profile";
 import {
   Award,
   BadgeCheck,
@@ -143,19 +142,9 @@ export function PromoterRegistration() {
     }
     setBusy(true);
     try {
-      let avatarPath = profile.avatar_path;
-      if (photoFile) {
-        avatarPath = `${user.id}/${crypto.randomUUID()}.${
-          photoFile.type === "image/png" ? "png" : "jpg"
-        }`;
-        const upload = await supabase.storage
-          .from("promoter-photos")
-          .upload(avatarPath, photoFile);
-        if (upload.error) throw upload.error;
-      }
-      const result = await supabase
-        .from("profiles")
-        .update({
+      const saved = await savePromoterProfile({
+        userId: user.id,
+        updates: {
           display_name: f.name.trim(),
           official_id: f.curp,
           professional_email: f.email.trim(),
@@ -168,14 +157,14 @@ export function PromoterRegistration() {
           bio: f.bio,
           specialties: picked,
           ethics_accepted: accept,
-          avatar_path: avatarPath,
+          avatar_path: profile.avatar_path,
           submitted_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-        })
-        .eq("id", user.id)
-        .select("id")
-        .single();
-      if (result.error) throw result.error;
+        },
+        photoFile,
+        existingPhotoUrl: photo,
+      });
+      setPhoto(saved.photo);
       await queryClient.invalidateQueries({
         queryKey: ["promoter-profile", user.id],
       });
