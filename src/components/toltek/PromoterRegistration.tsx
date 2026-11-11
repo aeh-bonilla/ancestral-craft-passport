@@ -259,13 +259,13 @@ export function PromoterRegistration() {
   }
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[1fr_320px]">
-      <div className="overflow-hidden rounded-2xl border bg-card shadow-float">
+    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_300px]">
+      <div className="min-w-0 overflow-hidden rounded-2xl border bg-card shadow-float">
         <div className="greca" />
-        <div className="talavera-bg border-b p-6 sm:p-8">
+        <div className="talavera-bg border-b p-6 sm:p-7">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="flex items-start gap-4">
-              <span className="grid h-13 w-13 shrink-0 place-items-center rounded-2xl bg-indigo text-gold shadow-float">
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-indigo text-gold shadow-float">
                 <UserRound className="h-6 w-6" />
               </span>
               <div>
@@ -275,7 +275,7 @@ export function PromoterRegistration() {
                 <h2 className="mt-1 font-serif text-2xl font-semibold sm:text-3xl">
                   {t("Registro del Promotor Certificador")}
                 </h2>
-                <p className="mt-1 max-w-xl text-sm text-muted-foreground">
+                <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
                   {t(
                     "Tu perfil respalda la originalidad, la técnica y la procedencia de cada pieza que certifiques.",
                   )}
@@ -289,44 +289,42 @@ export function PromoterRegistration() {
           </div>
         </div>
 
-        <div className="grid gap-8 p-6 sm:p-8 md:grid-cols-[200px_1fr]">
-          <div className="flex flex-col items-center">
-            <label className="group flex w-full cursor-pointer flex-col items-center gap-3 rounded-2xl border border-dashed border-primary/35 bg-sand/40 p-5 text-center transition-colors hover:border-primary hover:bg-sand/70">
-              <div className="relative flex h-36 w-36 items-center justify-center overflow-hidden rounded-full border-2 border-primary/40 bg-card shadow-float transition-transform group-hover:scale-[1.02]">
-                {photo ? (
-                  <img
-                    src={photo}
-                    alt={t("Foto del promotor")}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <Camera className="h-9 w-9 text-primary/60" />
-                )}
-              </div>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                <Camera className="h-3.5 w-3.5" />
-                {photo ? t("Cambiar foto") : t("Subir foto")}
-              </span>
-              <span className="text-center text-xs leading-relaxed text-muted-foreground">
-                {t("Rostro visible · JPG/PNG · máx. 5 MB")}
-              </span>
-              <input
-                aria-label={t("Foto del promotor")}
-                type="file"
-                accept="image/jpeg,image/png"
-                className="hidden"
-                onChange={(e) => onPhoto(e.target.files?.[0])}
-              />
-            </label>
-          </div>
+        <div className="space-y-6 p-6 sm:p-8">
+          <fieldset className="rounded-xl border bg-background/40 p-5 sm:p-6">
+            <legend className="flex items-center gap-2 px-2 text-xs font-semibold uppercase tracking-wider text-primary">
+              <UserRound className="h-3.5 w-3.5" />
+              {t("Identidad")}
+            </legend>
+            <div className="mt-2 grid items-center gap-6 md:grid-cols-[180px_minmax(0,1fr)]">
+              <label className="group flex w-full cursor-pointer flex-col items-center gap-2.5 rounded-2xl border border-dashed border-primary/35 bg-sand/40 p-4 text-center transition-colors hover:border-primary hover:bg-sand/70">
+                <div className="relative flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border-2 border-primary/40 bg-card shadow-float transition-transform group-hover:scale-[1.02]">
+                  {photo ? (
+                    <img
+                      src={photo}
+                      alt={t("Foto del promotor")}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <Camera className="h-8 w-8 text-primary/60" />
+                  )}
+                </div>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                  <Camera className="h-3.5 w-3.5" />
+                  {photo ? t("Cambiar foto") : t("Subir foto")}
+                </span>
+                <span className="text-center text-[11px] leading-relaxed text-muted-foreground">
+                  {t("Rostro visible · JPG/PNG · máx. 5 MB")}
+                </span>
+                <input
+                  aria-label={t("Foto del promotor")}
+                  type="file"
+                  accept="image/jpeg,image/png"
+                  className="hidden"
+                  onChange={(e) => onPhoto(e.target.files?.[0])}
+                />
+              </label>
 
-          <div className="space-y-6">
-            <fieldset className="rounded-xl border bg-background/40 p-5">
-              <legend className="flex items-center gap-2 px-2 text-xs font-semibold uppercase tracking-wider text-primary">
-                <UserRound className="h-3.5 w-3.5" />
-                {t("Identidad")}
-              </legend>
-              <div className="mt-2 grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-1.5">
                   <Label>{t("Nombre completo *")}</Label>
                   <Input
@@ -353,9 +351,10 @@ export function PromoterRegistration() {
                   />
                 </div>
               </div>
-            </fieldset>
+            </div>
+          </fieldset>
 
-            <fieldset className="rounded-xl border bg-background/40 p-5">
+            <fieldset className="rounded-xl border bg-background/40 p-5 sm:p-6">
               <legend className="flex items-center gap-2 px-2 text-xs font-semibold uppercase tracking-wider text-primary">
                 <Briefcase className="h-3.5 w-3.5" />
                 {t("Perfil profesional")}
@@ -505,7 +504,6 @@ export function PromoterRegistration() {
                 )}
               </Button>
             </div>
-          </div>
         </div>
       </div>
 
