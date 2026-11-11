@@ -1762,5 +1762,13 @@
   "Puedes editarla desde Panel Promotor → Obras Registradas.": [
     "You can edit it from Promoter Panel → Registered Works.",
     "您可在推广人面板 → 已登记作品中进行编辑。"
+  ],
+  "Promotor responsable": [
+    "Responsible promoter",
+    "负责推广人"
+  ],
+  "Ej. Alain Bonilla · Cooperativa Guelaguetza": [
+    "e.g. Alain Bonilla · Cooperativa Guelaguetza",
+    "例如：Alain Bonilla · Cooperativa Guelaguetza"
   ]
 }

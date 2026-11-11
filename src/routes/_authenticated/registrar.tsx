@@ -88,6 +88,7 @@ function Register() {
   const [d, setD] = useState({
     title: "",
     artisan: artisans[0]?.name ?? "",
+    promoterName: user.displayName || user.username || "",
     category: "Talla en Madera",
     technique: "",
     materials: "",
@@ -202,6 +203,8 @@ function Register() {
       const workRecord: AuthoryWork = {
         id: workId,
         promoterId: user.id,
+        promoterName:
+          d.promoterName.trim() || user.displayName || user.username,
         title: d.title.trim() || "Obra Artesanal Certificada",
         type: primaryFile?.type.startsWith("image")
           ? "photography"
@@ -260,6 +263,8 @@ function Register() {
       await saveWorkDraft({
         id: workId,
         promoterId: user.id,
+        promoterName:
+          d.promoterName.trim() || user.displayName || user.username,
         title: d.title.trim() || "Obra Artesanal (Borrador)",
         type: primaryFile?.type.startsWith("image") ? "photography" : "other",
         description:
@@ -407,6 +412,13 @@ function Register() {
                     </option>
                   ))}
                 </select>
+              </Field>
+              <Field label={t("Promotor responsable")} className="sm:col-span-2">
+                <Input
+                  value={d.promoterName}
+                  onChange={set("promoterName")}
+                  placeholder={t("Ej. Alain Bonilla · Cooperativa Guelaguetza")}
+                />
               </Field>
               <Field label={t("Técnica ancestral")} className="sm:col-span-2">
                 <Textarea
@@ -582,6 +594,11 @@ function Register() {
               <p className="text-sm opacity-75">
                 {d.artisan} · {t(d.category)}
               </p>
+              {d.promoterName.trim() && (
+                <p className="mt-1 text-xs text-gold/90">
+                  {t("Promotor responsable")}: {d.promoterName.trim()}
+                </p>
+              )}
               {d.materials && <p className="mt-1 text-xs opacity-60">{d.materials}</p>}
               <div className="mt-5 flex items-center gap-4">
                 <div className="rounded-lg bg-card p-2">

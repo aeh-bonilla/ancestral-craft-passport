@@ -51,6 +51,7 @@ import {
 } from "@/lib/toltek";
 import { cn } from "@/lib/utils";
 import { PromoterRegistration } from "@/components/toltek/PromoterRegistration";
+import { useAccount } from "@/components/toltek/AuthProvider";
 import { profileOptions } from "@/lib/promoter-profile";
 import { hashArtisanBanking } from "@/lib/artisan-banking";
 import {
@@ -160,6 +161,7 @@ const seedLiquidaciones: SpeiSettlementItem[] = [
 
 function Panel() {
   const { t, money } = useI18n();
+  const { user } = useAccount();
   const [tab, setTab] = useState<Tab>("registro");
   const [list, setList] = useState<Artisan[]>(seed);
   const [catalogPieces, setCatalogPieces] = useState<Piece[]>(seedPieces);
@@ -170,6 +172,7 @@ function Panel() {
   const [editForm, setEditForm] = useState({
     title: "",
     artisan: "",
+    promoterName: "",
     community: "",
     region: "Oaxaca" as Piece["region"],
     technique: "Talla en Madera" as Piece["technique"],
@@ -274,6 +277,8 @@ function Panel() {
     setEditForm({
       title: item.work.title,
       artisan: item.work.artisan,
+      promoterName:
+        item.work.promoterName || user?.displayName || user?.username || "",
       community: item.work.community,
       region: item.work.region,
       technique: item.work.technique,
@@ -306,6 +311,7 @@ function Panel() {
       await updateUnanchoredWork(editingWork.work.id, {
         title: editForm.title,
         artisan: editForm.artisan,
+        promoterName: editForm.promoterName,
         community: editForm.community,
         region: editForm.region,
         technique: editForm.technique,
@@ -419,7 +425,7 @@ function Panel() {
   };
 
   return (
-    <div className="mx-auto grid max-w-[1440px] gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[224px_minmax(0,1fr)]">
+    <div className="mx-auto grid max-w-[1440px] gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[248px_minmax(0,1fr)]">
       <aside className="flex gap-2 overflow-x-auto rounded-xl bg-sidebar p-3 text-sidebar-foreground [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:flex-col lg:self-start">
         <p className="hidden px-3 pb-2 pt-1 text-xs uppercase tracking-wider opacity-60 lg:block">
           Cooperativa Guelaguetza
@@ -429,22 +435,23 @@ function Panel() {
             key={n.id}
             onClick={() => setTab(n.id)}
             className={cn(
-              "flex shrink-0 items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium",
+              "flex shrink-0 items-center justify-start gap-2.5 whitespace-nowrap rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors lg:w-full",
               tab === n.id
                 ? "bg-sidebar-primary text-sidebar-primary-foreground"
                 : "hover:bg-sidebar-accent",
             )}
           >
-            <n.icon className="h-4 w-4" /> {t(n.label)}
+            <n.icon className="h-4 w-4 shrink-0" />
+            <span>{t(n.label)}</span>
           </button>
         ))}
         <div className="hidden h-px shrink-0 bg-sidebar-border lg:mt-2 lg:block" />
         <Link
           to="/registrar"
-          className="flex shrink-0 items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-sidebar-accent lg:pt-3"
+          className="flex shrink-0 items-center justify-start gap-2.5 whitespace-nowrap rounded-lg px-3 py-2.5 text-left text-sm font-medium hover:bg-sidebar-accent lg:w-full lg:pt-3"
         >
           <FilePlus2 className="h-4 w-4 shrink-0" />
-          {t("Registro de Obras")}
+          <span>{t("Registro de Obras")}</span>
         </Link>
       </aside>
 
@@ -670,6 +677,14 @@ function Panel() {
                                   </strong>{" "}
                                   · {w.community}, {t(w.region)} · {t(w.technique)}
                                 </p>
+                                {w.promoterName && (
+                                  <p className="text-xs text-muted-foreground">
+                                    {t("Promotor responsable")}:{" "}
+                                    <span className="font-medium text-foreground">
+                                      {w.promoterName}
+                                    </span>
+                                  </p>
+                                )}
                                 <p className="line-clamp-2 text-xs text-muted-foreground">
                                   {w.materials ? `${t("Materiales")}: ${w.materials}` : w.description}
                                   {w.dimensions ? ` · ${w.dimensions}` : ""}
@@ -1131,6 +1146,19 @@ function Panel() {
                 onChange={(e) =>
                   setEditForm({ ...editForm, artisan: e.target.value })
                 }
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="edit-work-promoter">
+                {t("Promotor responsable")}
+              </Label>
+              <Input
+                id="edit-work-promoter"
+                value={editForm.promoterName}
+                onChange={(e) =>
+                  setEditForm({ ...editForm, promoterName: e.target.value })
+                }
+                placeholder={t("Ej. Alain Bonilla · Cooperativa Guelaguetza")}
               />
             </div>
             <div className="space-y-1.5">

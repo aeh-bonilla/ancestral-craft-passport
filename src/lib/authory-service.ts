@@ -21,6 +21,7 @@ export type WorkStatus = "draft" | "processing" | "registered" | "verified";
 export interface AuthoryWork {
   id: string;
   promoterId?: string | undefined;
+  promoterName?: string | undefined;
   title: string;
   type: WorkType;
   description: string;
@@ -77,6 +78,7 @@ const LOCAL_SPEI_SETTLEMENTS_KEY = "tlamatik_spei_settlements";
 const SEED_DRAFT_WORKS: AuthoryWork[] = [
   {
     id: "TK-0419",
+    promoterName: "Alain Bonilla",
     title: "Vasija Bruñida de Alta Temperatura",
     type: "photography",
     description:
@@ -236,6 +238,7 @@ export function workToPiece(work: AuthoryWork): Piece {
 export function pieceToWork(piece: Piece): AuthoryWork {
   return {
     id: piece.id,
+    promoterName: "Alain Bonilla · Cooperativa Guelaguetza",
     title: piece.title,
     type: "other",
     description: piece.story || piece.techniqueDetail || piece.technique,
@@ -557,6 +560,7 @@ export async function updateUnanchoredWork(
   updates: {
     title: string;
     artisan: string;
+    promoterName?: string;
     community: string;
     region: Piece["region"];
     technique: Piece["technique"];
@@ -582,6 +586,7 @@ export async function updateUnanchoredWork(
     title: updates.title.trim(),
     artisan: updates.artisan.trim(),
     author: updates.artisan.trim(),
+    promoterName: updates.promoterName?.trim() || existing.promoterName,
     community: updates.community.trim(),
     region: updates.region,
     technique: updates.technique,
