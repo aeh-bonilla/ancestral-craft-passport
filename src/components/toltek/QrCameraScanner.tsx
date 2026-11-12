@@ -12,6 +12,7 @@ import {
   HelpCircle,
   ShieldCheck,
   CheckCircle2,
+  Video,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -21,6 +22,11 @@ interface QrCameraScannerProps {
   onScan: (text: string) => void;
   active?: boolean;
   className?: string;
+}
+
+interface VideoDeviceOption {
+  deviceId: string;
+  label: string;
 }
 
 function playScanChime() {
@@ -50,6 +56,76 @@ function playScanChime() {
   }
 }
 
+/**
+ * Universal getUserMedia helper with multi-tier progressive fallback
+ * Guarantees compatibility across Mac (FaceTime / Continuity camera), Windows, iPhone/Safari, Android and Linux.
+ */
+async function requestUserMediaWithFallback(
+  facingMode: "environment" | "user",
+  deviceId?: string,
+): Promise<MediaStream> {
+  if (
+    typeof navigator === "undefined" ||
+    !navigator.mediaDevices ||
+    !navigator.mediaDevices.getUserMedia
+  ) {
+    throw new Error("WEBRTC_NOT_SUPPORTED");
+  }
+
+  // Tier 0: Explicit deviceId if user chose a specific camera
+  if (deviceId) {
+    try {
+      return await navigator.mediaDevices.getUserMedia({
+        video: { deviceId: { exact: deviceId } },
+        audio: false,
+      });
+    } catch (err) {
+      console.warn("Specific deviceId failed, falling back to general constraints", err);
+    }
+  }
+
+  // Tier 1: Ideal facingMode + ideal standard resolution
+  try {
+    return await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: { ideal: facingMode },
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+      },
+      audio: false,
+    });
+  } catch (err1) {
+    console.warn("Tier 1 camera constraints failed, attempting Tier 2...", err1);
+  }
+
+  // Tier 2: Ideal facingMode without resolution restrictions
+  try {
+    return await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: facingMode } },
+      audio: false,
+    });
+  } catch (err2) {
+    console.warn("Tier 2 camera constraints failed, attempting Tier 3...", err2);
+  }
+
+  // Tier 3: Opposite facingMode (e.g. Mac/Laptop webcam is usually "user" when "environment" was requested)
+  try {
+    const fallbackMode = facingMode === "environment" ? "user" : "environment";
+    return await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: fallbackMode } },
+      audio: false,
+    });
+  } catch (err3) {
+    console.warn("Tier 3 camera constraints failed, attempting Tier 4...", err3);
+  }
+
+  // Tier 4: Universal fallback — any available video device
+  return await navigator.mediaDevices.getUserMedia({
+    video: true,
+    audio: false,
+  });
+}
+
 export function QrCameraScanner({
   onScan,
   active = true,
@@ -61,6 +137,8 @@ export function QrCameraScanner({
   const streamRef = useRef<MediaStream | null>(null);
   const animFrameRef = useRef<number | null>(null);
   const scannedLockRef = useRef<boolean>(false);
+  const requestIdRef = useRef<number>(0);
+  const isMountedRef = useRef<boolean>(true);
 
   const [status, setStatus] = useState<
     "idle" | "requesting" | "scanning" | "permission_denied" | "error" | "scanned"
@@ -69,10 +147,46 @@ export function QrCameraScanner({
   const [facingMode, setFacingMode] = useState<"environment" | "user">(
     "environment",
   );
-  const [hasMultipleCameras, setHasMultipleCameras] = useState<boolean>(false);
+  const [availableDevices, setAvailableDevices] = useState<VideoDeviceOption[]>(
+    [],
+  );
+  const [selectedDeviceId, setSelectedDeviceId] = useState<string>("");
   const [analyzingFile, setAnalyzingFile] = useState<boolean>(false);
 
-  // Stop camera tracks cleanly
+  // Mount tracking
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
+  // Refresh available devices
+  const refreshDevices = useCallback(async () => {
+    if (
+      typeof navigator === "undefined" ||
+      !navigator.mediaDevices ||
+      !navigator.mediaDevices.enumerateDevices
+    ) {
+      return;
+    }
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const videoInputs = devices
+        .filter((d) => d.kind === "videoinput")
+        .map((d, index) => ({
+          deviceId: d.deviceId,
+          label: d.label || `${t("Cámara")} ${index + 1}`,
+        }));
+      if (isMountedRef.current) {
+        setAvailableDevices(videoInputs);
+      }
+    } catch {
+      // Enumeration may fail or return blank labels before permission
+    }
+  }, [t]);
+
+  // Stop camera tracks cleanly without leaving dangling resources
   const stopCamera = useCallback(() => {
     if (animFrameRef.current) {
       cancelAnimationFrame(animFrameRef.current);
@@ -89,6 +203,11 @@ export function QrCameraScanner({
       streamRef.current = null;
     }
     if (videoRef.current) {
+      try {
+        videoRef.current.pause();
+      } catch {
+        // ignore
+      }
       videoRef.current.srcObject = null;
     }
   }, []);
@@ -113,10 +232,13 @@ export function QrCameraScanner({
     [onScan, stopCamera],
   );
 
-  // Start camera stream
+  // Start camera stream safely with race condition prevention
   const startCamera = useCallback(async () => {
+    // Stop any active stream first
     stopCamera();
     scannedLockRef.current = false;
+
+    const reqId = ++requestIdRef.current;
     setStatus("requesting");
     setErrorMessage("");
 
@@ -125,46 +247,100 @@ export function QrCameraScanner({
       !navigator.mediaDevices ||
       !navigator.mediaDevices.getUserMedia
     ) {
-      setStatus("error");
-      setErrorMessage(
-        t("Tu navegador no soporta el acceso a la cámara mediante WebRTC."),
-      );
+      if (isMountedRef.current && reqId === requestIdRef.current) {
+        setStatus("error");
+        setErrorMessage(
+          t("Tu navegador no soporta el acceso a la cámara mediante WebRTC."),
+        );
+      }
       return;
     }
 
     try {
-      // Check available cameras
-      try {
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const videoInputs = devices.filter((d) => d.kind === "videoinput");
-        setHasMultipleCameras(videoInputs.length > 1);
-      } catch {
-        // enumeration can fail without permissions
-      }
+      // Request media stream with multi-tier progressive fallback
+      const stream = await requestUserMediaWithFallback(
+        facingMode,
+        selectedDeviceId || undefined,
+      );
 
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: { ideal: facingMode },
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
-        },
-        audio: false,
-      });
-
-      streamRef.current = stream;
-
-      if (!videoRef.current) {
-        setStatus("error");
+      // Check if another startCamera call was initiated or component unmounted during getUserMedia
+      if (!isMountedRef.current || reqId !== requestIdRef.current) {
+        stream.getTracks().forEach((t) => t.stop());
         return;
       }
 
-      videoRef.current.srcObject = stream;
-      videoRef.current.setAttribute("playsinline", "true");
-      await videoRef.current.play();
+      streamRef.current = stream;
 
-      setStatus("scanning");
+      const video = videoRef.current;
+      if (!video) {
+        stream.getTracks().forEach((t) => t.stop());
+        return;
+      }
+
+      // Prepare video element attributes for all browsers (iOS Safari, Mac Chrome/Safari, Android)
+      video.muted = true;
+      video.playsInline = true;
+      video.setAttribute("playsinline", "true");
+      video.setAttribute("webkit-playsinline", "true");
+      video.setAttribute("muted", "true");
+      video.srcObject = stream;
+
+      // Wait for video metadata to be loaded before calling play()
+      // This prevents the DOMException: "The fetching process for the media resource was aborted..."
+      await new Promise<void>((resolve) => {
+        if (video.readyState >= HTMLMediaElement.HAVE_METADATA) {
+          resolve();
+          return;
+        }
+        const onLoaded = () => {
+          video.removeEventListener("loadedmetadata", onLoaded);
+          resolve();
+        };
+        video.addEventListener("loadedmetadata", onLoaded, { once: true });
+        // Safety timeout fallback
+        setTimeout(resolve, 800);
+      });
+
+      // Re-check race condition after metadata wait
+      if (!isMountedRef.current || reqId !== requestIdRef.current) {
+        stream.getTracks().forEach((t) => t.stop());
+        return;
+      }
+
+      // Safe play() invocation
+      try {
+        await video.play();
+      } catch (playErr: unknown) {
+        const pErr = playErr as Error;
+        // AbortError is normal when switching or unmounting; ignore it safely
+        if (
+          pErr.name === "AbortError" ||
+          pErr.message?.toLowerCase().includes("aborted")
+        ) {
+          return;
+        }
+        console.warn("video.play() warning:", pErr);
+      }
+
+      if (isMountedRef.current && reqId === requestIdRef.current) {
+        setStatus("scanning");
+        void refreshDevices();
+      }
     } catch (err: unknown) {
+      if (!isMountedRef.current || reqId !== requestIdRef.current) {
+        return;
+      }
+
       const error = err as Error;
+
+      // Benign AbortError (e.g. from user navigation or fast re-render)
+      if (
+        error.name === "AbortError" ||
+        error.message?.toLowerCase().includes("aborted")
+      ) {
+        return;
+      }
+
       if (
         error.name === "NotAllowedError" ||
         error.name === "PermissionDeniedError"
@@ -190,7 +366,7 @@ export function QrCameraScanner({
         );
       }
     }
-  }, [facingMode, stopCamera, t]);
+  }, [facingMode, selectedDeviceId, stopCamera, refreshDevices, t]);
 
   // Frame processing loop
   useEffect(() => {
@@ -207,7 +383,11 @@ export function QrCameraScanner({
 
       const now = performance.now();
       // Throttle to ~16 scans per second (~60ms) to save CPU/battery
-      if (now - lastScanTime >= 60 && video && video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      if (
+        now - lastScanTime >= 60 &&
+        video &&
+        video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA
+      ) {
         lastScanTime = now;
 
         const width = video.videoWidth;
@@ -221,11 +401,21 @@ export function QrCameraScanner({
           ) {
             try {
               type BarcodeDetectorInstance = {
-                detect: (source: ImageBitmapSource) => Promise<Array<{ rawValue?: string }>>;
+                detect: (
+                  source: ImageBitmapSource,
+                ) => Promise<Array<{ rawValue?: string }>>;
               };
-              type BarcodeDetectorConstructor = new (options?: { formats: string[] }) => BarcodeDetectorInstance;
-              const BarcodeDetectorClass = (window as unknown as { BarcodeDetector: BarcodeDetectorConstructor }).BarcodeDetector;
-              const detector = new BarcodeDetectorClass({ formats: ["qr_code"] });
+              type BarcodeDetectorConstructor = new (options?: {
+                formats: string[];
+              }) => BarcodeDetectorInstance;
+              const BarcodeDetectorClass = (
+                window as unknown as {
+                  BarcodeDetector: BarcodeDetectorConstructor;
+                }
+              ).BarcodeDetector;
+              const detector = new BarcodeDetectorClass({
+                formats: ["qr_code"],
+              });
               const barcodes = await detector.detect(video);
               if (barcodes.length > 0 && barcodes[0]?.rawValue) {
                 handleDetected(barcodes[0].rawValue);
@@ -236,7 +426,7 @@ export function QrCameraScanner({
             }
           }
 
-          // 2. Fallback to jsQR canvas scanner (works everywhere: iOS Safari, Firefox, Desktop)
+          // 2. Fallback to jsQR canvas scanner (universal: iOS Safari, Firefox, Desktop Mac/PC)
           if (canvas) {
             canvas.width = width;
             canvas.height = height;
@@ -245,9 +435,14 @@ export function QrCameraScanner({
               ctx.drawImage(video, 0, 0, width, height);
               try {
                 const imageData = ctx.getImageData(0, 0, width, height);
-                const code = jsQR(imageData.data, imageData.width, imageData.height, {
-                  inversionAttempts: "dontInvert",
-                });
+                const code = jsQR(
+                  imageData.data,
+                  imageData.width,
+                  imageData.height,
+                  {
+                    inversionAttempts: "dontInvert",
+                  },
+                );
                 if (code && code.data && code.data.trim()) {
                   handleDetected(code.data.trim());
                   return;
@@ -288,6 +483,7 @@ export function QrCameraScanner({
 
   // Switch facing mode (environment <-> user)
   const toggleFacingMode = () => {
+    setSelectedDeviceId(""); // clear specific device lock when toggling mode
     setFacingMode((prev) => (prev === "environment" ? "user" : "environment"));
   };
 
@@ -348,7 +544,7 @@ export function QrCameraScanner({
       <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-primary via-gold to-jade opacity-80" />
 
       {/* Header bar */}
-      <div className="mb-4 flex w-full items-center justify-between gap-3 px-1">
+      <div className="mb-4 flex w-full flex-wrap items-center justify-between gap-3 px-1">
         <div className="flex items-center gap-2">
           <span className="grid h-8 w-8 place-items-center rounded-full bg-primary/25 text-primary">
             <Camera className="h-4 w-4" />
@@ -365,14 +561,54 @@ export function QrCameraScanner({
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5">
-          {hasMultipleCameras && (
+        <div className="flex flex-wrap items-center gap-1.5">
+          {/* Multi-camera selector dropdown (Mac / PC / Multi-camera phones) */}
+          {availableDevices.length > 1 ? (
+            <div className="flex items-center gap-1">
+              <select
+                value={selectedDeviceId}
+                onChange={(e) => {
+                  setSelectedDeviceId(e.target.value);
+                }}
+                disabled={status === "requesting"}
+                className="h-8 max-w-[130px] sm:max-w-[180px] truncate rounded-lg border border-white/20 bg-white/10 px-2 text-xs text-white backdrop-blur-xs outline-none hover:bg-white/20 cursor-pointer"
+                title={t("Seleccionar cámara")}
+              >
+                <option value="" className="bg-slate-900 text-white">
+                  {facingMode === "environment"
+                    ? t("Cámara principal")
+                    : t("Cámara frontal")}
+                </option>
+                {availableDevices.map((d, i) => (
+                  <option
+                    key={d.deviceId || i}
+                    value={d.deviceId}
+                    className="bg-slate-900 text-white"
+                  >
+                    {d.label}
+                  </option>
+                ))}
+              </select>
+
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={toggleFacingMode}
+                disabled={status === "requesting"}
+                className="h-8 border-white/20 bg-white/10 px-2 text-xs text-white hover:bg-white/20"
+                title={t("Alternar cámara trasera/frontal")}
+              >
+                <FlipHorizontal className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+          ) : (
             <Button
               type="button"
               variant="outline"
               size="sm"
               onClick={toggleFacingMode}
-              disabled={status !== "scanning"}
+              disabled={status === "requesting"}
               className="h-8 border-white/20 bg-white/10 px-2.5 text-xs text-white hover:bg-white/20"
               title={t("Cambiar cámara")}
             >
@@ -408,6 +644,7 @@ export function QrCameraScanner({
           className="h-full w-full object-cover"
           muted
           playsInline
+          autoPlay
         />
 
         {/* Viewfinder Overlays */}
@@ -511,7 +748,7 @@ export function QrCameraScanner({
               {errorMessage ||
                 t("No se pudo iniciar el dispositivo de video en este navegador.")}
             </p>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2 justify-center">
               <Button
                 size="sm"
                 variant="outline"
@@ -520,6 +757,18 @@ export function QrCameraScanner({
               >
                 <RefreshCw className="h-3.5 w-3.5" />
                 {t("Reintentar")}
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => {
+                  toggleFacingMode();
+                  void startCamera();
+                }}
+                className="mt-2 border-white/20 bg-white/10 text-xs text-white hover:bg-white/20"
+              >
+                <FlipHorizontal className="h-3.5 w-3.5" />
+                {t("Probar otra cámara")}
               </Button>
             </div>
           </div>
@@ -544,3 +793,4 @@ export function QrCameraScanner({
     </div>
   );
 }
+
