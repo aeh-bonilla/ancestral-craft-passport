@@ -1894,5 +1894,185 @@
   "Ver obras": [
     "View works",
     "查看作品"
+  ],
+  "Escáner de Pasaporte Cultural": [
+    "Cultural Passport Scanner",
+    "文化通照扫码器"
+  ],
+  "Cámara activa · Enfoca el código QR de la pieza": [
+    "Camera active · Focus on the craft piece QR code",
+    "相机已激活 · 请对准工艺品二维码"
+  ],
+  "Verificación física y digital en tiempo real": [
+    "Real-time phygital verification",
+    "虚实互联实时查验"
+  ],
+  "Cambiar cámara": [
+    "Switch camera",
+    "切换摄像头"
+  ],
+  "Subir imagen": [
+    "Upload image",
+    "上传图片"
+  ],
+  "Trasera": [
+    "Rear",
+    "后置"
+  ],
+  "Frontal": [
+    "Front",
+    "前置"
+  ],
+  "Alinea el código QR dentro del recuadro": [
+    "Align the QR code within the frame",
+    "请将二维码对准取景框内"
+  ],
+  "Conectando con la cámara de tu dispositivo…": [
+    "Connecting to your device camera…",
+    "正在连接设备相机…"
+  ],
+  "Por favor concede el permiso en el navegador cuando se solicite.": [
+    "Please grant camera permission in your browser when prompted.",
+    "请在浏览器提示时允许相机权限。"
+  ],
+  "¡Código QR detectado!": [
+    "QR code detected!",
+    "已检测到二维码！"
+  ],
+  "Consultando expediente en el registro de Tlamatik…": [
+    "Querying registry in Tlamatik…",
+    "正在 Tlamatik 登记册中查询档案…"
+  ],
+  "Permiso de cámara bloqueado": [
+    "Camera permission denied",
+    "相机权限已被拒绝"
+  ],
+  "Reintentar activación": [
+    "Retry activation",
+    "重试激活"
+  ],
+  "Cámara no disponible": [
+    "Camera unavailable",
+    "相机不可用"
+  ],
+  "Compatible con QR de Kits Phygital, CoDi® y URLs de Tlamatik": [
+    "Compatible with Phygital QR kits, CoDi® and Tlamatik URLs",
+    "兼容物联套件二维码、CoDi® 及 Tlamatik 链接"
+  ],
+  "Verificación en vivo por cámara": [
+    "Live camera verification",
+    "实时相机查验"
+  ],
+  "Escanea el Pasaporte Cultural": [
+    "Scan Cultural Passport",
+    "扫描文化通照"
+  ],
+  "Apunta la cámara de tu celular o computadora al código QR de la pieza física para certificar su origen comunitario y registro inmutable en Stellar Soroban.": [
+    "Point your phone or computer camera at the physical piece QR code to certify community origin and immutable registration on Stellar Soroban.",
+    "将手机或电脑摄像头对准实物工艺品的二维码，以验证其社区源头及在 Stellar Soroban 上的不可篡改存证。"
+  ],
+  "¿No tienes un QR físico a la mano? Prueba el verificador con una pieza registrada de prueba:": [
+    "Don't have a physical QR nearby? Try the verifier with a registered sample piece:",
+    "手头没有实体二维码？可通过已登记的范例作品测试查验："
+  ],
+  "Simular QR no registrado (Ver causas)": [
+    "Simulate unregistered QR (View causes)",
+    "模拟未登记二维码（查看可能原因）"
+  ],
+  "Escanear otra pieza (Cámara)": [
+    "Scan another piece (Camera)",
+    "扫描另一件作品（相机）"
+  ],
+  "Verificación Fallida · Sistema Antifraude": [
+    "Verification Failed · Anti-Fraud System",
+    "查验失败 · 防伪系统预警"
+  ],
+  "Pieza no encontrada en la plataforma Tlamatik": [
+    "Piece not found on the Tlamatik platform",
+    "在 Tlamatik 平台未找到该作品"
+  ],
+  "El código QR escaneado no coincide con ninguna obra catalogada ni con ningún pasaporte cultural inmutable activo en nuestro registro.": [
+    "The scanned QR code does not match any cataloged work or active immutable cultural passport in our registry.",
+    "所扫描的二维码与我们登记册中任何已编目作品或有效的不可篡改文化通照均不匹配。"
+  ],
+  "Contenido escaneado:": [
+    "Scanned content:",
+    "扫描内容："
+  ],
+  "Identificador o Hash analizado:": [
+    "Analyzed Identifier or Hash:",
+    "解析出的标识符或哈希："
+  ],
+  "Estado en Smart Contract Soroban:": [
+    "Status in Soroban Smart Contract:",
+    "Soroban 智能合约状态："
+  ],
+  "No indexado en Stellar Testnet": [
+    "Not indexed on Stellar Testnet",
+    "未在 Stellar Testnet 索引"
+  ],
+  "Detalle de las posibles causas:": [
+    "Detail of possible causes:",
+    "可能原因详情："
+  ],
+  "1. Código QR no emitido por Tlamatik": [
+    "1. QR code not issued by Tlamatik",
+    "1. 二维码非 Tlamatik 发行"
+  ],
+  "El código escaneado pertenece a otra aplicación, pasarela o empaque comercial y no corresponde a la norma de Pasaporte Cultural de nuestra red.": [
+    "The scanned code belongs to another app, gateway, or commercial packaging and does not correspond to our network's Cultural Passport standard.",
+    "所扫二维码属于其他应用程序、网关或商业包装，不符合本网络文化通照规范。"
+  ],
+  "2. Obra en borrador o sin anclaje en blockchain": [
+    "2. Work in draft or unanchored on blockchain",
+    "2. 作品为草稿或尚未上链"
+  ],
+  "La pieza puede haber sido registrada de forma preliminar por el artesano pero todavía no ha completado su sellado criptográfico en Stellar Soroban.": [
+    "The piece may have been drafted preliminarily by the artisan but has not yet completed cryptographic anchoring on Stellar Soroban.",
+    "手艺人可能进行了初步登记，但尚未在 Stellar Soroban 完成密码学存证。"
+  ],
+  "3. Huella SHA-256 no coincidente (Posible alteración)": [
+    "3. SHA-256 mismatch (Potential tampering)",
+    "3. SHA-256 哈希不一致（疑似篡改）"
+  ],
+  "Si la pieza física o su expediente digital fueron modificados, el hash criptográfico SHA-256 no concuerda con ningún registro inmutable.": [
+    "If the physical piece or digital dossier was modified, the SHA-256 cryptographic hash will not match any immutable record.",
+    "若实体作品或数字档案被改动，其 SHA-256 密码学哈希值将与任何不可篡改记录不一致。"
+  ],
+  "4. Etiqueta física deteriorada o lectura incompleta": [
+    "4. Damaged physical label or incomplete scan",
+    "4. 物理标签受损或扫码不全"
+  ],
+  "Desgaste del papel o cerámica, reflejos de luz excesivos o una cámara desenfocada pueden provocar una lectura parcial o corrupta de los bytes del QR.": [
+    "Wear on paper/ceramic, excessive lighting glare, or an unfocused camera can cause partial or corrupted reading of the QR bytes.",
+    "纸张或陶瓷磨损、光线反光过度或相机对焦不良，均可能导致二维码字节读取不完整或损坏。"
+  ],
+  "5. Taller o artesano no afiliado a la cooperativa": [
+    "5. Workshop or artisan not affiliated with cooperative",
+    "5. 作坊或手艺人未加入合作社"
+  ],
+  "La pieza proviene de un taller independiente fuera del padrón certificado de la Cooperativa Guelaguetza y los gremios ancestrales.": [
+    "The piece comes from an independent workshop outside the certified registry of the Guelaguetza Cooperative and ancestral guilds.",
+    "该作品来自未加入 Guelaguetza 合作社及传统行会认证名录的独立作坊。"
+  ],
+  "Escanear nuevamente con la cámara": [
+    "Scan again with camera",
+    "重新开启相机扫码"
+  ],
+  "O prueba con una obra registrada:": [
+    "Or try with a registered work:",
+    "或尝试已登记的作品："
+  ],
+  "✓ Pasaporte verificado con éxito": [
+    "✓ Passport verified successfully",
+    "✓ 通照成功查验"
+  ],
+  "Pieza no encontrada en la plataforma": [
+    "Piece not found on platform",
+    "在平台未找到该作品"
+  ],
+  "Revisa el detalle de las posibles causas.": [
+    "Review the breakdown of possible causes.",
+    "请查看可能的原因详情。"
   ]
 }

@@ -1,5 +1,5 @@
 import { useI18n } from "@/i18n";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   BadgeCheck,
@@ -17,6 +17,12 @@ import {
   ShieldCheck,
   AlertTriangle,
   Loader2,
+  Camera,
+  ShieldAlert,
+  CheckCircle2,
+  HelpCircle,
+  RotateCcw,
+  Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -44,6 +50,7 @@ import {
   StellarBadge,
   StripeButton,
 } from "@/components/toltek/ui";
+import { QrCameraScanner } from "@/components/toltek/QrCameraScanner";
 import {
   contractId,
   getPiece,
@@ -98,9 +105,217 @@ const gallery = [
   { src: images.olinala, label: "Pigmentos naturales" },
 ];
 
+export function extractPieceQuery(text: string): string {
+  const trimmed = text.trim();
+  if (!trimmed) return "";
+
+  // 1. Try URL parse: e.g. https://tlamatik.vercel.app/verificar?id=TK-0512
+  try {
+    const url = new URL(trimmed);
+    const idParam =
+      url.searchParams.get("id") ||
+      url.searchParams.get("pieceId") ||
+      url.searchParams.get("workId");
+    if (idParam) return idParam.trim();
+
+    const parts = url.pathname.split("/").filter(Boolean);
+    const last = parts[parts.length - 1];
+    if (
+      last &&
+      (/^TK-/i.test(last) ||
+        /^AUTH-/i.test(last) ||
+        /^[a-f0-9]{64}$/i.test(last))
+    ) {
+      return last.trim();
+    }
+  } catch {
+    // Relative URL query parse
+    const match = trimmed.match(/[?&]id=([^&#]+)/);
+    if (match && match[1]) {
+      return decodeURIComponent(match[1]).trim();
+    }
+  }
+
+  // 2. Try CoDi / Pey JSON format: { IDC: "35a13c0512", REF: 512, ... }
+  if (trimmed.startsWith("{") && trimmed.endsWith("}")) {
+    try {
+      const obj = JSON.parse(trimmed) as Record<string, unknown>;
+      if (typeof obj["pieceId"] === "string") return obj["pieceId"].trim();
+      if (typeof obj["id"] === "string") return obj["id"].trim();
+      if (typeof obj["workId"] === "string") return obj["workId"].trim();
+      if (typeof obj["IDC"] === "string") {
+        const numMatch = (obj["IDC"] as string).match(/\d+$/);
+        if (numMatch) return `TK-${numMatch[0].padStart(4, "0")}`;
+      }
+      if (typeof obj["REF"] === "number" || typeof obj["REF"] === "string") {
+        const num = String(obj["REF"]).replace(/\D/g, "");
+        if (num) return `TK-${num.padStart(4, "0")}`;
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  // 3. Direct pattern match
+  const tkMatch = trimmed.match(/\bTK-\d{4}\b/i);
+  if (tkMatch) return tkMatch[0].toUpperCase();
+
+  const authMatch = trimmed.match(/\bAUTH-[\w-]+\b/i);
+  if (authMatch) return authMatch[0].toUpperCase();
+
+  const shaMatch = trimmed.match(/\b[a-f0-9]{64}\b/i);
+  if (shaMatch) return shaMatch[0].toLowerCase();
+
+  return trimmed;
+}
+
+function PieceNotFoundPanel({
+  notFound,
+  onRetryCamera,
+  onSelectPiece,
+}: {
+  notFound: { rawText: string; cleanTarget: string };
+  onRetryCamera: () => void;
+  onSelectPiece: (pieceId: string) => void;
+}) {
+  const { t } = useI18n();
+
+  return (
+    <div className="mx-auto max-w-4xl px-4 py-8 animate-in fade-in duration-300">
+      <div className="overflow-hidden rounded-2xl border-2 border-amber-500/35 bg-card shadow-float">
+        {/* Banner with warning and cultural badge */}
+        <div className="border-b border-amber-500/20 bg-amber-500/10 p-6 sm:p-8">
+          <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+            <span className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-amber-500/20 text-amber-600 ring-4 ring-amber-500/10 dark:text-amber-400">
+              <ShieldAlert className="h-9 w-9" />
+            </span>
+            <div className="min-w-0">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/20 px-3 py-1 font-mono text-[11px] font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-300">
+                <AlertTriangle className="h-3.5 w-3.5" />
+                {t("Verificación Fallida · Sistema Antifraude")}
+              </span>
+              <h1 className="mt-2 font-serif text-2xl font-bold text-foreground sm:text-3xl">
+                {t("Pieza no encontrada en la plataforma Tlamatik")}
+              </h1>
+              <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
+                {t(
+                  "El código QR escaneado no coincide con ninguna obra catalogada ni con ningún pasaporte cultural inmutable activo en nuestro registro.",
+                )}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-6 p-6 sm:p-8">
+          {/* Scanned code info box */}
+          <div className="space-y-2 rounded-xl border bg-sand/40 p-4 font-mono text-xs">
+            <div className="flex flex-col justify-between gap-1 text-muted-foreground sm:flex-row sm:items-center">
+              <span>{t("Contenido escaneado:")}</span>
+              <span className="break-all rounded border bg-background/90 px-2 py-1 font-semibold text-foreground">
+                {notFound.rawText}
+              </span>
+            </div>
+            <div className="flex flex-col justify-between gap-1 border-t pt-2 text-muted-foreground sm:flex-row sm:items-center">
+              <span>{t("Identificador o Hash analizado:")}</span>
+              <span className="break-all rounded border bg-background/90 px-2 py-1 font-semibold text-primary">
+                {notFound.cleanTarget}
+              </span>
+            </div>
+            <div className="flex flex-col justify-between gap-1 border-t pt-2 text-muted-foreground sm:flex-row sm:items-center">
+              <span>{t("Estado en Smart Contract Soroban:")}</span>
+              <span className="font-semibold text-amber-600 dark:text-amber-400">
+                {t("No indexado en Stellar Testnet")}
+              </span>
+            </div>
+          </div>
+
+          {/* Causes breakdown */}
+          <div>
+            <h2 className="flex items-center gap-2 text-base font-semibold">
+              <HelpCircle className="h-4 w-4 text-primary" />
+              {t("Detalle de las posibles causas:")}
+            </h2>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              {[
+                {
+                  title: "1. Código QR no emitido por Tlamatik",
+                  desc: "El código escaneado pertenece a otra aplicación, pasarela o empaque comercial y no corresponde a la norma de Pasaporte Cultural de nuestra red.",
+                },
+                {
+                  title: "2. Obra en borrador o sin anclaje en blockchain",
+                  desc: "La pieza puede haber sido registrada de forma preliminar por el artesano pero todavía no ha completado su sellado criptográfico en Stellar Soroban.",
+                },
+                {
+                  title: "3. Huella SHA-256 no coincidente (Posible alteración)",
+                  desc: "Si la pieza física o su expediente digital fueron modificados, el hash criptográfico SHA-256 no concuerda con ningún registro inmutable.",
+                },
+                {
+                  title: "4. Etiqueta física deteriorada o lectura incompleta",
+                  desc: "Desgaste del papel o cerámica, reflejos de luz excesivos o una cámara desenfocada pueden provocar una lectura parcial o corrupta de los bytes del QR.",
+                },
+                {
+                  title: "5. Taller o artesano no afiliado a la cooperativa",
+                  desc: "La pieza proviene de un taller independiente fuera del padrón certificado de la Cooperativa Guelaguetza y los gremios ancestrales.",
+                },
+              ].map((c) => (
+                <div
+                  key={c.title}
+                  className="rounded-xl border border-border/80 bg-background/70 p-3.5 text-xs leading-relaxed"
+                >
+                  <p className="font-semibold text-foreground">{t(c.title)}</p>
+                  <p className="mt-1 text-muted-foreground">{t(c.desc)}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex flex-col items-center justify-between gap-3 border-t pt-5 sm:flex-row">
+            <Button onClick={onRetryCamera} className="w-full sm:w-auto">
+              <Camera className="h-4 w-4" />
+              {t("Escanear nuevamente con la cámara")}
+            </Button>
+
+            <div className="flex w-full flex-wrap items-center justify-end gap-2 sm:w-auto">
+              <span className="mr-1 text-xs text-muted-foreground">
+                {t("O prueba con una obra registrada:")}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onSelectPiece("TK-0512")}
+              >
+                <CheckCircle2 className="h-3.5 w-3.5 text-jade" />
+                TK-0512 (Tecuani)
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onSelectPiece("TK-0042")}
+              >
+                <CheckCircle2 className="h-3.5 w-3.5 text-jade" />
+                TK-0042 (Alebrije)
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Verify() {
   const { id } = Route.useSearch();
+  const navigate = useNavigate();
+  const { t } = useI18n();
+
   const [query, setQuery] = useState(id ?? "");
+  const [scannerActive, setScannerActive] = useState(!id);
+  const [notFoundInfo, setNotFoundInfo] = useState<{
+    rawText: string;
+    cleanTarget: string;
+  } | null>(null);
+
   const [resolvedWork, setResolvedWork] = useState<AuthoryWork | null>(null);
   const [events, setEvents] = useState<AuthoryRightsEvent[]>([]);
   const [fileCheckResult, setFileCheckResult] = useState<{
@@ -110,41 +325,138 @@ function Verify() {
   } | null>(null);
   const [searching, setSearching] = useState(false);
 
+  // Load piece when search param 'id' changes
   useEffect(() => {
     let active = true;
-    const target = id?.trim() || "TK-0042";
-    setQuery(id ?? "");
+    if (!id || !id.trim()) {
+      setScannerActive(true);
+      setResolvedWork(null);
+      setNotFoundInfo(null);
+      return;
+    }
+
+    const target = extractPieceQuery(id);
+    setQuery(target);
+    setScannerActive(false);
+
     findWorkByIdOrHash(target).then(async (found) => {
       if (!active) return;
-      const fallbackPiece = getPiece(id) ?? pieces[0]!;
-      const work = found ?? pieceToWork(fallbackPiece);
-      setResolvedWork(work);
-      const evts = await getWorkRightsEvents(work.id);
-      if (active) setEvents(evts);
+      const fallbackPiece = getPiece(target);
+
+      if (found) {
+        setResolvedWork(found);
+        setNotFoundInfo(null);
+        const evts = await getWorkRightsEvents(found.id);
+        if (active) setEvents(evts);
+      } else if (fallbackPiece) {
+        const work = pieceToWork(fallbackPiece);
+        setResolvedWork(work);
+        setNotFoundInfo(null);
+        const evts = await getWorkRightsEvents(work.id);
+        if (active) setEvents(evts);
+      } else {
+        setResolvedWork(null);
+        setNotFoundInfo({ rawText: id, cleanTarget: target });
+      }
     });
+
     return () => {
       active = false;
     };
   }, [id]);
+
+  // Handler for QR detected by the camera scanner
+  const handleQrScanned = async (scannedRaw: string) => {
+    setSearching(true);
+    setNotFoundInfo(null);
+    const target = extractPieceQuery(scannedRaw);
+    setQuery(target);
+
+    try {
+      const foundWork = await findWorkByIdOrHash(target);
+      const fallbackPiece = getPiece(target);
+
+      if (foundWork) {
+        setResolvedWork(foundWork);
+        const evts = await getWorkRightsEvents(foundWork.id);
+        setEvents(evts);
+        setScannerActive(false);
+        void navigate({ to: "/verificar", search: { id: foundWork.id } });
+        toast.success(t("✓ Pasaporte verificado con éxito"), {
+          description: `${foundWork.id} · ${foundWork.title}`,
+        });
+      } else if (fallbackPiece) {
+        const work = pieceToWork(fallbackPiece);
+        setResolvedWork(work);
+        const evts = await getWorkRightsEvents(work.id);
+        setEvents(evts);
+        setScannerActive(false);
+        void navigate({ to: "/verificar", search: { id: fallbackPiece.id } });
+        toast.success(t("✓ Pasaporte verificado con éxito"), {
+          description: `${fallbackPiece.id} · ${fallbackPiece.title}`,
+        });
+      } else {
+        // Piece not found in platform!
+        setResolvedWork(null);
+        setScannerActive(false);
+        setNotFoundInfo({
+          rawText: scannedRaw,
+          cleanTarget: target,
+        });
+        toast.error(t("Pieza no encontrada en la plataforma"), {
+          description: t("Revisa el detalle de las posibles causas."),
+        });
+      }
+    } finally {
+      setSearching(false);
+    }
+  };
 
   const handleManualSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!query.trim()) return;
     setSearching(true);
     setFileCheckResult(null);
+    const target = extractPieceQuery(query);
+
     try {
-      const found = await findWorkByIdOrHash(query);
-      if (!found) {
-        toast.error("No se encontró ninguna obra con ese ID o hash SHA-256");
-        return;
+      const found = await findWorkByIdOrHash(target);
+      const fallbackPiece = getPiece(target);
+
+      if (found) {
+        setResolvedWork(found);
+        setNotFoundInfo(null);
+        setScannerActive(false);
+        const evts = await getWorkRightsEvents(found.id);
+        setEvents(evts);
+        void navigate({ to: "/verificar", search: { id: found.id } });
+        toast.success(`Pasaporte ${found.id} verificado`);
+      } else if (fallbackPiece) {
+        const work = pieceToWork(fallbackPiece);
+        setResolvedWork(work);
+        setNotFoundInfo(null);
+        setScannerActive(false);
+        const evts = await getWorkRightsEvents(work.id);
+        setEvents(evts);
+        void navigate({ to: "/verificar", search: { id: fallbackPiece.id } });
+        toast.success(`Pasaporte ${fallbackPiece.id} verificado`);
+      } else {
+        setResolvedWork(null);
+        setScannerActive(false);
+        setNotFoundInfo({ rawText: query, cleanTarget: target });
+        toast.error(t("Pieza no encontrada en la plataforma"), {
+          description: t("Revisa el detalle de las posibles causas."),
+        });
       }
-      setResolvedWork(found);
-      const evts = await getWorkRightsEvents(found.id);
-      setEvents(evts);
-      toast.success(`Pasaporte ${found.id} verificado`);
     } finally {
       setSearching(false);
     }
+  };
+
+  const handleSelectPiece = (pieceId: string) => {
+    setNotFoundInfo(null);
+    setScannerActive(false);
+    void navigate({ to: "/verificar", search: { id: pieceId } });
   };
 
   const handleVerifyFile = async (file: File | null) => {
@@ -160,6 +472,8 @@ function Verify() {
 
       if (byHash) {
         setResolvedWork(byHash);
+        setNotFoundInfo(null);
+        setScannerActive(false);
         const evts = await getWorkRightsEvents(byHash.id);
         setEvents(evts);
         setFileCheckResult({
@@ -189,29 +503,145 @@ function Verify() {
     }
   };
 
-  const activeWork = resolvedWork ?? pieceToWork(getPiece(id) ?? pieces[0]!);
-  const seedPiece = getPiece(activeWork.id);
-  const activePiece = seedPiece ?? workToPiece(activeWork);
+  const activeWork = resolvedWork;
+  const seedPiece = activeWork ? getPiece(activeWork.id) : null;
+  const activePiece = activeWork
+    ? seedPiece ?? workToPiece(activeWork)
+    : null;
 
   const showFeaturedLayout =
-    Boolean(id && id.toUpperCase() !== "TK-0042") ||
-    activeWork.id.toUpperCase() !== "TK-0042";
+    Boolean(activeWork && activeWork.id.toUpperCase() !== "TK-0042");
 
   return (
     <div>
-      <VerifierSearchBar
-        query={query}
-        onQueryChange={setQuery}
-        onSubmit={handleManualSearch}
-        onFileSelect={handleVerifyFile}
-        searching={searching}
-        fileCheckResult={fileCheckResult}
-      />
-      {showFeaturedLayout ? (
-        <FeaturedVerify piece={activePiece} work={activeWork} events={events} />
-      ) : (
-        <DefaultVerify work={activeWork} events={events} />
-      )}
+      {scannerActive ? (
+        <div className="mx-auto max-w-4xl px-4 py-8 space-y-6 animate-in fade-in duration-300">
+          <div className="mx-auto max-w-xl text-center space-y-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
+              <Camera className="h-3.5 w-3.5" />
+              {t("Verificación en vivo por cámara")}
+            </span>
+            <h1 className="font-serif text-3xl font-semibold sm:text-4xl">
+              {t("Escanea el Pasaporte Cultural")}
+            </h1>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {t(
+                "Apunta la cámara de tu celular o computadora al código QR de la pieza física para certificar su origen comunitario y registro inmutable en Stellar Soroban.",
+              )}
+            </p>
+          </div>
+
+          {/* Camera Viewfinder */}
+          <QrCameraScanner onScan={handleQrScanned} active={scannerActive} />
+
+          {/* Sample quick check options */}
+          <div className="rounded-xl border bg-sand/30 p-4 text-center">
+            <p className="text-xs text-muted-foreground mb-3 font-medium">
+              {t(
+                "¿No tienes un QR físico a la mano? Prueba el verificador con una pieza registrada de prueba:",
+              )}
+            </p>
+            <div className="flex flex-wrap justify-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleSelectPiece("TK-0512")}
+              >
+                <CheckCircle2 className="h-3.5 w-3.5 text-jade" />
+                TK-0512 · Tecuani de Acatlán (Puebla)
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleSelectPiece("TK-0042")}
+              >
+                <CheckCircle2 className="h-3.5 w-3.5 text-jade" />
+                TK-0042 · Alebrije Jaguar Nahual (Oaxaca)
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleSelectPiece("TK-0117")}
+              >
+                <CheckCircle2 className="h-3.5 w-3.5 text-jade" />
+                TK-0117 · Cántaro Barro Negro (Oaxaca)
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-amber-700 hover:text-amber-800 dark:text-amber-400"
+                onClick={() =>
+                  void handleQrScanned(
+                    "https://ejemplo.com/qr-desconocido-no-registrado-9999",
+                  )
+                }
+              >
+                <AlertTriangle className="h-3.5 w-3.5" />
+                {t("Simular QR no registrado (Ver causas)")}
+              </Button>
+            </div>
+          </div>
+
+          <VerifierSearchBar
+            query={query}
+            onQueryChange={setQuery}
+            onSubmit={handleManualSearch}
+            onFileSelect={handleVerifyFile}
+            searching={searching}
+            fileCheckResult={fileCheckResult}
+          />
+        </div>
+      ) : notFoundInfo ? (
+        <PieceNotFoundPanel
+          notFound={notFoundInfo}
+          onRetryCamera={() => {
+            setNotFoundInfo(null);
+            setScannerActive(true);
+            void navigate({ to: "/verificar", search: {} });
+          }}
+          onSelectPiece={(pid) => handleSelectPiece(pid)}
+        />
+      ) : activeWork && activePiece ? (
+        <div>
+          {/* Top banner offering to scan another QR with camera */}
+          <div className="border-b bg-sand/40">
+            <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-2.5">
+              <span className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
+                <ShieldCheck className="h-4 w-4 text-jade" />
+                {t("Pasaporte")} {activePiece.id} · {t("Verificado en Stellar Soroban")}
+              </span>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => {
+                  setResolvedWork(null);
+                  setNotFoundInfo(null);
+                  setScannerActive(true);
+                  void navigate({ to: "/verificar", search: {} });
+                }}
+              >
+                <Camera className="h-4 w-4" />
+                {t("Escanear otra pieza (Cámara)")}
+              </Button>
+            </div>
+          </div>
+
+          <VerifierSearchBar
+            query={query}
+            onQueryChange={setQuery}
+            onSubmit={handleManualSearch}
+            onFileSelect={handleVerifyFile}
+            searching={searching}
+            fileCheckResult={fileCheckResult}
+          />
+
+          {showFeaturedLayout ? (
+            <FeaturedVerify piece={activePiece} work={activeWork} events={events} />
+          ) : (
+            <DefaultVerify work={activeWork} events={events} />
+          )}
+        </div>
+      ) : null}
     </div>
   );
 }
