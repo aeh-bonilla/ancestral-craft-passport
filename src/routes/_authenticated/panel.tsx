@@ -25,6 +25,9 @@ import {
   ShieldCheck,
   Clock,
   ShoppingBag,
+  Camera,
+  Images,
+  Upload,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -189,12 +192,26 @@ function Panel() {
     name: "",
     technique: "",
     location: "",
+    bio: "",
+    photo: "",
     bank: "",
     account: "",
     clabe: "",
   });
   const [adding, setAdding] = useState(false);
   const [testingWebhook, setTestingWebhook] = useState(false);
+
+  const handleArtisanPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        setForm((prev) => ({ ...prev, photo: reader.result as string }));
+      }
+    };
+    reader.readAsDataURL(file);
+  };
 
   const triggerTestWebhook = async () => {
     setTestingWebhook(true);
@@ -365,11 +382,11 @@ function Panel() {
 
   const nav = [
     { id: "registro" as const, label: "Registro del Promotor", icon: BadgeCheck },
-    { id: "obras" as const, label: "Obras Registradas", icon: BookOpen },
-    { id: "resumen" as const, label: "Resumen / Métricas", icon: BarChart3 },
     { id: "artesanos" as const, label: "Catálogo de Artesanos", icon: Users },
+    { id: "obras" as const, label: "Registro de Obras", icon: BookOpen },
     { id: "kits" as const, label: "Kits Phygital QR", icon: QrIcon },
     { id: "liquidaciones" as const, label: "Liquidaciones SPEI", icon: Landmark },
+    { id: "resumen" as const, label: "Resumen / Métricas", icon: BarChart3 },
   ];
 
   const add = async () => {
@@ -392,9 +409,11 @@ function Panel() {
         .toUpperCase();
       setList((previous) => [
         {
-          name: form.name,
-          technique: form.technique,
-          location: form.location,
+          name: form.name.trim(),
+          technique: form.technique.trim() || "Artesanía Tradicional",
+          location: form.location.trim() || "Oaxaca, México",
+          bio: form.bio.trim() || undefined,
+          photo: form.photo || undefined,
           bankingHashes,
           status: "Pendiente KYC",
           pieces: 0,
@@ -408,12 +427,14 @@ function Panel() {
         name: "",
         technique: "",
         location: "",
+        bio: "",
+        photo: "",
         bank: "",
         account: "",
         clabe: "",
       });
       toast.success(t("Artesano agregado"), {
-        description: t("Se generó su billetera Stellar custodiada."),
+        description: t("Se generó su perfil y billetera Stellar custodiada."),
       });
     } catch {
       toast.error(
@@ -445,14 +466,6 @@ function Panel() {
             <span>{t(n.label)}</span>
           </button>
         ))}
-        <div className="hidden h-px shrink-0 bg-sidebar-border lg:mt-2 lg:block" />
-        <Link
-          to="/registrar"
-          className="flex shrink-0 items-center justify-start gap-2.5 whitespace-nowrap rounded-lg px-3 py-2.5 text-left text-sm font-medium hover:bg-sidebar-accent lg:w-full lg:pt-3"
-        >
-          <FilePlus2 className="h-4 w-4 shrink-0" />
-          <span>{t("Registro de Obras")}</span>
-        </Link>
       </aside>
 
       <section className="min-w-0 space-y-6">
@@ -775,8 +788,109 @@ function Panel() {
             </div>
           );
         })()}
-        {(tab === "resumen" || tab === "artesanos") && (
-          <>
+        {tab === "resumen" && (
+          <div className="space-y-6">
+            <div className="grid gap-4 sm:grid-cols-3">
+              {[
+                {
+                  label: "Artesanos apadrinados",
+                  value: String(list.length + 18),
+                  icon: Users,
+                },
+                {
+                  label: "Piezas catalogadas",
+                  value: String(136 + catalogPieces.length),
+                  icon: Package,
+                },
+                {
+                  label: "Recibido para la comunidad",
+                  value: "$4,850 USDC",
+                  icon: Coins,
+                },
+              ].map((m) => (
+                <div
+                  key={m.label}
+                  className="rounded-xl border bg-card p-5 shadow-float"
+                >
+                  <m.icon className="h-5 w-5 text-primary" />
+                  <p className="mt-3 font-serif text-3xl font-semibold">{m.value}</p>
+                  <p className="text-sm text-muted-foreground">{t(m.label)}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="rounded-2xl border bg-card p-6 shadow-float">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b pb-5">
+                <div>
+                  <h2 className="text-xl font-semibold">
+                    {t("Resumen y Métricas de la Cooperativa")}
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {t(
+                      "Monitoreo de trazabilidad cultural, dispersión directa SPEI y pasaportes anclados en Stellar Soroban.",
+                    )}
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <Button size="sm" variant="outline" onClick={() => setTab("artesanos")}>
+                    <Users className="h-4 w-4" />
+                    {t("Ver artesanos")}
+                  </Button>
+                  <Button size="sm" onClick={() => setTab("obras")}>
+                    <BookOpen className="h-4 w-4" />
+                    {t("Ver obras")}
+                  </Button>
+                </div>
+              </div>
+
+              <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="rounded-xl border bg-sand/40 p-4">
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                    {t("Dispersión Directa")}
+                  </p>
+                  <p className="mt-2 font-serif text-2xl font-bold text-jade">95.2%</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {t("Sin intermediarios, vía SPEI / CoDi® Banxico.")}
+                  </p>
+                </div>
+                <div className="rounded-xl border bg-sand/40 p-4">
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                    {t("Obras Inmutables")}
+                  </p>
+                  <p className="mt-2 font-serif text-2xl font-bold text-primary">
+                    {catalogPieces.length}
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {t("Con hash SHA-256 en Stellar Soroban.")}
+                  </p>
+                </div>
+                <div className="rounded-xl border bg-sand/40 p-4">
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                    {t("Comunidades Activas")}
+                  </p>
+                  <p className="mt-2 font-serif text-2xl font-bold text-gold">6</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {t("Oaxaca, Puebla, Chiapas, Michoacán, Guerrero.")}
+                  </p>
+                </div>
+                <div className="rounded-xl border bg-sand/40 p-4">
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                    {t("Liquidaciones SPEI")}
+                  </p>
+                  <p className="mt-2 font-serif text-2xl font-bold text-indigo">
+                    {liquidaciones.length}
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {t("Comprobantes con clave de rastreo Banxico.")}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {tab === "artesanos" && (
+          <div className="space-y-6">
             <div className="grid gap-4 sm:grid-cols-3">
               {[
                 {
@@ -808,17 +922,25 @@ function Panel() {
 
             <div className="rounded-xl border bg-card shadow-float">
               <div className="flex flex-wrap items-center justify-between gap-3 border-b p-5">
-                <h2 className="text-xl font-semibold">{t("Artesanos asociados")}</h2>
+                <div>
+                  <h2 className="text-xl font-semibold">{t("Catálogo de Artesanos")}</h2>
+                  <p className="text-sm text-muted-foreground">
+                    {t(
+                      "Directorio de maestros y maestras tradicionales, su biografía, fotografía y datos bancarios protegidos.",
+                    )}
+                  </p>
+                </div>
                 <Button size="sm" onClick={() => setOpen(true)}>
                   <UserPlus />
                   {t("Agregar Nuevo Artesano")}
                 </Button>
               </div>
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[640px] text-sm">
+                <table className="w-full min-w-[760px] text-sm">
                   <thead className="bg-sand text-left text-xs uppercase tracking-wider text-muted-foreground">
                     <tr>
                       <th className="p-3">{t("Artesano")}</th>
+                      <th className="p-3">{t("Biografía / Trayectoria")}</th>
                       <th className="p-3">{t("Técnica")}</th>
                       <th className="p-3">{t("Ubicación")}</th>
                       <th className="p-3">{t("Piezas")}</th>
@@ -836,22 +958,39 @@ function Panel() {
                       <tr key={a.name} className="border-t">
                         <td className="p-3">
                           <span className="flex items-center gap-3">
-                            <span className="grid h-9 w-9 place-items-center rounded-full bg-primary/15 text-xs font-semibold text-primary">
-                              {a.initials}
-                            </span>
-                            <span className="font-medium">{a.name}</span>
+                            {a.photo ? (
+                              <img
+                                src={a.photo}
+                                alt={a.name}
+                                className="h-10 w-10 shrink-0 rounded-full border border-primary/25 object-cover shadow-xs"
+                              />
+                            ) : (
+                              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary/15 text-xs font-semibold text-primary">
+                                {a.initials}
+                              </span>
+                            )}
+                            <span className="font-medium whitespace-nowrap">{a.name}</span>
                           </span>
                         </td>
-                        <td className="p-3 text-muted-foreground">
+                        <td className="p-3 max-w-xs text-xs text-muted-foreground">
+                          {a.bio ? (
+                            <span className="line-clamp-2" title={a.bio}>
+                              {a.bio}
+                            </span>
+                          ) : (
+                            "—"
+                          )}
+                        </td>
+                        <td className="p-3 text-muted-foreground whitespace-nowrap">
                           {t(a.technique)}
                         </td>
-                        <td className="p-3 text-muted-foreground">{a.location}</td>
+                        <td className="p-3 text-muted-foreground whitespace-nowrap">{a.location}</td>
                         <td className="p-3">{a.pieces}</td>
                         <td className="p-3 font-mono">{a.usdc}</td>
                         <td className="p-3">
                           <span
                             className={cn(
-                              "rounded-full px-2 py-0.5 text-xs font-medium",
+                              "rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap",
                               a.status === "Verificada" && "bg-jade/15 text-jade",
                               a.status === "Activa" &&
                                 "bg-gold/20 text-gold-foreground",
@@ -881,7 +1020,7 @@ function Panel() {
                 </table>
               </div>
             </div>
-          </>
+          </div>
         )}
 
         {tab === "kits" && (
@@ -1062,48 +1201,142 @@ function Panel() {
               name: "",
               technique: "",
               location: "",
+              bio: "",
+              photo: "",
               bank: "",
               account: "",
               clabe: "",
             });
         }}
       >
-        <DialogContent className="max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-h-[90vh] max-w-lg overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="font-serif">{t("Nuevo artesano")}</DialogTitle>
+            <DialogTitle className="font-serif text-xl">{t("Nuevo artesano")}</DialogTitle>
+            <DialogDescription>
+              {t(
+                "Registra al maestro artesano, su técnica, semblanza cultural y datos para liquidaciones.",
+              )}
+            </DialogDescription>
           </DialogHeader>
-          <div className="space-y-3">
-            {(
-              ["name", "technique", "location", "bank", "account", "clabe"] as const
-            ).map((k) => (
-              <div key={k} className="space-y-1">
-                <Label htmlFor={`artisan-${k}`}>
-                  {t(
-                    {
-                      name: "Nombre completo",
-                      technique: "Técnica",
-                      location: "Comunidad / Estado",
-                      bank: "Banco",
-                      account: "Cuenta",
-                      clabe: "CLABE interbancaria",
-                    }[k],
-                  )}
-                </Label>
+          <div className="space-y-4 py-2">
+            {/* Foto del artesano */}
+            <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-primary/30 bg-sand/30 p-4 text-center">
+              <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border-2 border-primary/30 bg-sand shadow-inner">
+                {form.photo ? (
+                  <img src={form.photo} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  <Camera className="h-8 w-8 text-primary/60" />
+                )}
+              </div>
+              <div>
+                <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border bg-background px-3 py-1.5 text-xs font-medium shadow-xs transition-colors hover:bg-sand">
+                  <Upload className="h-3.5 w-3.5" />
+                  {form.photo ? t("Cambiar fotografía") : t("Subir foto del artesano")}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleArtisanPhoto}
+                  />
+                </label>
+                <p className="mt-1 text-[11px] text-muted-foreground">
+                  {t("Rostro o retrato del maestro artesano · JPG o PNG")}
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="artisan-name">{t("Nombre completo *")}</Label>
+              <Input
+                id="artisan-name"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                placeholder={t("Ej. Don Miguel Aguilar")}
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="artisan-bio">{t("Biografía y trayectoria del artesano")}</Label>
+              <Textarea
+                id="artisan-bio"
+                rows={3}
+                value={form.bio}
+                onChange={(e) => setForm({ ...form, bio: e.target.value })}
+                placeholder={t(
+                  "Trayectoria, linaje familiar, saberes ancestrales y especialidad del maestro...",
+                )}
+              />
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="space-y-1.5">
+                <Label htmlFor="artisan-technique">{t("Técnica ancestral *")}</Label>
                 <Input
-                  id={`artisan-${k}`}
-                  autoComplete="off"
-                  inputMode={
-                    k === "account" || k === "clabe" ? "numeric" : "text"
-                  }
-                  value={form[k]}
-                  onChange={(e) => setForm({ ...form, [k]: e.target.value })}
+                  id="artisan-technique"
+                  value={form.technique}
+                  onChange={(e) => setForm({ ...form, technique: e.target.value })}
+                  placeholder={t("Ej. Talla en copal")}
                 />
               </div>
-            ))}
+              <div className="space-y-1.5">
+                <Label htmlFor="artisan-location">{t("Comunidad / Estado *")}</Label>
+                <Input
+                  id="artisan-location"
+                  value={form.location}
+                  onChange={(e) => setForm({ ...form, location: e.target.value })}
+                  placeholder={t("Ej. San Antonio Arrazola, Oax.")}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-3 rounded-xl border bg-card p-3">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {t("Datos Bancarios para Liquidaciones (Protegidos con SHA-256)")}
+              </p>
+              <div className="space-y-1.5">
+                <Label htmlFor="artisan-bank">{t("Banco")}</Label>
+                <Input
+                  id="artisan-bank"
+                  value={form.bank}
+                  onChange={(e) => setForm({ ...form, bank: e.target.value })}
+                  placeholder={t("BBVA, Banorte, Santander...")}
+                />
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="space-y-1.5">
+                  <Label htmlFor="artisan-account">{t("Cuenta")}</Label>
+                  <Input
+                    id="artisan-account"
+                    inputMode="numeric"
+                    value={form.account}
+                    onChange={(e) => setForm({ ...form, account: e.target.value })}
+                    placeholder="1234567890"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="artisan-clabe">{t("CLABE interbancaria")}</Label>
+                  <Input
+                    id="artisan-clabe"
+                    inputMode="numeric"
+                    value={form.clabe}
+                    onChange={(e) => setForm({ ...form, clabe: e.target.value })}
+                    placeholder="012180015355682429"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
           <DialogFooter>
+            <Button
+              type="button"
+              variant="ghost"
+              disabled={adding}
+              onClick={() => setOpen(false)}
+            >
+              {t("Cancelar")}
+            </Button>
             <Button disabled={adding} onClick={() => void add()}>
-              {adding ? t("Enviando…") : t("Agregar")}
+              {adding ? t("Guardando…") : t("Guardar artesano")}
             </Button>
           </DialogFooter>
         </DialogContent>

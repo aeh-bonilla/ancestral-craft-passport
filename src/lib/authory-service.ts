@@ -42,6 +42,7 @@ export interface AuthoryWork {
   fileMimeType?: string | undefined;
   sourceUrl?: string | undefined;
   fileUrl?: string | undefined;
+  gallery?: string[] | undefined;
   notes?: string | undefined;
   createdAt: string;
   registeredAt: string;
@@ -208,6 +209,11 @@ export function mapDbRowToRightsEvent(row: DbRightsEventRow): AuthoryRightsEvent
 
 export function workToPiece(work: AuthoryWork): Piece {
   const priceMxn = work.priceMxn > 0 ? work.priceMxn : 3500;
+  const primaryImage = work.fileUrl || defaultImageForTechnique(work.technique);
+  const gallery =
+    work.gallery && work.gallery.length > 0
+      ? work.gallery
+      : [primaryImage];
   return {
     id: work.id,
     title: work.title,
@@ -216,7 +222,8 @@ export function workToPiece(work: AuthoryWork): Piece {
     region: work.region,
     technique: work.technique,
     priceMxn,
-    image: work.fileUrl || defaultImageForTechnique(work.technique),
+    image: primaryImage,
+    gallery,
     featured: true,
     badge: `${work.region} · Soroban`,
     category: work.technique,
@@ -256,6 +263,7 @@ export function pieceToWork(piece: Piece): AuthoryWork {
     network: "testnet",
     status: "verified",
     fileUrl: piece.image,
+    gallery: piece.gallery || [piece.image],
     createdAt: "2026-10-17T17:42:09.000Z",
     registeredAt: "2026-10-17T17:42:09.000Z",
   };
@@ -569,6 +577,7 @@ export async function updateUnanchoredWork(
     priceMxn: number;
     description: string;
     hash?: string;
+    gallery?: string[];
   },
 ): Promise<AuthoryWork> {
   const existing = await findWorkByIdOrHash(workId);
@@ -595,6 +604,8 @@ export async function updateUnanchoredWork(
     priceMxn: Number(updates.priceMxn) || existing.priceMxn,
     description: updates.description.trim(),
     hash: updates.hash || existing.hash,
+    gallery: updates.gallery || existing.gallery,
+    fileUrl: updates.gallery?.[0] || existing.fileUrl,
   };
 
   writeLocalWork(updated);

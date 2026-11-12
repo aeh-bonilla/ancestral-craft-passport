@@ -1770,5 +1770,129 @@
   "Ej. Alain Bonilla · Cooperativa Guelaguetza": [
     "e.g. Alain Bonilla · Cooperativa Guelaguetza",
     "例如：Alain Bonilla · Cooperativa Guelaguetza"
+  ],
+  "Fotos de la Pieza Artesanal (Galería)": [
+    "Craft Piece Photos (Gallery)",
+    "手工艺品照片（画廊）"
+  ],
+  "Captura o sube fotos desde diferentes ángulos (frente, reverso, detalles y firma) para la galería pública.": [
+    "Capture or upload photos from different angles (front, back, details, signature) for the public gallery.",
+    "从不同角度拍摄或上传照片（正面、反面、细节及签名）以供公开展示。"
+  ],
+  "Capturar / Subir foto": [
+    "Capture / Upload photo",
+    "拍摄 / 上传照片"
+  ],
+  "Portada": [
+    "Cover",
+    "封面"
+  ],
+  "Hacer portada": [
+    "Set as cover",
+    "设为封面"
+  ],
+  "Quitar foto": [
+    "Remove photo",
+    "移除照片"
+  ],
+  "JPG, PNG o WEBP": [
+    "JPG, PNG or WEBP",
+    "JPG、PNG 或 WEBP"
+  ],
+  "{{count}} foto(s) añadidas a la galería": [
+    "{{count}} photo(s) added to gallery",
+    "已添加 {{count}} 张照片至画廊"
+  ],
+  "Foto seleccionada como portada": [
+    "Photo set as cover",
+    "已设为封面照片"
+  ],
+  "Foto anterior": [
+    "Previous photo",
+    "上一张照片"
+  ],
+  "Foto siguiente": [
+    "Next photo",
+    "下一张照片"
+  ],
+  "Biografía y trayectoria del artesano": [
+    "Artisan biography and trajectory",
+    "手艺人生平与传承历程"
+  ],
+  "Biografía / Trayectoria": [
+    "Biography / Trajectory",
+    "生平 / 历程"
+  ],
+  "Subir foto del artesano": [
+    "Upload artisan photo",
+    "上传手艺人照片"
+  ],
+  "Cambiar fotografía": [
+    "Change photograph",
+    "更换照片"
+  ],
+  "Rostro o retrato del maestro artesano · JPG o PNG": [
+    "Portrait of master artisan · JPG or PNG",
+    "工艺大师肖像照 · JPG 或 PNG"
+  ],
+  "Trayectoria, linaje familiar, saberes ancestrales y especialidad del maestro...": [
+    "Trajectory, family lineage, ancestral knowledge and specialty of the master...",
+    "大师的传承历程、家族谱系、古法技艺及擅长领域..."
+  ],
+  "Datos Bancarios para Liquidaciones (Protegidos con SHA-256)": [
+    "Banking Details for Settlements (SHA-256 Protected)",
+    "结算银行信息（SHA-256 加密保护）"
+  ],
+  "Directorio de maestros y maestras tradicionales, su biografía, fotografía y datos bancarios protegidos.": [
+    "Directory of traditional master artisans, their biography, photograph and protected banking details.",
+    "传统工艺大师名录，包含生平、肖像及加密银行信息。"
+  ],
+  "Resumen y Métricas de la Cooperativa": [
+    "Cooperative Summary & Metrics",
+    "合作社摘要与指标"
+  ],
+  "Monitoreo de trazabilidad cultural, dispersión directa SPEI y pasaportes anclados en Stellar Soroban.": [
+    "Monitoring cultural traceability, direct SPEI disbursement and passports anchored on Stellar Soroban.",
+    "监控文化溯源、直接 SPEI 结算以及在 Stellar Soroban 上的作品通照。"
+  ],
+  "Dispersión Directa": [
+    "Direct Disbursement",
+    "直接结算"
+  ],
+  "Sin intermediarios, vía SPEI / CoDi® Banxico.": [
+    "No intermediaries, via SPEI / CoDi® Banxico.",
+    "零中间环节，通过墨西哥央行 SPEI / CoDi® 结算。"
+  ],
+  "Obras Inmutables": [
+    "Immutable Works",
+    "不可篡改作品"
+  ],
+  "Con hash SHA-256 en Stellar Soroban.": [
+    "With SHA-256 hash on Stellar Soroban.",
+    "具备 Stellar Soroban 的 SHA-256 存证。"
+  ],
+  "Comunidades Activas": [
+    "Active Communities",
+    "活跃社区"
+  ],
+  "Oaxaca, Puebla, Chiapas, Michoacán, Guerrero.": [
+    "Oaxaca, Puebla, Chiapas, Michoacán, Guerrero.",
+    "瓦哈卡、普埃布拉、恰帕斯、米却肯、格雷罗。"
+  ],
+  "Comprobantes con clave de rastreo Banxico.": [
+    "Receipts with Banxico tracking key.",
+    "带有墨西哥央行追踪凭证的代码。"
+  ],
+  "Guardar artesano": [
+    "Save artisan",
+    "保存手艺人"
+  ],
+  "Ver artesanos": [
+    "View artisans",
+    "查看手艺人"
+  ],
+  "Ver obras": [
+    "View works",
+    "查看作品"
   ]
 }

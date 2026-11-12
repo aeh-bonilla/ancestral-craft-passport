@@ -21,6 +21,7 @@ export type Piece = {
   technique: "Textil" | "Cerámica" | "Talla en Madera" | "Filigrana" | "Laca";
   priceMxn: number;
   image: string;
+  gallery?: string[] | undefined;
   unesco?: string;
   /** Campos extendidos para piezas destacadas con pasaporte completo. */
   featured?: boolean;
@@ -48,6 +49,7 @@ export const pieces: Piece[] = [
     technique: "Talla en Madera",
     priceMxn: 1,
     image: tecuani,
+    gallery: [tecuani, alebrije, barroNegro],
     featured: true,
     badge: "Puebla · Mixteca · Cuenta CoDi Activa $1 MXN",
     category: "Figuras de Danza / Madera & Textil",
@@ -62,12 +64,73 @@ export const pieces: Piece[] = [
     ledgerStatus: "Verified on Soroban Testnet",
     story: "En las entrañas de la Mixteca, el sonido del teponaztli y la flauta de carrizo anuncian la llegada del Tecuani. Esta pieza rinde homenaje a la danza ancestral de petición de lluvias y protección de las cosechas. Modelado y ensamblado a mano por la maestra artesana Miriam Nava, viste el tradicional mazo amarillo salpicado con las rosetas del felino sagrado y una máscara decorada con cerdas naturales e hilos de ixtle trenzado.",
   },
-  { id: "TK-0388", title: "Plato de Talavera Poblana", artisan: "Uriarte Talavera", community: "Puebla de Zaragoza", region: "Puebla", technique: "Cerámica", priceMxn: 2650, image: talavera, unesco: "Patrimonio Cultural Inmaterial (UNESCO) · Puebla" },
-  { id: "TK-0042", title: "Alebrije Jaguar Nahual", artisan: "Jacobo y María Ángeles", community: "San Martín Tilcajete", region: "Oaxaca", technique: "Talla en Madera", priceMxn: 8900, image: alebrije },
-  { id: "TK-0117", title: "Cántaro Calado de Barro Negro", artisan: "Familia Doña Rosa", community: "San Bartolo Coyotepec", region: "Oaxaca", technique: "Cerámica", priceMxn: 3450, image: barroNegro },
-  { id: "TK-0203", title: "Huipil de Telar de Cintura", artisan: "Cooperativa Sna Jolobil", community: "San Juan Chamula", region: "Chiapas", technique: "Textil", priceMxn: 6200, image: huipil },
-  { id: "TK-0251", title: "Baúl de Laca Rayada", artisan: "Maestro Francisco Coronel", community: "Olinalá", region: "Guerrero", technique: "Laca", priceMxn: 5800, image: olinala },
-  { id: "TK-0310", title: "Cazo Martillado y Arracadas", artisan: "Taller Punzo Hermanos", community: "Santa Clara del Cobre", region: "Michoacán", technique: "Filigrana", priceMxn: 4100, image: cobre },
+  {
+    id: "TK-0388",
+    title: "Plato de Talavera Poblana",
+    artisan: "Uriarte Talavera",
+    community: "Puebla de Zaragoza",
+    region: "Puebla",
+    technique: "Cerámica",
+    priceMxn: 2650,
+    image: talavera,
+    gallery: [talavera, barroNegro, tecuani],
+    unesco: "Patrimonio Cultural Inmaterial (UNESCO) · Puebla",
+  },
+  {
+    id: "TK-0042",
+    title: "Alebrije Jaguar Nahual",
+    artisan: "Jacobo y María Ángeles",
+    community: "San Martín Tilcajete",
+    region: "Oaxaca",
+    technique: "Talla en Madera",
+    priceMxn: 8900,
+    image: alebrije,
+    gallery: [alebrije, hero, olinala],
+  },
+  {
+    id: "TK-0117",
+    title: "Cántaro Calado de Barro Negro",
+    artisan: "Familia Doña Rosa",
+    community: "San Bartolo Coyotepec",
+    region: "Oaxaca",
+    technique: "Cerámica",
+    priceMxn: 3450,
+    image: barroNegro,
+    gallery: [barroNegro, talavera, alebrije],
+  },
+  {
+    id: "TK-0203",
+    title: "Huipil de Telar de Cintura",
+    artisan: "Cooperativa Sna Jolobil",
+    community: "San Juan Chamula",
+    region: "Chiapas",
+    technique: "Textil",
+    priceMxn: 6200,
+    image: huipil,
+    gallery: [huipil, olinala, hero],
+  },
+  {
+    id: "TK-0251",
+    title: "Baúl de Laca Rayada",
+    artisan: "Maestro Francisco Coronel",
+    community: "Olinalá",
+    region: "Guerrero",
+    technique: "Laca",
+    priceMxn: 5800,
+    image: olinala,
+    gallery: [olinala, cobre, tecuani],
+  },
+  {
+    id: "TK-0310",
+    title: "Cazo Martillado y Arracadas",
+    artisan: "Taller Punzo Hermanos",
+    community: "Santa Clara del Cobre",
+    region: "Michoacán",
+    technique: "Filigrana",
+    priceMxn: 4100,
+    image: cobre,
+    gallery: [cobre, talavera, barroNegro],
+  },
 ];
 
 export const toUsdc = (mxn: number) => (mxn / USDC_RATE).toFixed(2);
@@ -82,17 +145,91 @@ export type Artisan = {
   pieces: number;
   usdc: number;
   initials: string;
+  photo?: string | undefined;
+  bio?: string | undefined;
 };
 
 export const artisans: Artisan[] = [
-  { name: "Miriam Nava", technique: "Talla en madera & textil", location: "Acatlán de Osorio, Pue.", status: "Verificada", pieces: 1, usdc: 1, initials: "MN" },
-  { name: "Alain Bonilla", technique: "Promotor Comunitario", location: "Acatlán de Osorio, Pue.", status: "Verificada", pieces: 0, usdc: 0, initials: "AB" },
-  { name: "Don Miguel Aguilar", technique: "Talla en copal", location: "San Antonio Arrazola, Oax.", status: "Verificada", pieces: 18, usdc: 920, initials: "MA" },
-  { name: "Doña Rosa Real", technique: "Barro negro bruñido", location: "San Bartolo Coyotepec, Oax.", status: "Verificada", pieces: 26, usdc: 1140, initials: "RR" },
-  { name: "Petrona Gómez", technique: "Telar de cintura", location: "Zinacantán, Chis.", status: "Activa", pieces: 12, usdc: 610, initials: "PG" },
-  { name: "Francisco Coronel", technique: "Laca rayada", location: "Olinalá, Gro.", status: "Verificada", pieces: 9, usdc: 780, initials: "FC" },
-  { name: "Juana Morales", technique: "Alfarería de alta temperatura", location: "Tzintzuntzan, Mich.", status: "Pendiente KYC", pieces: 4, usdc: 0, initials: "JM" },
-  { name: "Abelardo Punzo", technique: "Cobre martillado", location: "Santa Clara del Cobre, Mich.", status: "Activa", pieces: 15, usdc: 540, initials: "AP" },
+  {
+    name: "Miriam Nava",
+    technique: "Talla en madera & textil",
+    location: "Acatlán de Osorio, Pue.",
+    status: "Verificada",
+    pieces: 1,
+    usdc: 1,
+    initials: "MN",
+    bio: "Maestra artesana de la Mixteca Baja dedicada a la preservación del Tecuani tradicional, esculpiendo máscaras de copal e indumentaria festiva con tintes e ixtle.",
+  },
+  {
+    name: "Alain Bonilla",
+    technique: "Promotor Comunitario",
+    location: "Acatlán de Osorio, Pue.",
+    status: "Verificada",
+    pieces: 0,
+    usdc: 0,
+    initials: "AB",
+    bio: "Promotor cultural comunitario y certificador de origen. Enlace de cooperativas mixtecas y oaxaqueñas para la soberanía económica de los talleres.",
+  },
+  {
+    name: "Don Miguel Aguilar",
+    technique: "Talla en copal",
+    location: "San Antonio Arrazola, Oax.",
+    status: "Verificada",
+    pieces: 18,
+    usdc: 920,
+    initials: "MA",
+    bio: "Tercera generación de talladores zapotecas en Arrazola, reconocido por sus nahuales y figuras míticas pintadas con pigmentos vegetales.",
+  },
+  {
+    name: "Doña Rosa Real",
+    technique: "Barro negro bruñido",
+    location: "San Bartolo Coyotepec, Oax.",
+    status: "Verificada",
+    pieces: 26,
+    usdc: 1140,
+    initials: "RR",
+    bio: "Heredera del bruñido con cuarzo en barro negro de Coyotepec, horneado en pozo de reducción de oxígeno según la tradición prehispánica.",
+  },
+  {
+    name: "Petrona Gómez",
+    technique: "Telar de cintura",
+    location: "Zinacantán, Chis.",
+    status: "Activa",
+    pieces: 12,
+    usdc: 610,
+    initials: "PG",
+    bio: "Tejedora tsotsil de Zinacantán, experta en cosmogramas mayas en telar de cintura con hilos teñidos con cortezas y flores endémicas.",
+  },
+  {
+    name: "Francisco Coronel",
+    technique: "Laca rayada",
+    location: "Olinalá, Gro.",
+    status: "Verificada",
+    pieces: 9,
+    usdc: 780,
+    initials: "FC",
+    bio: "Premio Nacional de Ciencias y Artes, maestro del vaciado en madera de lináloe y técnica de rayado doble con espina de maguey.",
+  },
+  {
+    name: "Juana Morales",
+    technique: "Alfarería de alta temperatura",
+    location: "Tzintzuntzan, Mich.",
+    status: "Pendiente KYC",
+    pieces: 4,
+    usdc: 0,
+    initials: "JM",
+    bio: "Artesana purépecha de la ribera de Pátzcuaro, especialista en vasijas bruñidas y loza tradicional con engobes minerales de la región.",
+  },
+  {
+    name: "Abelardo Punzo",
+    technique: "Cobre martillado",
+    location: "Santa Clara del Cobre, Mich.",
+    status: "Activa",
+    pieces: 15,
+    usdc: 540,
+    initials: "AP",
+    bio: "Maestro forjador de Santa Clara del Cobre, moldeando piezas ornamentales y utilitarias a golpe de marro y fuego de leña de encino.",
+  },
 ];
 
 export type Pattern = {

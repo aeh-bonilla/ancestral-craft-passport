@@ -17,6 +17,7 @@ import {
   ExternalLink,
   ShieldCheck,
   Save,
+  Images,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -95,6 +96,7 @@ function Register() {
     priceMxn: "",
   });
   const [files, setFiles] = useState<SealedFileItem[]>([]);
+  const [piecePhotos, setPiecePhotos] = useState<string[]>([]);
   const [drag, setDrag] = useState(false);
   const [hash, setHash] = useState("");
   const [minting, setMinting] = useState<"idle" | "running" | "done">("idle");
@@ -103,6 +105,38 @@ function Register() {
   const [aiBusy, setAiBusy] = useState(false);
   const [mintedWork, setMintedWork] = useState<AuthoryWork | null>(null);
   const [mintedEvents, setMintedEvents] = useState<AuthoryRightsEvent[]>([]);
+
+  const handlePiecePhotosUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const list = e.target.files;
+    if (!list || list.length === 0) return;
+    const readers = Array.from(list).map((file) => {
+      return new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          if (typeof reader.result === "string") resolve(reader.result);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+    Promise.all(readers).then((dataUrls) => {
+      setPiecePhotos((prev) => [...prev, ...dataUrls]);
+      toast.success(t("{{count}} foto(s) añadidas a la galería", { count: dataUrls.length }));
+    });
+  };
+
+  const makePhotoPrimary = (index: number) => {
+    setPiecePhotos((prev) => {
+      const copy = [...prev];
+      const [selected] = copy.splice(index, 1);
+      if (selected) copy.unshift(selected);
+      return copy;
+    });
+    toast.success(t("Foto seleccionada como portada"));
+  };
+
+  const removePhoto = (index: number) => {
+    setPiecePhotos((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const generateWithAi = () => {
     setAiBusy(true);
@@ -200,13 +234,14 @@ function Register() {
           ? files.map((f) => `${f.name}:${f.sha256}`).join(" | ")
           : undefined;
 
+      const primaryPhoto = piecePhotos[0];
       const workRecord: AuthoryWork = {
         id: workId,
         promoterId: user.id,
         promoterName:
           d.promoterName.trim() || user.displayName || user.username,
         title: d.title.trim() || "Obra Artesanal Certificada",
-        type: primaryFile?.type.startsWith("image")
+        type: primaryPhoto || primaryFile?.type.startsWith("image")
           ? "photography"
           : primaryFile?.type.startsWith("audio")
             ? "music"
@@ -229,7 +264,8 @@ function Register() {
         filename: primaryFile?.name,
         fileSize: primaryFile ? `${(primaryFile.size / 1024).toFixed(1)} KB` : undefined,
         fileMimeType: primaryFile?.type,
-        fileUrl: uploadedUrl ?? undefined,
+        fileUrl: primaryPhoto || uploadedUrl || undefined,
+        gallery: piecePhotos.length > 0 ? piecePhotos : (uploadedUrl ? [uploadedUrl] : undefined),
         notes: fileHashesNotes,
         createdAt: nowIso,
         registeredAt: sorobanRes.timestampIso || nowIso,
@@ -260,13 +296,15 @@ function Register() {
       const nowIso = new Date().toISOString();
       const primaryFile = files[0]?.file;
 
+      const primaryPhoto = piecePhotos[0];
+
       await saveWorkDraft({
         id: workId,
         promoterId: user.id,
         promoterName:
           d.promoterName.trim() || user.displayName || user.username,
         title: d.title.trim() || "Obra Artesanal (Borrador)",
-        type: primaryFile?.type.startsWith("image") ? "photography" : "other",
+        type: primaryPhoto || primaryFile?.type.startsWith("image") ? "photography" : "other",
         description:
           d.technique.trim() ||
           `Obra artesanal en ${d.category} elaborada por ${d.artisan}.`,
@@ -284,6 +322,8 @@ function Register() {
         filename: primaryFile?.name,
         fileSize: primaryFile ? `${(primaryFile.size / 1024).toFixed(1)} KB` : undefined,
         fileMimeType: primaryFile?.type,
+        fileUrl: primaryPhoto || undefined,
+        gallery: piecePhotos.length > 0 ? piecePhotos : undefined,
         createdAt: nowIso,
         registeredAt: nowIso,
       });
@@ -446,6 +486,76 @@ function Register() {
                 />
                 <p className="mt-1 text-xs text-muted-foreground">≈ {usdc} USDC</p>
               </Field>
+
+              <div className="sm:col-span-2 pt-1">
+                <div className="rounded-xl border border-primary/20 bg-sand/30 p-4">
+                  <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <Label className="flex items-center gap-1.5 text-sm font-semibold">
+                        <Images className="h-4 w-4 text-primary" />
+                        {t("Fotos de la Pieza Artesanal (Galería)")}
+                      </Label>
+                      <p className="mt-0.5 text-xs text-muted-foreground">
+                        {t(
+                          "Captura o sube fotos desde diferentes ángulos (frente, reverso, detalles y firma) para la galería pública.",
+                        )}
+                      </p>
+                    </div>
+                    <span className="rounded-full bg-primary/10 px-2.5 py-0.5 font-mono text-xs font-medium text-primary">
+                      {piecePhotos.length} {piecePhotos.length === 1 ? t("foto") : t("fotos")}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    {piecePhotos.map((photo, idx) => (
+                      <div
+                        key={idx}
+                        className="group relative aspect-square overflow-hidden rounded-lg border bg-background shadow-xs"
+                      >
+                        <img src={photo} alt="" className="h-full w-full object-cover" />
+                        {idx === 0 ? (
+                          <span className="absolute left-1.5 top-1.5 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground shadow-xs">
+                            {t("Portada")}
+                          </span>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => makePhotoPrimary(idx)}
+                            className="absolute left-1.5 top-1.5 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-medium text-white opacity-0 transition-opacity backdrop-blur-xs group-hover:opacity-100 hover:bg-black/80"
+                          >
+                            {t("Portada")}
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => removePhoto(idx)}
+                          className="absolute right-1.5 top-1.5 grid h-6 w-6 place-items-center rounded-full bg-black/70 text-white opacity-0 transition-opacity hover:bg-destructive group-hover:opacity-100 shadow-xs"
+                          aria-label={t("Quitar foto")}
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    ))}
+
+                    <label className="flex aspect-square cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-primary/40 bg-background/60 p-3 text-center transition-colors hover:bg-primary/5">
+                      <Camera className="mb-1.5 h-6 w-6 text-primary" />
+                      <span className="text-xs font-medium text-primary">
+                        {t("Capturar / Subir foto")}
+                      </span>
+                      <span className="mt-0.5 text-[10px] text-muted-foreground">
+                        {t("JPG, PNG o WEBP")}
+                      </span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        className="hidden"
+                        onChange={handlePiecePhotosUpload}
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
@@ -600,6 +710,23 @@ function Register() {
                 </p>
               )}
               {d.materials && <p className="mt-1 text-xs opacity-60">{d.materials}</p>}
+
+              {piecePhotos.length > 0 && (
+                <div className="mt-3 overflow-hidden rounded-xl border border-white/10 bg-black/30">
+                  <div className="relative aspect-video">
+                    <img
+                      src={piecePhotos[0]}
+                      alt=""
+                      className="h-full w-full object-cover"
+                    />
+                    <span className="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-black/75 px-2 py-0.5 font-mono text-[10px] text-white backdrop-blur-xs">
+                      <Images className="h-3 w-3" />
+                      {piecePhotos.length} {piecePhotos.length === 1 ? t("foto") : t("fotos")}
+                    </span>
+                  </div>
+                </div>
+              )}
+
               <div className="mt-5 flex items-center gap-4">
                 <div className="rounded-lg bg-card p-2">
                   <QrCode value={hash} size={112} />

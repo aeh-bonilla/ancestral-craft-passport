@@ -5,10 +5,13 @@ import {
   Award,
   Check,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
   Copy,
   CreditCard,
   Download,
   ExternalLink,
+  Images,
   Info,
   KeyRound,
   Loader2,
@@ -75,10 +78,98 @@ export function SectionTitle({ eyebrow, title, sub, center }: { eyebrow?: string
   );
 }
 
+export function PiecePhotoGallery({
+  photos,
+  title,
+  className,
+}: {
+  photos: string[];
+  title?: string;
+  className?: string;
+}) {
+  const { t } = useI18n();
+  const [active, setActive] = useState(0);
+  const items = photos.length > 0 ? photos : [];
+
+  if (items.length === 0) return null;
+
+  const currentIdx = Math.min(active, items.length - 1);
+
+  return (
+    <div className={cn("flex flex-col bg-sand overflow-hidden", className)}>
+      <div className="relative flex-1 min-h-[300px] max-h-[65vh] md:max-h-none flex items-center justify-center overflow-hidden bg-black/5">
+        <img
+          src={items[currentIdx]}
+          alt={title ? t(title) : "Foto de la pieza"}
+          className="h-full w-full object-contain md:object-cover transition-opacity duration-300"
+        />
+        {items.length > 1 && (
+          <>
+            <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 text-xs text-white backdrop-blur-xs font-mono shadow-sm">
+              <Images className="h-3.5 w-3.5" />
+              <span>{currentIdx + 1} / {items.length}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setActive((prev) => (prev > 0 ? prev - 1 : items.length - 1))}
+              aria-label={t("Foto anterior")}
+              className="absolute left-3 top-1/2 -translate-y-1/2 grid h-8 w-8 place-items-center rounded-full bg-black/60 text-white hover:bg-black/80 transition-colors shadow-sm"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setActive((prev) => (prev < items.length - 1 ? prev + 1 : 0))}
+              aria-label={t("Foto siguiente")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 grid h-8 w-8 place-items-center rounded-full bg-black/60 text-white hover:bg-black/80 transition-colors shadow-sm"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </>
+        )}
+      </div>
+      {items.length > 1 && (
+        <div className="flex gap-2 p-3 overflow-x-auto bg-card border-t [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {items.map((src, i) => (
+            <button
+              key={`${src}-${i}`}
+              type="button"
+              onClick={() => setActive(i)}
+              className={cn(
+                "relative h-14 w-14 shrink-0 overflow-hidden rounded-md border-2 transition-all",
+                currentIdx === i
+                  ? "border-primary ring-2 ring-primary/40 scale-105"
+                  : "border-border/60 opacity-70 hover:opacity-100"
+              )}
+            >
+              <img src={src} alt="" className="h-full w-full object-cover" />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function PieceCard({ piece, action }: { piece: Piece; action?: React.ReactNode }) {
   const { t, money } = useI18n();
   const [open, setOpen] = useState(false);
   const clickable = !!piece.featured;
+  const gallery = piece.gallery && piece.gallery.length > 0 ? piece.gallery : [piece.image];
+  const [currentIdx, setCurrentIdx] = useState(0);
+
+  const prevImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setCurrentIdx((prev) => (prev > 0 ? prev - 1 : gallery.length - 1));
+  };
+
+  const nextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setCurrentIdx((prev) => (prev < gallery.length - 1 ? prev + 1 : 0));
+  };
+
   return (
     <>
     <article
@@ -89,16 +180,51 @@ export function PieceCard({ piece, action }: { piece: Piece; action?: React.Reac
       aria-label={clickable ? t("Abrir pasaporte de {{title}}", { title: t(piece.title) }) : undefined}
       className={cn("group overflow-hidden rounded-xl border bg-card shadow-float transition-transform hover:-translate-y-1", clickable && "cursor-pointer ring-2 ring-gold/60")}>
       <div className="relative aspect-square overflow-hidden bg-sand">
-        <img src={piece.image} alt={t(piece.title)} loading="lazy" width={816} height={816} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-        <StellarBadge className="absolute left-3 top-3" />
+        <img
+          src={gallery[currentIdx] || piece.image}
+          alt={t(piece.title)}
+          loading="lazy"
+          width={816}
+          height={816}
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <StellarBadge className="absolute left-3 top-3 z-10" />
+        {gallery.length > 1 && (
+          <div className="absolute right-3 top-3 z-10 flex items-center gap-1 rounded-full bg-black/60 px-2 py-0.5 font-mono text-[10px] text-white backdrop-blur-xs">
+            <Images className="h-3 w-3" />
+            <span>{currentIdx + 1}/{gallery.length}</span>
+          </div>
+        )}
+        {gallery.length > 1 && (
+          <div className="absolute inset-x-2 top-1/2 -translate-y-1/2 flex justify-between opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none">
+            <button
+              type="button"
+              onClick={prevImage}
+              aria-label={t("Foto anterior")}
+              className="pointer-events-auto grid h-7 w-7 place-items-center rounded-full bg-black/60 text-white backdrop-blur-xs hover:bg-black/80 transition-colors shadow-sm"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={nextImage}
+              aria-label={t("Foto siguiente")}
+              className="pointer-events-auto grid h-7 w-7 place-items-center rounded-full bg-black/60 text-white backdrop-blur-xs hover:bg-black/80 transition-colors shadow-sm"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
+        )}
         {piece.badge && (
-          <span className="absolute bottom-3 left-3 flex items-center gap-1 rounded-full bg-indigo px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-indigo-foreground shadow-sm">
+          <span className="absolute bottom-3 left-3 z-10 flex items-center gap-1 rounded-full bg-indigo px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-indigo-foreground shadow-sm">
             <Sparkles className="h-3 w-3" /> {piece.badge}
           </span>
         )}
-        <span className="absolute right-3 top-3 rounded-full bg-card/90 px-2 py-0.5 font-mono text-[10px] text-muted-foreground">{piece.id}</span>
+        {!gallery.length || gallery.length <= 1 ? (
+          <span className="absolute right-3 top-3 rounded-full bg-card/90 px-2 py-0.5 font-mono text-[10px] text-muted-foreground">{piece.id}</span>
+        ) : null}
         {piece.unesco && (
-          <span className="absolute inset-x-3 bottom-3 flex items-center gap-1.5 rounded-full bg-seal px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-gold-foreground shadow-sm">
+          <span className="absolute inset-x-3 bottom-3 z-10 flex items-center gap-1.5 rounded-full bg-seal px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-gold-foreground shadow-sm">
             <Award className="h-3.5 w-3.5 shrink-0" /> {t(piece.unesco)}
           </span>
         )}
@@ -177,13 +303,13 @@ export function StripeButton({ piece, className }: { piece: Piece; className?: s
 /** Modal de Pasaporte para piezas destacadas. */
 export function PassportModal({ piece, open, onOpenChange }: { piece: Piece; open: boolean; onOpenChange: (o: boolean) => void }) {
   const { t, money } = useI18n();
+  const gallery = piece.gallery && piece.gallery.length > 0 ? piece.gallery : [piece.image];
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[92vh] max-w-4xl overflow-y-auto p-0">
         <div className="grid md:grid-cols-2">
-          <div className="bg-sand">
-            <img src={piece.image} alt={t(piece.title)} className="h-full max-h-[70vh] w-full object-contain md:max-h-none md:object-cover" />
-          </div>
+          <PiecePhotoGallery photos={gallery} title={piece.title} />
           <div className="space-y-4 p-6">
             <DialogHeader className="text-left">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">{t(piece.category)}</p>

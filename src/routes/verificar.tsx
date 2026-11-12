@@ -38,6 +38,7 @@ import {
   CodiButton,
   FullBreakdown,
   LedgerBadge,
+  PiecePhotoGallery,
   PriceBreakdown,
   QrCode,
   StellarBadge,
@@ -340,11 +341,14 @@ function FeaturedVerify({
         </div>
       </div>
       <div className="mt-8 grid gap-8 lg:grid-cols-[1.1fr_1fr]">
-        <div className="self-start overflow-hidden rounded-2xl bg-sand shadow-float">
-          <img
-            src={piece.image}
-            alt={t(piece.title)}
-            className="w-full object-cover"
+        <div className="self-start overflow-hidden rounded-2xl shadow-float">
+          <PiecePhotoGallery
+            photos={
+              piece.gallery && piece.gallery.length > 0
+                ? piece.gallery
+                : [piece.image]
+            }
+            title={piece.title}
           />
         </div>
         <div className="space-y-6">

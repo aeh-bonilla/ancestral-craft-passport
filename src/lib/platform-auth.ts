@@ -262,3 +262,4 @@ export function onAuthChange(listener: () => void): () => void {
     window.removeEventListener("storage", onStorage);
   };
 }
+
