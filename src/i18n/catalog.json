@@ -2074,5 +2074,29 @@
   "Revisa el detalle de las posibles causas.": [
     "Review the breakdown of possible causes.",
     "请查看可能的原因详情。"
+  ],
+  "Liquidación bancaria en $MXN (SPEI)": [
+    "Bank settlement in $MXN (SPEI)",
+    "$MXN 银行直接结算 (SPEI)"
+  ],
+  "Sesión de derechos en Stellar": [
+    "Assignment of rights on Stellar",
+    "Stellar 链上权利转让与授权"
+  ],
+  "Red & Liquidación": [
+    "Network & Settlement",
+    "网络与结算"
+  ],
+  "Liquidación bancaria $MXN (SPEI / CoDi®)": [
+    "Bank settlement in $MXN (SPEI / CoDi®)",
+    "$MXN 银行结算 (SPEI / CoDi®)"
+  ],
+  "95.2% llega directo a la cuenta bancaria del taller vía CoDi® / SPEI": [
+    "95.2% goes directly to the workshop's bank account via CoDi® / SPEI",
+    "95.2% 通过 CoDi® / SPEI 直接到达工坊银行账户"
+  ],
+  "Ventas registradas": [
+    "Recorded sales",
+    "已记录销售额"
   ]
 }

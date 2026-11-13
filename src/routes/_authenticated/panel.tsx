@@ -56,7 +56,6 @@ import {
   contractId,
   pieces as seedPieces,
   sampleHash,
-  toUsdc,
   type Artisan,
   type Piece,
 } from "@/lib/toltek";
@@ -780,7 +779,7 @@ function Panel() {
                                 </p>
                                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-1 text-xs text-muted-foreground">
                                   <span className="font-semibold text-foreground">
-                                    {money(w.priceMxn)} ({toUsdc(w.priceMxn)} USDC)
+                                    {money(w.priceMxn)}
                                   </span>
                                   <span className="font-mono">
                                     SHA-256: {w.hash.slice(0, 12)}…{w.hash.slice(-6)}
@@ -880,7 +879,7 @@ function Panel() {
                 },
                 {
                   label: "Recibido para la comunidad",
-                  value: "$4,850 USDC",
+                  value: "$83,420 MXN",
                   icon: Coins,
                 },
               ].map((m) => (
@@ -1465,7 +1464,7 @@ function Panel() {
                     },
                     {
                       label: "Recibido para la comunidad",
-                      value: "$4,850 USDC",
+                      value: "$83,420 MXN",
                       icon: Coins,
                     },
                   ].map((m) => (
@@ -1508,7 +1507,7 @@ function Panel() {
                           <th className="p-3">{t("Técnica")}</th>
                           <th className="p-3">{t("Ubicación")}</th>
                           <th className="p-3">{t("Piezas")}</th>
-                          <th className="p-3">USDC</th>
+                          <th className="p-3">{t("Ventas registradas")}</th>
                           <th className="p-3">{t("Estado")}</th>
                           {["Banco", "Cuenta", "CLABE interbancaria"].map((label) => (
                             <th key={label} className="p-3">
@@ -1553,7 +1552,7 @@ function Panel() {
                               {a.location}
                             </td>
                             <td className="p-3">{a.pieces}</td>
-                            <td className="p-3 font-mono">{a.usdc}</td>
+                            <td className="p-3 font-mono">{money(Math.round(a.usdc * 17.2))}</td>
                             <td className="p-3">
                               <span
                                 className={cn(

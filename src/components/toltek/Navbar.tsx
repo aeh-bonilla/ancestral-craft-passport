@@ -1,5 +1,5 @@
 import { Link, useNavigate, useHydrated } from "@tanstack/react-router";
-import { Menu, Wallet, X, LogOut, UserRound } from "lucide-react";
+import { Menu, X, LogOut, UserRound } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { signOutPlatform } from "@/lib/platform-auth";
@@ -7,7 +7,6 @@ import { useAccount } from "./AuthProvider";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "./ui";
-import { useWallet } from "./wallet";
 import { useI18n } from "@/i18n";
 
 const links = [
@@ -18,7 +17,6 @@ const links = [
 ] as const;
 
 export function Navbar() {
-  const { address, connect, disconnect } = useWallet();
   const { t, language, setLanguage } = useI18n();
   const hydrated = useHydrated();
   const [open, setOpen] = useState(false);
@@ -63,10 +61,6 @@ export function Navbar() {
           <select disabled={!hydrated} aria-label={t("Idioma")} value={language} onChange={(e) => setLanguage(e.target.value)} className="h-9 max-w-28 rounded-md border bg-background px-2 text-xs font-semibold">
             <option value="es">Español</option><option value="en">English</option><option value="zh-CN">简体中文</option>
           </select>
-          <Button size="sm" onClick={address ? disconnect : connect} className="hidden sm:inline-flex" variant={address ? "outline" : "default"}>
-            <Wallet className="h-4 w-4" />
-            {address ? address : t("Conectar Billetera Stellar")}
-          </Button>
           <button className="rounded-lg p-2 lg:hidden" onClick={() => setOpen(!open)} aria-label={t("Menú")}>
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -80,9 +74,6 @@ export function Navbar() {
               {t(l.es)}
             </Link>
           ))}
-          <Button className="mt-2 w-full" onClick={address ? disconnect : connect}>
-            <Wallet className="h-4 w-4" /> {address ?? "Conectar Billetera Stellar"}
-          </Button>
         </nav>
       )}
       <div className="greca" />
@@ -98,12 +89,12 @@ export function Footer() {
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 md:grid-cols-3">
         <div>
           <Logo />
-          <p className="mt-3 max-w-xs text-sm opacity-70">{t("Pasaportes Culturales Phygital, preservación de saberes y comercio justo sobre Stellar.")}</p>
+          <p className="mt-3 max-w-xs text-sm opacity-70">{t("Pasaportes Culturales Phygital, preservación de saberes y registro inmutable sobre Stellar.")}</p>
         </div>
         <div className="text-sm opacity-80">
-          <p className="font-semibold">{t("Red")}</p>
+          <p className="font-semibold">{t("Red & Liquidación")}</p>
           <p className="mt-2">Stellar · Soroban Testnet</p>
-          <p>{t("Pagos en USDC")}</p>
+          <p>{t("Liquidación bancaria $MXN (SPEI / CoDi®)")}</p>
         </div>
         <div className="text-sm opacity-80">
           <p className="font-semibold">{t("Comunidades")}</p>

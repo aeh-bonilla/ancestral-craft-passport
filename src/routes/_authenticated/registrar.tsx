@@ -32,7 +32,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { QrCode, StellarBadge } from "@/components/toltek/ui";
-import { artisans, contractId, shortHash, USDC_RATE } from "@/lib/toltek";
+import { artisans, contractId, shortHash } from "@/lib/toltek";
 import {
   computeDossierSha256,
   computeFileSha256,
@@ -171,7 +171,6 @@ function Register() {
       >,
     ) =>
       setD({ ...d, [k]: e.target.value });
-  const usdc = d.priceMxn ? (Number(d.priceMxn) / USDC_RATE).toFixed(2) : "0.00";
 
   const addFiles = async (list: FileList | null) => {
     if (!list || list.length === 0) return;
@@ -484,7 +483,6 @@ function Register() {
                   onChange={set("priceMxn")}
                   placeholder="8900"
                 />
-                <p className="mt-1 text-xs text-muted-foreground">≈ {usdc} USDC</p>
               </Field>
 
               <div className="sm:col-span-2 pt-1">
@@ -736,7 +734,6 @@ function Register() {
                   <p className="font-semibold">
                     {d.priceMxn ? money(Number(d.priceMxn)) : "—"}
                   </p>
-                  <p className="text-xs text-gold">{usdc} USDC</p>
                 </div>
               </div>
               <p className="mt-5 text-xs uppercase tracking-wider opacity-60">

@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { contractId, sampleHash, shortHash, toUsdc, type Piece } from "@/lib/toltek";
+import { contractId, sampleHash, shortHash, type Piece } from "@/lib/toltek";
 import { getContractExplorerUrl, getTxExplorerUrl } from "@/lib/stellar/config";
 import {
   downloadPassportCertificate,
@@ -237,7 +237,6 @@ export function PieceCard({ piece, action }: { piece: Piece; action?: React.Reac
           <div className="flex items-end justify-between">
             <div>
               <p className="flex items-center gap-1.5 font-semibold">{money(piece.priceMxn)} <PriceBreakdown priceMxn={piece.priceMxn} /></p>
-              <p className="text-xs text-muted-foreground">≈ {toUsdc(piece.priceMxn)} USDC</p>
             </div>
             {!action && (clickable ? (
               <button onClick={() => setOpen(true)} className="text-sm font-medium text-primary hover:underline">{t("Ver pasaporte →")}</button>
@@ -295,7 +294,7 @@ export function LedgerBadge({ piece }: { piece: Piece }) {
 export function StripeButton({ piece, className }: { piece: Piece; className?: string }) {
   const { t, money } = useI18n();
   return (
-    <Button variant="outline" className={className} onClick={() => toast.success(t("Checkout de Stripe simulado"), { description: `USD $${piece.priceUsd ?? toUsdc(piece.priceMxn)} · ${piece.title}` })}>
+    <Button variant="outline" className={className} onClick={() => toast.success(t("Checkout de Stripe simulado"), { description: `${money(piece.priceMxn)} · ${piece.title}` })}>
       <CreditCard />{t("Buy in USD (Stripe)")}</Button>
   );
 }
@@ -738,8 +737,7 @@ export function CodiButton({ piece, className, primary }: { piece: Piece; classN
                     {t("Dispersión directa al artesano (95.2%):")}
                   </span>
                   <span className="text-right font-mono text-[11px] font-semibold text-foreground">
-                    {money(dualReceipt.netArtisanMxn, 2)} (≈{" "}
-                    {toUsdc(dualReceipt.basePriceMxn)} USDC)
+                    {money(dualReceipt.netArtisanMxn, 2)}
                   </span>
                 </div>
               </div>

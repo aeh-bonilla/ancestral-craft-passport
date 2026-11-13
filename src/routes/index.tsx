@@ -21,7 +21,7 @@ export const Route = createFileRoute("/")({
 
 const stats = [
   { value: "+600", label: "Artesanos protegidos", icon: Users },
-  { value: "100%", label: "Pagos directos en USDC", icon: Coins },
+  { value: "100%", label: "Liquidación bancaria en $MXN (SPEI)", icon: Coins },
   { value: "+7,000", label: "Pasaportes emitidos", icon: ShieldCheck },
   { value: "38", label: "Comunidades de origen", icon: Fingerprint },
 ];
@@ -29,7 +29,7 @@ const stats = [
 const steps = [
   { n: "01", title: "Registro & Hashing", sub: "Preservación del saber", text: "Documentamos técnica, materiales y relato del maestro. Cada evidencia se sella con un hash SHA-256 inmutable.", icon: Fingerprint },
   { n: "02", title: "Pasaporte Cultural QR/NFC", sub: "Anclaje físico-digital", text: "Una etiqueta física vincula la pieza con su registro en Soroban. Cualquiera puede verificarla desde su teléfono.", icon: QrIcon },
-  { n: "03", title: "Comercio Justo & Regalías", sub: "Liquidación en Stellar", text: "Ventas y licencias se pagan en USDC directo a la billetera del taller, con regalías automáticas para la comunidad.", icon: Coins },
+  { n: "03", title: "Comercio Justo & Regalías", sub: "Sesión de derechos en Stellar", text: "Ventas y licencias se liquidan directamente en moneda nacional ($MXN) a la cuenta bancaria del taller, registrando la sesión de derechos en contratos Soroban.", icon: Coins },
 ];
 
 function Index() {

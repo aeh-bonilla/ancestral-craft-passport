@@ -5,10 +5,8 @@ import {
   BadgeCheck,
   Copy,
   ExternalLink,
-  Gift,
   MapPin,
   Play,
-  ShoppingBag,
   ChevronDown,
   Search,
   Upload,
@@ -58,7 +56,6 @@ import {
   pieces,
   sampleHash,
   shortHash,
-  toUsdc,
   type Piece,
 } from "@/lib/toltek";
 import {
@@ -835,7 +832,6 @@ function DefaultVerify({
   const { t, money } = useI18n();
   const [active, setActive] = useState(0);
   const cur = gallery[active]!;
-  const [tip, setTip] = useState(false);
   const piece = pieces.find((p) => p.id === "TK-0042")!;
   const price = piece.priceMxn;
 
@@ -940,24 +936,11 @@ function DefaultVerify({
               {money(price)} <PriceBreakdown priceMxn={price} />
             </p>
             <p className="text-sm text-muted-foreground">
-              ≈ {toUsdc(price)} {t("USDC · 95.2% llega directo al taller")}
+              {t("95.2% llega directo a la cuenta bancaria del taller vía CoDi® / SPEI")}
             </p>
             <div className="mt-4 grid gap-2 sm:grid-cols-2">
-              <Button
-                onClick={() =>
-                  toast.success(t("Pago simulado enviado"), {
-                    description: `${toUsdc(price)} USDC → GBTK…AGUI`,
-                  })
-                }
-              >
-                <ShoppingBag />
-                {t("Comprar en USDC / MXN")}
-              </Button>
-              <Button variant="outline" onClick={() => setTip(true)}>
-                <Gift />
-                {t("Propina / Mecenazgo")}
-              </Button>
-              <CodiButton piece={piece} className="sm:col-span-2" />
+              <CodiButton piece={piece} primary className="w-full" />
+              <StripeButton piece={piece} className="w-full" />
             </div>
           </div>
 
@@ -994,35 +977,6 @@ function DefaultVerify({
       </div>
 
       <BlockchainAuditPanel work={work} events={events} />
-
-      <Dialog open={tip} onOpenChange={setTip}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="font-serif">
-              {t("Apoyo directo al Maestro Aguilar")}
-            </DialogTitle>
-            <DialogDescription>
-              {t("El 100% de la propina llega a su billetera Stellar.")}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid grid-cols-3 gap-2">
-            {[5, 10, 25].map((a) => (
-              <Button
-                key={a}
-                variant="outline"
-                onClick={() => {
-                  setTip(false);
-                  toast.success(`Propina de ${a} USDC enviada`, {
-                    description: t("Gracias por sostener el oficio."),
-                  });
-                }}
-              >
-                {a} USDC
-              </Button>
-            ))}
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { useI18n } from "@/i18n";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { FileSignature, ShoppingCart, Loader2, ExternalLink } from "lucide-react";
+import { FileSignature, Loader2, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -24,7 +24,6 @@ import {
   patterns,
   pieces as seedPieces,
   shortHash,
-  toUsdc,
   type Pattern,
   type Piece,
 } from "@/lib/toltek";
@@ -191,22 +190,7 @@ function Market() {
                   piece={p}
                   action={
                     <div className="flex w-full flex-col gap-1.5">
-                      <Button
-                        size="sm"
-                        className="w-full"
-                        onClick={() =>
-                          toast.success(t("Checkout rápido completado"), {
-                            description: t("{{amount}} USDC enviados a {{artisan}}", {
-                              amount: toUsdc(p.priceMxn),
-                              artisan: p.artisan,
-                            }),
-                          })
-                        }
-                      >
-                        <ShoppingCart />
-                        {t("Comprar")}
-                      </Button>
-                      <CodiButton piece={p} className="w-full" />
+                      <CodiButton piece={p} primary className="w-full" />
                     </div>
                   }
                 />
