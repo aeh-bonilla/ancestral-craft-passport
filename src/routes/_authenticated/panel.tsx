@@ -34,6 +34,8 @@ import {
   Check,
   RotateCcw,
   Compass,
+  ArrowLeft,
+  Save,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -210,7 +212,8 @@ function Panel() {
   const [savingWork, setSavingWork] = useState(false);
   const [anchoringId, setAnchoringId] = useState<string | null>(null);
   const [liquidaciones, setLiquidaciones] = useState<SpeiSettlementItem[]>(seedLiquidaciones);
-  const [artisanSubTab, setArtisanSubTab] = useState<"formulario" | "catalogo">("formulario");
+  const [artisanSubTab, setArtisanSubTab] = useState<"catalogo" | "formulario">("catalogo");
+  const [editingArtisan, setEditingArtisan] = useState<Artisan | null>(null);
   const [form, setForm] = useState({
     name: "",
     technique: "",
@@ -237,6 +240,29 @@ function Panel() {
       account: "",
       clabe: "",
     });
+  };
+
+  const startNewArtisan = () => {
+    setEditingArtisan(null);
+    resetArtisanForm();
+    setArtisanSubTab("formulario");
+  };
+
+  const startEditingArtisan = (artisan: Artisan) => {
+    setEditingArtisan(artisan);
+    setForm({
+      name: artisan.name,
+      technique: artisan.technique,
+      location: artisan.location,
+      years: "",
+      materials: "",
+      bio: artisan.bio || "",
+      photo: artisan.photo || "",
+      bank: "",
+      account: "",
+      clabe: "",
+    });
+    setArtisanSubTab("formulario");
   };
   const [adding, setAdding] = useState(false);
   const [testingWebhook, setTestingWebhook] = useState(false);
@@ -442,22 +468,48 @@ function Panel() {
         clabe: form.clabe,
       });
       const initials = getArtisanInitials(form.name);
-      const newArtisan: Artisan = {
-        name: form.name.trim(),
-        technique: form.technique.trim() || "Artesanía Tradicional",
-        location: form.location.trim() || "Oaxaca, México",
-        bio: form.bio.trim() || undefined,
-        photo: form.photo || undefined,
-        bankingHashes,
-        status: "Verificada",
-        pieces: 0,
-        usdc: 0,
-        initials,
-      };
-      setList((previous) => [newArtisan, ...previous]);
-      toast.success(t("Maestro artesano registrado en el Padrón"), {
-        description: `${newArtisan.name} · ${newArtisan.technique}`,
-      });
+
+      if (editingArtisan) {
+        setList((previous) =>
+          previous.map((a) => {
+            if (a.name === editingArtisan.name) {
+              return {
+                ...a,
+                name: form.name.trim(),
+                technique: form.technique.trim() || a.technique,
+                location: form.location.trim() || a.location,
+                bio: form.bio.trim() || undefined,
+                photo: form.photo || a.photo,
+                initials,
+                bankingHashes: bankingHashes || a.bankingHashes,
+              };
+            }
+            return a;
+          }),
+        );
+        toast.success(t("Información del artesano actualizada"), {
+          description: `${form.name.trim()} · ${form.technique.trim()}`,
+        });
+      } else {
+        const newArtisan: Artisan = {
+          name: form.name.trim(),
+          technique: form.technique.trim() || "Artesanía Tradicional",
+          location: form.location.trim() || "Oaxaca, México",
+          bio: form.bio.trim() || undefined,
+          photo: form.photo || undefined,
+          bankingHashes,
+          status: "Verificada",
+          pieces: 0,
+          usdc: 0,
+          initials,
+        };
+        setList((previous) => [newArtisan, ...previous]);
+        toast.success(t("Maestro artesano registrado en el Padrón"), {
+          description: `${newArtisan.name} · ${newArtisan.technique}`,
+        });
+      }
+
+      setEditingArtisan(null);
       resetArtisanForm();
       setArtisanSubTab("catalogo");
     } catch {
@@ -927,7 +979,9 @@ function Panel() {
                   </h3>
                   <p className="text-xs text-muted-foreground">
                     {artisanSubTab === "formulario"
-                      ? t("Formulario de registro y credencialización comunitaria")
+                      ? editingArtisan
+                        ? t("Editando información de {name}", { name: editingArtisan.name })
+                        : t("Formulario de registro y credencialización comunitaria")
                       : t("Directorio registrado · {count} maestros activos", {
                           count: list.length,
                         })}
@@ -939,58 +993,88 @@ function Panel() {
                 <Button
                   type="button"
                   size="sm"
-                  variant={artisanSubTab === "formulario" ? "default" : "ghost"}
-                  onClick={() => setArtisanSubTab("formulario")}
+                  variant={artisanSubTab === "catalogo" ? "default" : "ghost"}
+                  onClick={() => {
+                    setEditingArtisan(null);
+                    setArtisanSubTab("catalogo");
+                  }}
                   className="h-8 gap-1.5 text-xs font-medium"
                 >
-                  <UserPlus className="h-3.5 w-3.5" />
-                  {t("Formulario de Registro")}
+                  <Users className="h-3.5 w-3.5" />
+                  {t("Listado de Artesanos")} ({list.length})
                 </Button>
                 <Button
                   type="button"
                   size="sm"
-                  variant={artisanSubTab === "catalogo" ? "default" : "ghost"}
-                  onClick={() => setArtisanSubTab("catalogo")}
+                  variant={artisanSubTab === "formulario" ? "default" : "ghost"}
+                  onClick={startNewArtisan}
                   className="h-8 gap-1.5 text-xs font-medium"
                 >
-                  <Users className="h-3.5 w-3.5" />
-                  {t("Directorio de Artesanos")} ({list.length})
+                  <UserPlus className="h-3.5 w-3.5" />
+                  {editingArtisan ? t("Editar Artesano") : t("Agregar Artesano")}
                 </Button>
               </div>
             </div>
 
-            {/* VISTA 1: Formulario Completo de Registro (Estilo Registro de Promotor / Obra) */}
+            {/* VISTA 1: Formulario Completo de Registro / Edición */}
             {artisanSubTab === "formulario" && (
-              <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
-                {/* Formulario Principal */}
-                <div className="min-w-0 overflow-hidden rounded-2xl border bg-card shadow-float">
-                  <div className="greca" />
-                  <div className="talavera-bg border-b p-6 sm:p-7">
-                    <div className="flex flex-wrap items-start justify-between gap-4">
-                      <div className="flex items-start gap-4">
-                        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-indigo text-gold shadow-float">
-                          <UserRound className="h-6 w-6" />
-                        </span>
-                        <div>
-                          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-                            {t("Padrón Cultural · Stellar Soroban")}
-                          </p>
-                          <h2 className="mt-1 font-serif text-2xl font-semibold sm:text-3xl">
-                            {t("Registro de Maestro Artesano")}
-                          </h2>
-                          <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-                            {t(
-                              "Registra la identidad, saberes ancestrales, linaje y datos protegidos de liquidación del maestro artesano.",
-                            )}
-                          </p>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setEditingArtisan(null);
+                      setArtisanSubTab("catalogo");
+                    }}
+                    className="gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    {t("Volver al Listado de Artesanos")}
+                  </Button>
+                  <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                    {editingArtisan ? t("Modo Edición") : t("Nuevo Registro")}
+                  </span>
+                </div>
+
+                <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
+                  {/* Formulario Principal */}
+                  <div className="min-w-0 overflow-hidden rounded-2xl border bg-card shadow-float">
+                    <div className="greca" />
+                    <div className="talavera-bg border-b p-6 sm:p-7">
+                      <div className="flex flex-wrap items-start justify-between gap-4">
+                        <div className="flex items-start gap-4">
+                          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-indigo text-gold shadow-float">
+                            <UserRound className="h-6 w-6" />
+                          </span>
+                          <div>
+                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+                              {t("Padrón Cultural · Stellar Soroban")}
+                            </p>
+                            <h2 className="mt-1 font-serif text-2xl font-semibold sm:text-3xl">
+                              {editingArtisan
+                                ? t("Editar Maestro Artesano")
+                                : t("Registro de Maestro Artesano")}
+                            </h2>
+                            <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+                              {editingArtisan
+                                ? t(
+                                    "Modifica la información, semblanza cultural y datos del maestro artesano {name}.",
+                                    { name: editingArtisan.name },
+                                  )
+                                : t(
+                                    "Registra la identidad, saberes ancestrales, linaje y datos protegidos de liquidación del maestro artesano.",
+                                  )}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 rounded-full border bg-card/90 px-3.5 py-1.5 text-xs font-medium">
+                          <span className="h-2 w-2 rounded-full bg-jade" />
+                          <span>{editingArtisan ? t("Actualizando Padrón") : t("Padrón Tlamatik")}</span>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2 rounded-full border bg-card/90 px-3.5 py-1.5 text-xs font-medium">
-                        <span className="h-2 w-2 rounded-full bg-jade" />
-                        <span>{t("Padrón Tlamatik")}</span>
-                      </div>
                     </div>
-                  </div>
 
                   <div className="space-y-6 p-6 sm:p-8">
                     {/* Sección 1: Identidad y Fotografía */}
@@ -1224,11 +1308,14 @@ function Panel() {
                         <Button
                           type="button"
                           variant="outline"
-                          onClick={() => setArtisanSubTab("catalogo")}
+                          onClick={() => {
+                            setEditingArtisan(null);
+                            setArtisanSubTab("catalogo");
+                          }}
                           disabled={adding}
                         >
-                          <Users className="h-4 w-4" />
-                          {t("Ver Catálogo")} ({list.length})
+                          <ArrowLeft className="h-4 w-4" />
+                          {t("Volver al Listado")} ({list.length})
                         </Button>
                         <Button
                           type="button"
@@ -1250,7 +1337,12 @@ function Panel() {
                         {adding ? (
                           <>
                             <Loader2 className="h-4 w-4 animate-spin" />
-                            {t("Guardando en Padrón…")}
+                            {t("Guardando…")}
+                          </>
+                        ) : editingArtisan ? (
+                          <>
+                            <Save className="h-4 w-4" />
+                            {t("Guardar Cambios")}
                           </>
                         ) : (
                           <>
@@ -1274,7 +1366,7 @@ function Panel() {
                           {t("Pasaporte Cultural")}
                         </span>
                         <span className="rounded-full bg-indigo-foreground/10 px-2 py-0.5 font-mono text-[10px] opacity-80">
-                          {t("Vista previa")}
+                          {editingArtisan ? t("Editando") : t("Vista previa")}
                         </span>
                       </div>
 
@@ -1319,7 +1411,7 @@ function Panel() {
                             {t("Piezas")}
                           </p>
                           <p className="font-serif text-sm font-semibold">
-                            0 {t("obras")}
+                            {editingArtisan ? `${editingArtisan.pieces} ${t("obras")}` : `0 ${t("obras")}`}
                           </p>
                         </div>
                       </div>
@@ -1353,7 +1445,8 @@ function Panel() {
                   </div>
                 </aside>
               </div>
-            )}
+            </div>
+          )}
 
             {/* VISTA 2: Directorio de Artesanos y Métricas */}
             {artisanSubTab === "catalogo" && (
@@ -1399,11 +1492,11 @@ function Panel() {
                     </div>
                     <Button
                       size="sm"
-                      onClick={() => setArtisanSubTab("formulario")}
+                      onClick={startNewArtisan}
                       className="gap-1.5"
                     >
                       <UserPlus className="h-4 w-4" />
-                      {t("Registrar Nuevo Artesano")}
+                      {t("Agregar Nuevo Artesano")}
                     </Button>
                   </div>
                   <div className="overflow-x-auto">
@@ -1422,6 +1515,7 @@ function Panel() {
                               {t(label)}
                             </th>
                           ))}
+                          <th className="p-3 text-right">{t("Acciones")}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1487,6 +1581,19 @@ function Panel() {
                                 </span>
                               </td>
                             ))}
+                            <td className="p-3 text-right">
+                              <Button
+                                type="button"
+                                size="sm"
+                                variant="outline"
+                                onClick={() => startEditingArtisan(a)}
+                                className="h-8 gap-1.5 text-xs border-primary/25 hover:bg-primary/10"
+                                title={t("Editar información del artesano")}
+                              >
+                                <Pencil className="h-3.5 w-3.5 text-primary" />
+                                <span>{t("Editar")}</span>
+                              </Button>
+                            </td>
                           </tr>
                         ))}
                       </tbody>
