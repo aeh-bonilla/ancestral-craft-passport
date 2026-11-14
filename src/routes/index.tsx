@@ -1,6 +1,6 @@
 import { useI18n } from "@/i18n";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, BookOpen, Eye, Fingerprint, Map, MapPin, QrCode, ScanLine, Shapes, Store, Users, CalendarDays, HandCoins, ShieldCheck, Sparkles, Landmark } from "lucide-react";
+import { ArrowRight, BookOpen, Eye, Fingerprint, Map, MapPin, QrCode, Shapes, Store, Users, CalendarDays, HandCoins, ShieldCheck, Sparkles, Landmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PieceCard } from "@/components/toltek/ui";
 import { images, pieces, type Piece } from "@/lib/toltek";
@@ -67,9 +67,6 @@ function Index() {
               {t("Detrás de cada obra hay una persona, un oficio y una comunidad que decide cómo compartirlos.")}
             </p>
             <div className="flex flex-wrap gap-3 pt-2">
-              <Button asChild size="lg" className="rounded-full">
-                <Link to="/verificar"><ScanLine className="mr-2 h-4 w-4" />{t("Escanear una pieza")}</Link>
-              </Button>
               <Button asChild size="lg" variant="outline" className="rounded-full bg-background/70">
                 <Link to="/regiones">{t("Conocer comunidades")}</Link>
               </Button>
@@ -196,16 +193,6 @@ function Index() {
           </ul>
         </section>
 
-        {/* CTA */}
-        <section className="text-center">
-          <h2 className="font-serif text-3xl tracking-tight text-foreground sm:text-4xl">{t("¿Tienes una pieza en tus manos?")}</h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
-            {t("Escanea su pasaporte para saber quién la hizo, de dónde viene y cómo se hizo, según lo que su autora o autor quiso compartir.")}
-          </p>
-          <Button asChild size="lg" className="mt-6 rounded-full">
-            <Link to="/verificar"><ScanLine className="mr-2 h-4 w-4" />{t("Escanear Pasaporte")}</Link>
-          </Button>
-        </section>
       </div>
     </div>
   );

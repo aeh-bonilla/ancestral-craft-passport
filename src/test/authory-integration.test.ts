@@ -89,12 +89,13 @@ describe("Tlamatik Stellar integration", () => {
     expect(html).toContain(work.hash);
   });
 
-  it("creates pey.mx CoDi QR and Payment Link payloads for Tecuani TK-0512 ($1 MXN to Miriam Nava)", async () => {
-    const tecuani = pieces.find((p) => p.id === "TK-0512")!;
-    expect(tecuani.artisan).toBe("Miriam Nava");
+  it("creates pey.mx CoDi QR and Payment Link payloads for Tecuani TK-0512 at the updated reference price", async () => {
+    const tecuani = pieces.find((p) => p.id === "TK-0512");
+    if (!tecuani) throw new Error("Missing Tecuani");
+    expect(tecuani.artisan).toBe("Angel Cordero Sosa");
     const totalMxn =
       tecuani.priceMxn + (tecuani.certFeeMxn ?? 0) + (tecuani.shippingMxn ?? 0);
-    expect(totalMxn).toBe(1);
+    expect(totalMxn).toBe(450);
 
     const { concept, numRef } = buildCodiConceptAndRef(
       tecuani.id,
@@ -109,7 +110,7 @@ describe("Tlamatik Stellar integration", () => {
       title: tecuani.title,
       amountMxn: totalMxn,
     });
-    expect(codiQr.amount).toBe(1);
+    expect(codiQr.amount).toBe(450);
     expect(codiQr.id).toBe("35a13c0512");
     expect(codiQr.endpoint).toBe("https://api.pey.mx/codi/qr");
 
@@ -120,7 +121,7 @@ describe("Tlamatik Stellar integration", () => {
       community: tecuani.community,
       amountMxn: totalMxn,
     });
-    expect(payLink.amount).toBe(1);
+    expect(payLink.amount).toBe(450);
     expect(payLink.url).toContain("https://app.mipey.mx/");
     expect(payLink.endpoint).toBe("https://api.pey.mx/payment-link/create");
 
@@ -141,7 +142,7 @@ describe("Tlamatik Stellar integration", () => {
     const webhookTimestamp = String(nowSec);
     const rawBody = JSON.stringify({
       type: "codi.qr.payment_received",
-      amount: 1,
+      amount: 450,
       codiQrId: "35a13c0512",
       concept: "Tlamatik TK-0512 El Guardian del Monte",
       datePaid: nowSec,
@@ -171,7 +172,7 @@ describe("Tlamatik Stellar integration", () => {
     expect(checkValid.valid).toBe(true);
 
     const checkTampered = verifyPeyWebhookSignature({
-      rawBody: rawBody.replace('"amount":1', '"amount":10'),
+      rawBody: rawBody.replace('"amount":450', '"amount":451'),
       webhookId,
       webhookTimestamp,
       webhookSignature: validSignature,
@@ -188,12 +189,12 @@ describe("Tlamatik Stellar integration", () => {
       secretOverride: secret,
     });
     expect(processed.pieceId).toBe("TK-0512");
-    expect(processed.artisan).toBe("Miriam Nava");
-    expect(processed.amountMxn).toBe(1);
-    expect(processed.basePriceMxn).toBe(1);
+    expect(processed.artisan).toBe("Angel Cordero Sosa");
+    expect(processed.amountMxn).toBe(450);
+    expect(processed.basePriceMxn).toBe(450);
     expect(processed.certFeeMxn).toBe(0);
     expect(processed.shippingMxn).toBe(0);
-    expect(processed.netArtisanMxn).toBe(1);
+    expect(processed.netArtisanMxn).toBe(428.4);
     expect(processed.signatureVerified).toBe(true);
     expect(processed.duplicate).toBe(false);
     expect(processed.sorobanContractId).toBe(STELLAR_CONFIG.contractId);
