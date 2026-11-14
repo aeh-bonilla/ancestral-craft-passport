@@ -21,10 +21,11 @@ describe('regional catalog', () => {
   it('rejects unknown region IDs', () => { expect(getRegion('not-a-region')).toBeUndefined(); });
 });
 describe('Google Maps domain gate', () => {
-  it('allows Lovable domains and blocks Vercel unless configured', async () => {
+  it('allows the authorized published Vercel host but not other Vercel projects', async () => {
     const { mapsHostAllowed } = await import('@/components/toltek/RegionsMap');
     expect(mapsHostAllowed('ancestral-craft-passport.lovable.app', '')).toBe(true);
-    expect(mapsHostAllowed('tlamatik.vercel.app', '')).toBe(false);
+    expect(mapsHostAllowed('tlamatik.vercel.app', '')).toBe(true);
+    expect(mapsHostAllowed('other.vercel.app', '')).toBe(false);
     expect(mapsHostAllowed('tlamatik.vercel.app', 'tlamatik.vercel.app')).toBe(true);
     expect(mapsHostAllowed('preview.tlamatik.mx', '*.tlamatik.mx')).toBe(true);
     expect(mapsHostAllowed('localhost', 'localhost')).toBe(false);

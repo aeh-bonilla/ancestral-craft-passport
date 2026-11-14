@@ -15,11 +15,13 @@ type MapsApi = {
 declare global { interface Window { google?: { maps: MapsApi }; initTlamatikRegionsMap?: () => void; gm_authFailure?: () => void } }
 let mapsPromise: Promise<MapsApi> | undefined;
 // The managed browser key is referrer-restricted to Lovable domains; other hosts need their own key
-// listed in VITE_GOOGLE_MAPS_ALLOWED_HOSTS (comma separated), otherwise we skip Google entirely.
+// The user-owned connection also authorizes the published Vercel host.
+// Additional hosts may be listed in VITE_GOOGLE_MAPS_ALLOWED_HOSTS (comma separated).
 export function mapsHostAllowed(hostname: string, extraHosts = String(import.meta.env['VITE_GOOGLE_MAPS_ALLOWED_HOSTS'] ?? '')): boolean {
   const host = hostname.toLowerCase();
   if (host === 'localhost' || host === '') return false;
   if (host.endsWith('.lovable.app') || host.endsWith('.lovableproject.com')) return true;
+  if (host === 'tlamatik.vercel.app') return true;
   return extraHosts.split(',').map(item => item.trim().toLowerCase()).filter(Boolean)
     .some(item => item.startsWith('*.') ? host.endsWith(item.slice(1)) : host === item);
 }
