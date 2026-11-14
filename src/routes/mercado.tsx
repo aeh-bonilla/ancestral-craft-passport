@@ -57,7 +57,35 @@ export const Route = createFileRoute("/mercado")({
 
 const regions = ["Oaxaca", "Chiapas", "Jalisco", "Michoacán", "Guerrero", "Puebla"];
 const techniques = ["Textil", "Cerámica", "Talla en Madera", "Filigrana", "Laca"];
-const uses = ["Textil comercial", "Arquitectura", "Edición limitada"];
+
+export const artisanLicenseTypes = [
+  {
+    id: "moda-textil",
+    name: "Moda & Textil Artesanal",
+    termsName: "Licencia de Expresión Cultural Tradicional para Moda y Textil Ético",
+    description: "Aplicación de patrones ancestrales en indumentaria respetando técnicas comunitarias.",
+  },
+  {
+    id: "diseno-interiores",
+    name: "Diseño & Interiorismo",
+    termsName: "Licencia de Aplicación Artesanal en Decoración y Arquitectura de Interiores",
+    description: "Uso de motivos originarios en mobiliario y proyectos de diseño colaborativo.",
+  },
+  {
+    id: "edicion-limitada",
+    name: "Edición Limitada Colaborativa",
+    termsName: "Licencia de Co-creación y Edición Limitada con Taller Artesanal Originario",
+    description: "Piezas producidas en alianza directa con el taller artesanal con estricta atribución.",
+  },
+  {
+    id: "editorial-cultural",
+    name: "Exhibición & Divulgación Cultural",
+    termsName: "Licencia de Difusión Cultural, Museografía y Catálogo Curatorial de Tradición Viva",
+    description: "Autorización para fines curatoriales, exposiciones y publicaciones culturales.",
+  },
+];
+
+const uses = artisanLicenseTypes.map((l) => l.name);
 
 function Market() {
   const { t, locale } = useI18n();
@@ -102,8 +130,10 @@ function Market() {
     if (!lic) return;
     setSigning(true);
     try {
+      const selectedLicType =
+        artisanLicenseTypes.find((l) => l.name === use) || artisanLicenseTypes[0]!;
       const eventId = `EVT-LIC-${Date.now().toString(36).toUpperCase()}`;
-      const terms = `Uso: ${use} · Regalías automáticas: ${royalty}% (${royalty * 100} bps)`;
+      const terms = `${selectedLicType.termsName} · Modalidad: ${use} · Regalías automáticas: ${royalty}% (${royalty * 100} bps) · Salvaguarda de Expresión Cultural Tradicional`;
 
       const sorobanRes = await recordRightsServerFn({
         data: {
@@ -133,7 +163,7 @@ function Market() {
       const communityName = lic.community;
       setSigning(false);
       setLic(null);
-      toast.success(t("Licencia ética aprobada"), {
+      toast.success(t("Licencia ética de expresión cultural aprobada"), {
         description: `${t("{{royalty}}% de regalías automáticas para {{community}}", {
           royalty,
           community: communityName,
@@ -320,18 +350,26 @@ function Market() {
           </DialogHeader>
           <div className="space-y-5">
             <div>
-              <p className="mb-2 text-sm font-semibold">{t("Tipo de uso")}</p>
-              <div className="grid grid-cols-3 gap-2">
-                {uses.map((u) => (
+              <p className="mb-2 text-sm font-semibold">
+                {t("Modalidad de Licencia Artesanal y Expresión Cultural")}
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {artisanLicenseTypes.map((item) => (
                   <button
-                    key={u}
-                    onClick={() => setUse(u)}
+                    key={item.name}
+                    type="button"
+                    onClick={() => setUse(item.name)}
                     className={cn(
-                      "rounded-lg border p-2 text-xs font-medium",
-                      use === u && "border-primary bg-primary/10 text-primary",
+                      "flex flex-col text-left rounded-xl border p-3 transition-colors",
+                      use === item.name
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-border hover:bg-sand/60 text-foreground",
                     )}
                   >
-                    {t(u)}
+                    <span className="text-xs font-semibold">{t(item.name)}</span>
+                    <span className="text-[11px] text-muted-foreground mt-1 leading-snug">
+                      {t(item.description)}
+                    </span>
                   </button>
                 ))}
               </div>
@@ -352,7 +390,7 @@ function Market() {
             <div className="space-y-2 rounded-lg bg-sand p-3 font-mono text-xs text-muted-foreground">
               <p className="break-all">
                 record_rights_event(work_id=&quot;{lic?.id}&quot;, type=&quot;license&quot;,
-                use=&quot;{use}&quot;, royalty_bps={royalty * 100})
+                terms=&quot;{artisanLicenseTypes.find((l) => l.name === use)?.termsName ?? use} ({royalty}%)&quot;)
               </p>
               <a
                 href={getContractExplorerUrl(contractId)}

@@ -833,7 +833,7 @@ export async function getWorkRightsEvents(
           actor: work.author,
           recipient: "Editorial Global / Exhibición Cultural",
           effectiveDate: "2026-10-17T18:00:00.000Z",
-          terms: "Licencia ética no exclusiva con 12% de regalías comunitarias en Soroban",
+          terms: "Licencia de Expresión Cultural Tradicional y Co-creación Artesanal con 12% de regalías comunitarias en Soroban",
           stellarTransactionId: STELLAR_CONFIG.sampleRightsTxHash,
           createdAt: "2026-10-17T18:00:00.000Z",
         });

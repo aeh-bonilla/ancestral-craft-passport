@@ -1030,7 +1030,7 @@ function BlockchainAuditPanel({
   const eventLabel: Record<string, string> = {
     registration: "Registro de Autoría",
     evidence: "Anclaje de Evidencia SHA-256",
-    license: "Licencia Ética B2B",
+    license: "Licencia de Expresión Cultural Tradicional",
     assignment: "Cesión / Transferencia",
   };
 

@@ -44,7 +44,7 @@ pub struct RightsEvent {
     pub event_type: String,     // "registration", "license", "assignment", "evidence", "transfer"
     pub actor: String,          // Artesano, colectivo o promotor
     pub recipient: String,      // Comprador, marca licenciataria o nuevo custodio
-    pub terms: String,          // Términos, regalías o notas técnicas
+    pub terms: String,          // ej. "Licencia de Expresión Cultural Tradicional para Moda & Textil Ético · 12% regalías comunitarias"
     pub effective_date: String, // Fecha ISO-8601
     pub recorded_at: u64,       // Timestamp Unix del ledger
 }
