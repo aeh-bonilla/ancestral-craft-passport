@@ -49,6 +49,9 @@ import {
   StripeButton,
 } from "@/components/toltek/ui";
 import { QrCameraScanner } from "@/components/toltek/QrCameraScanner";
+import { PiecePassportQr } from '@/components/toltek/PiecePassportQr';
+import { piecePassportUrl } from '@/lib/piece-passport';
+import { QRCodeSVG } from 'qrcode.react';
 import {
   contractId,
   getPiece,
@@ -814,6 +817,7 @@ function FeaturedVerify({
             </div>
           </div>
           <LedgerBadge piece={piece} />
+          <PiecePassportQr piece={piece} />
         </div>
       </div>
 
@@ -1095,9 +1099,12 @@ function BlockchainAuditPanel({
               </div>
             </dl>
             <div className="self-center rounded-xl bg-card p-3">
-              <QrCode
-                value={`https://tlamatik.vercel.app/verificar?id=${work.id}`}
+              <QRCodeSVG
+                value={piecePassportUrl(work)}
                 size={190}
+                level="M"
+                marginSize={4}
+                title="Código QR del pasaporte"
               />
             </div>
           </div>

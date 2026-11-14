@@ -18,3 +18,4 @@
 - Geographic maps use the Google Maps JavaScript loader with public browser credentials, callback initialization and tracking channel, and load Google only on authorized hosts (Lovable domains, the user-authorized published Vercel host, plus VITE_GOOGLE_MAPS_ALLOWED_HOSTS); other hosts show the region list with works, because unauthorized referrers make Maps throw.
 - Initialize geographic maps only against a connected HTML container after the Maps library resolves; keep React out of the map-owned DOM and preserve filtered regional navigation on load/auth/runtime failures.
 - Optional legacy catalog contracts are typed locally rather than added to the generated managed schema; preserve existing local fallback when those tables are unavailable.
+- Catalog QR codes link to each piece's public verification record using a shared canonical URL; show only supplied transaction identifiers and distinguish catalog/testnet data from proven on-chain fields.

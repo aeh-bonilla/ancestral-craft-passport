@@ -46,6 +46,7 @@ import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { encodeQrMatrix } from "@/lib/qr-encoder";
+import { PiecePassportQr } from '@/components/toltek/PiecePassportQr';
 import tlamatikMark from "@/assets/tlamatik-mark.png";
 
 export function Logo({ className }: { className?: string }) {
@@ -203,7 +204,7 @@ export function PieceCard({
           loading="lazy"
           width={816}
           height={612}
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-105"
         />
         <StellarBadge className="absolute left-3.5 top-3.5 z-10" />
         {gallery.length > 1 && (
@@ -276,6 +277,7 @@ export function PieceCard({
               </Link>
             )}
           </div>
+          <PiecePassportQr piece={piece} compact />
           {action}
         </div>
       </div>
@@ -376,9 +378,7 @@ export function CuratorialPieceDetail({
     "El entorno montañoso cobija la memoria viva de la comunidad, preservando saberes y técnicas ancestrales transmitidas de generación en generación.";
 
   const cleanArtisanName = piece.artisan
-    .split("-")[0]!
-    .replace(/^(Artesana:|Artesano:)\s*/i, "")
-    .trim();
+    .split("-")[0]?.trim() || piece.artisan;
 
   const artisanBio =
     piece.artisanBio ||
@@ -415,7 +415,7 @@ export function CuratorialPieceDetail({
               <img
                 src={piece.image}
                 alt={t(piece.title)}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-contain"
               />
               <StellarBadge className="absolute left-3.5 top-3.5 z-10" />
             </div>
@@ -436,6 +436,7 @@ export function CuratorialPieceDetail({
             </div>
           </div>
 
+          <PiecePassportQr piece={piece} />
           <div className="pt-6 border-t border-border/60 space-y-4 mt-6">
             <div className="flex items-center justify-between">
               <div className="flex items-baseline gap-2">

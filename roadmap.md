@@ -1,3 +1,6 @@
+- [x] Harmonize nine craft-photo backgrounds, retain original Tecuani, and avoid cropping the main craft in cards and curatorial details.
+- [ ] Recover true fine detail for the three Cuetzalan product photos; blocked on higher-resolution originals from the user (current sources are 190×175).
+- [x] Add scannable piece-specific Stellar passport QR codes to cards and detail views; photographed QR decoded, public record navigation and mobile layout verified, six tests passed.
 - [x] Remove La Galería from desktop and mobile navigation; browser checks passed.
 - [x] Harden Maps initialization against invalid/detached containers and partial API readiness; show filtered regional links on load/auth/runtime failure. Build and ten tests passed; fallback filtering, microsite navigation and mobile empty state verified.
 - [x] Add the public Regiones Google map and craft/community/technique filters for the eight catalog communities; filter and empty states verified.

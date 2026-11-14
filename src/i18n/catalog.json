@@ -1,4 +1,10 @@
 {
+  "Pasaporte Stellar": ["Stellar passport", "Stellar 护照"],
+  "Consultar pasaporte": ["View passport", "查看护照"],
+  "Soroban Testnet · Datos de catálogo": ["Soroban Testnet · Catalog data", "Soroban 测试网 · 目录数据"],
+  "Transacción Stellar": ["Stellar transaction", "Stellar 交易"],
+  "Sin transacción registrada": ["No recorded transaction", "无已登记交易"],
+  "Contrato Soroban": ["Soroban contract", "Soroban 合约"],
   "Inicio": [
     "Home",
     "首页"
