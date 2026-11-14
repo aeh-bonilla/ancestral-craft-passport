@@ -1,6 +1,7 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
+@import "leaflet/dist/leaflet.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -37,6 +38,8 @@
   --color-indigo-foreground: var(--indigo-foreground);
   --color-sand: var(--sand);
   --color-craft-photo: var(--craft-photo);
+  --color-map-active: var(--map-active);
+  --color-map-inactive: var(--map-inactive);
   --color-gold: var(--gold);
   --color-gold-foreground: var(--gold-foreground);
   --color-jade: var(--jade);
@@ -90,6 +93,10 @@
   --indigo-foreground: oklch(0.95 0.012 85);
   --sand: oklch(0.925 0.022 82);
   --craft-photo: #deddd9;
+  --map-active: #325e7e;
+  --map-inactive: #daeaf1;
+  --map-line: #689caf;
+  --map-canvas: #edf2f3;
   --gold: oklch(0.65 0.1 75);
   --gold-foreground: oklch(0.24 0.02 55);
   --jade: oklch(0.52 0.09 155);
@@ -124,6 +131,10 @@
     font-family: var(--font-serif);
   }
 }
+
+.municipal-map .leaflet-container { background: var(--map-canvas); font-family: var(--font-sans); }
+.municipal-map .leaflet-control-attribution { background: var(--card); color: var(--muted-foreground); font-size: 10px; }
+.municipal-map .leaflet-tooltip { background: var(--card); color: var(--foreground); border-color: var(--border); box-shadow: none; }
 
 @utility shadow-float {
   box-shadow: var(--shadow-float);

@@ -1,3 +1,4 @@
+- [x] Adapt ArteMex's 217-municipality Puebla map with local Leaflet rendering, preserve national map and all microsites; Acatlán polygon navigation, TK-0512, mobile filtering and six tests verified. Boundary derivative license remains unconfirmed as disclosed in the page and source notes.
 - [x] Replace the React QR adapter with a hook-free SVG renderer; homepage-to-passport navigation has no runtime errors, QR decoding and six tests passed.
 - [x] Move passport scanning into the top desktop/mobile navigation; five public screens verified at 360, 390, 768, 1024 and 1280px without overflow or runtime errors, scanner navigation and twelve tests passed. Protected content requires the project's current platform sign-in (managed Cloud session alone does not unlock it).
 - [x] Replace nine blue product backgrounds with light pearl gray and matching photo frames; original Tecuani preserved, desktop/mobile detail and six tests verified.

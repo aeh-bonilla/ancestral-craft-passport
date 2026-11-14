@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useI18n } from '@/i18n';
 import { craftFilters, culturalRegions, filterRegions, regionWorks } from '@/lib/regions';
 import { RegionsMap } from '@/components/toltek/RegionsMap';
+import { PueblaMunicipalMap } from '@/components/toltek/PueblaMunicipalMap';
 
 export const Route = createFileRoute('/regiones/')({
   head: () => ({ meta: [
@@ -21,6 +22,7 @@ function Regions() {
   const [query, setQuery] = useState('');
   const [state, setState] = useState('all');
   const [crafts, setCrafts] = useState<string[]>([]);
+  const [mapView, setMapView] = useState<'puebla' | 'mexico'>('puebla');
   const regions = filterRegions(query, state, crafts);
   const selectRegion = useCallback((region: string) => { void navigate({ to: '/regiones/$region', params: { region } }); }, [navigate]);
   const reset = () => { setQuery(''); setState('all'); setCrafts([]); };
@@ -28,14 +30,19 @@ function Regions() {
     <p className="mb-2 text-xs font-semibold uppercase text-primary">{t('Regiones')} · Tlamatik</p>
     <h1 className="text-3xl sm:text-4xl">{t('Mapa de Oficios y Comunidades')}</h1>
     <p className="mt-3 text-sm text-muted-foreground">{t('Exploración territorial de la artesanía en México')}</p>
-    <div className="mt-8 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
+    <div className="mt-6 flex flex-wrap gap-2" aria-label={t('Regiones')}>
+      <Button variant={mapView === 'puebla' ? 'default' : 'outline'} aria-pressed={mapView === 'puebla'} onClick={() => setMapView('puebla')}>{t('Municipios de Puebla')}</Button>
+      <Button variant={mapView === 'mexico' ? 'default' : 'outline'} aria-pressed={mapView === 'mexico'} onClick={() => setMapView('mexico')}>{t('Todas las regiones')}</Button>
+    </div>
+    <div className="mt-6 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
       <section className="min-w-0" aria-label={t('Explorador territorial')}>
-        <RegionsMap regions={regions} onSelect={selectRegion} />
+        {mapView === 'puebla' ? <PueblaMunicipalMap regions={regions.filter(region => region.state === 'Puebla')} onSelect={selectRegion} /> : <RegionsMap regions={regions} onSelect={selectRegion} />}
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
           <span className="flex items-center gap-2"><MapPin className="h-4 w-4 text-primary" />{t('Comunidades con obras en el catálogo')}</span>
           <span>{t('{{count}} comunidades', { count: regions.length })}</span>
         </div>
         <p className="mt-3 text-xs text-muted-foreground">{t('Catálogo cultural de muestra · Cobertura no exhaustiva')}</p>
+        {mapView === 'puebla' && <p className="mt-2 text-xs text-muted-foreground">{t('Límites: CONABIO 2022 / INEGI · Adaptación de ArteMex; licencia de la copia pendiente de confirmar.')}</p>}
       </section>
       <aside className="border-t border-border pt-6 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
         <div className="mb-5 flex items-center justify-between"><h2 className="text-xl">{t('Filtros')}</h2><Button variant="ghost" size="sm" onClick={reset}><RotateCcw />{t('Restablecer')}</Button></div>

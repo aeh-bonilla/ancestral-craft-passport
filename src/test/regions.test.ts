@@ -11,7 +11,14 @@ describe('regional catalog', () => {
   it('routes Acatlán to the Tecuani rather than neighboring works', () => {
     const region = getRegion('acatlan');
     if (!region) throw new Error('Missing Acatlán');
+    expect(region.name).toBe('Acatlán de Osorio');
+    expect(region.municipalityCode).toBe('003');
     expect(regionWorks(region).map(piece => piece.id)).toEqual(['TK-0512']);
+  });
+  it('maps each catalog municipality to its own public microsite', () => {
+    expect(getRegion('cuetzalan')?.municipalityCode).toBe('043');
+    expect(getRegion('puebla')?.municipalityCode).toBe('114');
+    expect(filterRegions('tecuani', 'Puebla', []).map(region => region.id)).toEqual(['acatlan']);
   });
   it('combines state, craft and accent-insensitive community search', () => {
     expect(filterRegions('cuetzalan', 'Puebla', ['Cestería']).map(region => region.id)).toEqual(['cuetzalan']);
