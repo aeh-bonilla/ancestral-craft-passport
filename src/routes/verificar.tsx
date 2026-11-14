@@ -942,7 +942,7 @@ function DefaultVerify({
               {money(price)} <PriceBreakdown priceMxn={price} />
             </p>
             <p className="text-sm text-muted-foreground">
-              {t("95.2% llega directo a la cuenta bancaria del taller vía CoDi® / SPEI")}
+              {t("El artesano recibe el 95% del monto de la obra.")}
             </p>
             <div className="mt-4 grid gap-2 sm:grid-cols-2">
               <CodiButton piece={piece} primary className="w-full" />

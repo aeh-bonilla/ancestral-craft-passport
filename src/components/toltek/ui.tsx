@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { getPriceBreakdown } from '@/lib/price-breakdown';
 import { contractId, sampleHash, shortHash, type Piece } from "@/lib/toltek";
 import { getContractExplorerUrl, getTxExplorerUrl } from "@/lib/stellar/config";
 import {
@@ -289,18 +290,18 @@ export function PieceCard({
   );
 }
 
-/** Desglose de compra completo: obra + certificado + envío. */
-export function FullBreakdown({ piece }: { piece: Piece }) {
+/** Listed price includes the certificate commission; shipping is excluded. */
+export function FullBreakdown({ piece }: { piece: Pick<Piece, 'priceMxn' | 'priceUsd'> }) {
   const { t, money } = useI18n();
-  const cert = piece.certFeeMxn ?? 0;
-  const ship = piece.shippingMxn ?? 0;
-  const rows: [string, number][] = [["Obra", piece.priceMxn], ["Certificado Phygital", cert], ["Envío", ship]];
+  const breakdown = getPriceBreakdown(piece.priceMxn);
+  const rows: [string, number][] = [["Monto de la obra", breakdown.totalMxn], ["Comisión de la plataforma · Certificado (5%, incluido)", breakdown.commissionMxn]];
   return (
     <dl className="space-y-1.5 text-sm">
       {rows.map(([k, v]) => (
-        <div key={k} className="flex justify-between gap-3"><dt className="text-muted-foreground">{t(k)}</dt><dd className="font-mono">{money(v)}</dd></div>
+        <div key={k} className="flex justify-between gap-3"><dt className="min-w-0 text-muted-foreground">{t(k)}</dt><dd className="shrink-0 whitespace-nowrap font-mono">{money(v, 2)}</dd></div>
       ))}
-      <div className="flex justify-between gap-3 border-t pt-2 font-semibold"><dt>{t("Total")}</dt><dd className="font-mono">{money(piece.priceMxn + cert + ship)}</dd></div>
+      <div className="flex justify-between gap-3 border-t pt-2 font-semibold"><dt>{t("Total")}</dt><dd className="shrink-0 whitespace-nowrap font-mono">{money(breakdown.totalMxn, 2)}</dd></div>
+      <div className="flex justify-between gap-3 border-t pt-2 text-jade"><dt className="min-w-0 font-medium">{t("El artesano recibe (95%)")}</dt><dd className="shrink-0 whitespace-nowrap font-mono font-semibold">{money(breakdown.artisanMxn, 2)}</dd></div>
       {piece.priceUsd && <p className="text-xs text-muted-foreground">{t("Precio internacional de la obra: USD $")}{" "}{piece.priceUsd}</p>}
     </dl>
   );
@@ -599,8 +600,6 @@ export function QrCode({ value, size = 140, className }: { value: string; size?:
 /** Desglose transparente "Buyer Premium": 95% artesano / 5% certificado. */
 export function PriceBreakdown({ priceMxn, piece }: { priceMxn: number; piece?: Piece }) {
   const { t } = useI18n();
-  const base = Math.round(priceMxn * 0.95);
-  const cert = priceMxn - base;
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -616,20 +615,7 @@ export function PriceBreakdown({ priceMxn, piece }: { priceMxn: number; piece?: 
       </PopoverTrigger>
       <PopoverContent className="w-72 max-w-[calc(100vw-2rem)] border-border bg-popover p-4 text-xs text-popover-foreground shadow-md">
         <p className="font-serif text-sm font-semibold">{t("Desglose transparente")}</p>
-        {piece ? <div className="mt-3"><FullBreakdown piece={piece} /></div> : <dl className="mt-3 space-y-2">
-          <div className="flex items-start justify-between gap-3 text-[11px]">
-            <dt className="text-[#6B5E50]">{t("Precio Base para el Artesano (95%)")}</dt>
-            <dd className="shrink-0 font-medium whitespace-nowrap">MXN {base.toLocaleString("es-MX")}</dd>
-          </div>
-          <div className="flex items-start justify-between gap-3 text-[11px]">
-            <dt className="text-[#6B5E50]">{t("Certificado y Preservación (5%)")}</dt>
-            <dd className="shrink-0 font-medium whitespace-nowrap">MXN {cert.toLocaleString("es-MX")}</dd>
-          </div>
-          <div className="flex items-start justify-between gap-3 border-t border-[#D5CABB] pt-2 font-semibold text-xs">
-            <dt>{t("Total Transparente")}</dt>
-            <dd className="shrink-0 whitespace-nowrap">MXN {priceMxn.toLocaleString("es-MX")}</dd>
-          </div>
-        </dl>}
+        <div className="mt-3"><FullBreakdown piece={piece ?? { priceMxn }} /></div>
       </PopoverContent>
     </Popover>
   );
@@ -649,9 +635,7 @@ export function CodiButton({ piece, className, primary }: { piece: Piece; classN
   const [apiKeyOverride, setApiKeyOverride] = useState("");
   const [scanMode, setScanMode] = useState<"bank" | "camera">("bank");
 
-  const certFeeMxn = piece.certFeeMxn ?? 0;
-  const shippingMxn = piece.shippingMxn ?? 0;
-  const totalMxn = piece.priceMxn + certFeeMxn + shippingMxn;
+  const { totalMxn } = getPriceBreakdown(piece.priceMxn);
 
   const copyValue = (val: string) => {
     navigator.clipboard?.writeText(val);
@@ -944,40 +928,7 @@ export function CodiButton({ piece, className, primary }: { piece: Piece; classN
                 <p className="mb-2 font-semibold uppercase tracking-wider text-primary">
                   {t("Resumen del Cobro Liquidado")}
                 </p>
-                <div className="grid grid-cols-2 gap-1.5 text-muted-foreground">
-                  <span>{t("Obra artesanal:")}</span>
-                  <span className="text-right font-mono text-foreground">
-                    {money(dualReceipt.basePriceMxn)}
-                  </span>
-                  {dualReceipt.certFeeMxn > 0 && (
-                    <>
-                      <span>{t("Certificado Phygital:")}</span>
-                      <span className="text-right font-mono text-foreground">
-                        {money(dualReceipt.certFeeMxn)}
-                      </span>
-                    </>
-                  )}
-                  {dualReceipt.shippingMxn > 0 && (
-                    <>
-                      <span>{t("Envío asegurado:")}</span>
-                      <span className="text-right font-mono text-foreground">
-                        {money(dualReceipt.shippingMxn)}
-                      </span>
-                    </>
-                  )}
-                  <span className="border-t pt-1.5 font-semibold text-foreground">
-                    {t("Total Cobrado (CoDi® 0% comisión):")}
-                  </span>
-                  <span className="border-t pt-1.5 text-right font-mono text-sm font-bold text-jade">
-                    {money(dualReceipt.amountMxn)}
-                  </span>
-                  <span className="text-[11px]">
-                    {t("Dispersión directa al artesano (95.2%):")}
-                  </span>
-                  <span className="text-right font-mono text-[11px] font-semibold text-foreground">
-                    {money(dualReceipt.netArtisanMxn, 2)}
-                  </span>
-                </div>
+                <FullBreakdown piece={{ priceMxn: dualReceipt.amountMxn }} />
               </div>
 
               {/* Evento 1: Notificación Webhook pey.mx (CoDi / SPEI Banxico) */}
