@@ -1,242 +1,212 @@
 import { useI18n } from "@/i18n";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { Coins, Fingerprint, QrCode as QrIcon, ScanLine, LayoutDashboard, Users, ShieldCheck, ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpen, Eye, Fingerprint, Map, MapPin, QrCode, ScanLine, Shapes, Store, Users, CalendarDays, HandCoins, ShieldCheck, Sparkles, Landmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PieceCard, SectionTitle } from "@/components/toltek/ui";
+import { PieceCard } from "@/components/toltek/ui";
 import { images, pieces, type Piece } from "@/lib/toltek";
+import heroValle from "@/assets/hero-valle-tlamatik.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { title: "Arte & Origen — Tlamatik · Memoria viva del patrimonio" },
-      { name: "description", content: "Pasaportes culturales físico-digitales, registro inmutable en Stellar Soroban y comercio justo para artesanos de México." },
-      { property: "og:title", content: "Arte & Origen — Tlamatik" },
-      { property: "og:description", content: "Certificamos el origen genuino de cada pieza artesanal en la red Stellar con liquidaciones directas en $MXN." },
+      { title: "Tlamatik — Cada pieza, su historia" },
+      { name: "description", content: "Pasaportes culturales físico-digitales en Stellar: conoce quién hizo cada pieza artesanal, su comunidad, su técnica y su origen." },
+      { property: "og:title", content: "Tlamatik — Cada pieza, su historia" },
+      { property: "og:description", content: "Artesanía, comunidades y saberes de México con pasaporte verificable y comercio justo." },
     ],
   }),
   component: Index,
 });
 
-type RegionStory = {
-  id: string;
-  name: string;
-  sub: string;
-  desc: string;
-  image: string;
-  pieceIds: string[];
-};
+const byId = (id: string) => pieces.find((p) => p.id === id);
+const starters = ["TK-0701", "TK-0512", "TK-0702"].map(byId).filter((p): p is Piece => Boolean(p));
+const thread = byId("TK-0702") ?? pieces[0];
 
-const regionsData: RegionStory[] = [
-  {
-    id: "cuetzalan",
-    name: "Cuetzalan del Progreso",
-    sub: "Sierra Norte de Puebla",
-    desc: "Comunidad de origen Nahua que habita entre la niebla y el verdor de la Sierra Norte. Sus familias entrelazan la vida cotidiana entre el cultivo de café y el ritmo ancestral del telar de cintura, preservando saberes que dan forma a su identidad.",
-    image: images.cuetzalanCourtyard,
-    pieceIds: ["TK-0701", "TK-0702", "TK-0703"],
-  },
-  {
-    id: "acatlan",
-    name: "Acatlán de Osorio",
-    sub: "Mixteca Poblana",
-    desc: "Cuna de la danza del Tecuani y el barro bruñido rojo. Entre cerros secos y cantos de carrizo, los maestros mixtecos tallan máscaras de felino y modelan figuras ceremoniales que preservan el rito de la lluvia.",
-    image: images.tecuani,
-    pieceIds: ["TK-0512", "TK-0388", "TK-0701"],
-  },
-  {
-    id: "arrazola",
-    name: "San Martín Tilcajete y Arrazola",
-    sub: "Valles Centrales de Oaxaca",
-    desc: "Tierras zapotecas donde la madera de copal cobra vida en nahuales y alebrijes. Cada pieza es tallada con machete siguiendo la veta viva del árbol y decorada a mano con pigmentos minerales.",
-    image: images.alebrije,
-    pieceIds: ["TK-0042", "TK-0117", "TK-0512"],
-  },
-  {
-    id: "santaclara",
-    name: "Santa Clara del Cobre",
-    sub: "Meseta Purépecha, Michoacán",
-    desc: "Antigua tradición purépecha de forja y martillado a fuego vivo. Bloques de cobre fundido son transformados en cazos y joyas sin un solo punto de soldadura.",
-    image: images.cobre,
-    pieceIds: ["TK-0310", "TK-0251", "TK-0203"],
-  },
+const routes = [
+  { n: "01", title: "Regiones", text: "Mapa interactivo de territorios y sus oficios.", to: "/regiones", icon: Map },
+  { n: "02", title: "Comunidades", text: "Micrositios con historias, saberes y obras de cada comunidad.", to: "/regiones", icon: Users },
+  { n: "03", title: "Verificar", text: "Consulta el pasaporte de cualquier pieza desde su código QR.", to: "/verificar", icon: QrCode },
+  { n: "04", title: "Mercado", text: "Obras con pasaporte activo y pago directo al taller.", to: "/mercado", icon: Store },
+] as const;
+
+const modes = [
+  { label: "Comparte su historia", icon: BookOpen },
+  { label: "Muestra sus obras", icon: Eye },
+  { label: "Ofrece piezas en Tlamatik", icon: Store },
+  { label: "Vende en un punto propio", icon: MapPin },
+  { label: "Talleres programados", icon: CalendarDays },
 ];
 
-const stats = [
-  { value: "+600", label: "Artesanos protegidos", icon: Users },
-  { value: "100%", label: "Liquidación bancaria en $MXN (SPEI)", icon: Coins },
-  { value: "+7,000", label: "Pasaportes emitidos", icon: ShieldCheck },
-  { value: "38", label: "Comunidades de origen", icon: Fingerprint },
+const promises = [
+  { title: "Cada comunidad decide qué comparte", text: "Saberes, ubicación, fotografías y venta solo si se autorizan.", icon: Users },
+  { title: "El precio lo decide quien hace la pieza", text: "Liquidación directa en $MXN a la cuenta del taller.", icon: HandCoins },
+  { title: "Registro verificable en Stellar", text: "Cada pasaporte guarda un hash inmutable consultable por cualquiera.", icon: ShieldCheck },
 ];
 
-const steps = [
-  { n: "01", title: "Registro & Hashing", sub: "Preservación del saber", text: "Documentamos técnica, materiales y relato del maestro. Cada evidencia se sella con un hash SHA-256 inmutable.", icon: Fingerprint },
-  { n: "02", title: "Pasaporte Cultural QR/NFC", sub: "Anclaje físico-digital", text: "Una etiqueta física vincula la pieza con su registro en Soroban. Cualquiera puede verificarla desde su teléfono.", icon: QrIcon },
-  { n: "03", title: "Comercio Justo & Regalías", sub: "Sesión de derechos en Stellar", text: "Ventas y licencias se liquidan directamente en moneda nacional ($MXN) a la cuenta bancaria del taller, registrando la sesión de derechos en contratos Soroban.", icon: Coins },
-];
+function Eyebrow({ children }: { children: React.ReactNode }) {
+  return <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">{children}</p>;
+}
 
 function Index() {
   const { t } = useI18n();
-  const [selectedRegionId, setSelectedRegionId] = useState("cuetzalan");
-
-  const currentRegion = regionsData.find((r) => r.id === selectedRegionId) || regionsData[0];
-  if (!currentRegion) return null;
-
-  const featuredPieces = currentRegion.pieceIds
-    .map((id) => pieces.find((p) => p.id === id))
-    .filter((p): p is Piece => Boolean(p));
-
   return (
-    <div className="space-y-16 py-6 sm:py-8">
-      {/* 1. SECTOR DESTACADO: Banner Editorial de Región (Cuetzalan del Progreso) */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="relative overflow-hidden rounded-3xl bg-[#2B231D] text-[#F4EFE6] shadow-xl">
-          <div className="grid gap-8 p-6 sm:p-10 md:grid-cols-12 md:gap-12 md:p-14 items-center">
-            {/* Columna Izquierda: Información Editorial */}
-            <div className="min-w-0 md:col-span-7 space-y-4">
-              <div className="space-y-1">
-                <h1 className="font-serif text-3xl font-normal tracking-tight text-[#F4EFE6] sm:text-4xl md:text-5xl leading-[1.15]">
-                  {t(currentRegion.name)}
-                </h1>
-                <p className="text-base font-normal text-[#D6CCA8] sm:text-lg">
-                  {t(currentRegion.sub)}
-                </p>
-              </div>
-
-              <p className="max-w-xl text-xs sm:text-sm leading-relaxed text-[#C5B9A8]">
-                {t(currentRegion.desc)}
-              </p>
-
-              {/* Selector interactivo de regiones */}
-              <div id="regiones" className="pt-4 flex flex-wrap gap-2">
-                {regionsData.map((reg) => (
-                  <button
-                    key={reg.id}
-                    type="button"
-                    onClick={() => setSelectedRegionId(reg.id)}
-                    className={`rounded-full px-3 py-1 text-xs font-medium transition-all ${
-                      selectedRegionId === reg.id
-                        ? "bg-[#F4EFE6] text-[#2B231D] shadow-xs"
-                        : "bg-white/10 text-[#D6CCA8] hover:bg-white/20"
-                    }`}
-                  >
-                    {reg.name.split(" ")[0]}
-                  </button>
-                ))}
-              </div>
+    <div className="pb-16">
+      {/* Hero */}
+      <section id="inicio" className="relative overflow-hidden">
+        <img src={heroValle} alt="" width={1920} height={1088} className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/20" />
+        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 sm:px-6 md:grid-cols-12 md:py-24">
+          <div className="min-w-0 space-y-5 md:col-span-7">
+            <Eyebrow>{t("Artesanía, comunidades y saberes de México")}</Eyebrow>
+            <h1 className="font-serif text-4xl leading-[1.1] tracking-tight text-foreground sm:text-5xl md:text-6xl">
+              {t("Cada pieza, su historia")}
+            </h1>
+            <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+              {t("Detrás de cada obra hay una persona, un oficio y una comunidad que decide cómo compartirlos.")}
+            </p>
+            <div className="flex flex-wrap gap-3 pt-2">
+              <Button asChild size="lg" className="rounded-full">
+                <Link to="/verificar"><ScanLine className="mr-2 h-4 w-4" />{t("Escanear una pieza")}</Link>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="rounded-full bg-background/70">
+                <Link to="/regiones">{t("Conocer comunidades")}</Link>
+              </Button>
             </div>
-
-            {/* Columna Derecha: Fotografía de Taller / Comunidad */}
+          </div>
+          {thread && (
             <div className="min-w-0 md:col-span-5">
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-white/10 shadow-lg">
-                <img
-                  src={currentRegion.image}
-                  alt={currentRegion.name}
-                  className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                />
+              <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-xl">
+                <img src={thread.image} alt={thread.title} className="aspect-[4/3] w-full bg-[var(--craft-photo)] object-cover" />
+                <div className="flex items-center justify-between gap-3 p-4">
+                  <div className="min-w-0">
+                    <p className="truncate font-serif text-lg text-foreground">{t(thread.title)}</p>
+                    <p className="truncate text-xs text-muted-foreground">{thread.community} · {t(thread.technique)}</p>
+                  </div>
+                  <QrCode className="h-6 w-6 shrink-0 text-primary" />
+                </div>
               </div>
             </div>
+          )}
+        </div>
+      </section>
+
+      <div className="mx-auto max-w-7xl space-y-20 px-4 pt-16 sm:px-6">
+        {/* Quiénes somos */}
+        <section className="grid gap-10 md:grid-cols-2 md:items-center">
+          <div className="space-y-4">
+            <Eyebrow>{t("Quiénes somos")}</Eyebrow>
+            <h2 className="font-serif text-3xl tracking-tight text-foreground sm:text-4xl">
+              {t("Un espacio cultural para conocer la artesanía desde quienes la hacen")}
+            </h2>
+            <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
+              {t("Tlamatik reúne regiones, comunidades, saberes y piezas en un mismo recorrido. Cada pieza lleva un pasaporte con código QR que abre la historia que su autora o autor decidió compartir.")}
+            </p>
           </div>
-        </div>
-      </section>
-
-      {/* 2. CATÁLOGO DESTACADO: 3 Piezas Certificadas (Rebozo, Huipil, Canasta) */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {featuredPieces.map((piece, idx) => (
-            <PieceCard key={piece.id} piece={piece} index={idx} />
-          ))}
-        </div>
-
-        {/* Capturas de identidad editorial en esquinas inferiores */}
-        <div className="mt-8 grid grid-cols-2 items-start gap-4 px-2 text-xs font-serif tracking-wider text-muted-foreground/80 uppercase [&>span:last-child]:text-right">
-          <span>{t("Comunidad & Tradición")}</span>
-          <span>{t("Comercio Justo Transparente")}</span>
-        </div>
-      </section>
-
-      {/* 3. GALERÍA EXTENDIDA: Colección de Obras Certificadas */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 pt-10 border-t border-border/60">
-        <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">{t("Colecciones")}</p>
-            <h2 className="font-serif text-2xl sm:text-3xl font-normal tracking-tight text-foreground">{t("Obras con Pasaporte Activo")}</h2>
-          </div>
-          <Button asChild variant="outline" className="rounded-full">
-            <Link to="/mercado">
-              {t("Explorar todo el catálogo")} <ArrowRight className="ml-1 h-3.5 w-3.5" />
-            </Link>
-          </Button>
-        </div>
-
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {pieces.slice(3, 7).map((p, idx) => (
-            <PieceCard key={p.id} piece={p} index={idx + 3} />
-          ))}
-        </div>
-      </section>
-
-      {/* 4. CÓMO FUNCIONA: Protocolo Phygital en 3 Pasos */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-12">
-        <SectionTitle
-          center
-          eyebrow={t("Trazabilidad Phygital")}
-          title={t("Memoria viva, protegida en blockchain")}
-          sub={t("De las manos del maestro a tu hogar: una etiqueta física y un pasaporte digital que aseguran origen genuino y liquidación bancaria directa.")}
-        />
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {steps.map((s) => (
-            <div key={s.n} className="relative rounded-2xl border border-border/80 bg-card p-7 shadow-xs">
-              <span className="absolute right-6 top-5 font-serif text-5xl font-normal text-primary/10 select-none">
-                {s.n}
-              </span>
-              <span className="grid h-12 w-12 place-items-center rounded-xl bg-sand text-foreground">
-                <s.icon className="h-5 w-5 text-primary" />
-              </span>
-              <p className="mt-6 text-xs font-semibold uppercase tracking-wider text-primary">{t(s.sub)}</p>
-              <h3 className="mt-1.5 font-serif text-lg font-semibold text-foreground">{t(s.title)}</h3>
-              <p className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">{t(s.text)}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 5. CIFRAS DE IMPACTO COMUNITARIO */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="rounded-3xl bg-[#2B231D] text-[#F4EFE6] px-6 py-10 sm:py-12">
-          <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
-            {stats.map((s) => (
-              <div key={s.label} className="text-center">
-                <s.icon className="mx-auto h-5 w-5 text-gold" />
-                <p className="mt-2 font-serif text-3xl sm:text-4xl font-normal text-gold">{s.value}</p>
-                <p className="mt-1 text-xs text-[#C5B9A8]">{t(s.label)}</p>
-              </div>
+          <ul className="space-y-3">
+            {promises.map((p) => (
+              <li key={p.title} className="flex gap-4 rounded-2xl border border-border bg-card p-5">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-secondary"><p.icon className="h-5 w-5 text-primary" /></span>
+                <div>
+                  <p className="font-semibold text-foreground">{t(p.title)}</p>
+                  <p className="text-sm text-muted-foreground">{t(p.text)}</p>
+                </div>
+              </li>
             ))}
-          </div>
-        </div>
-      </section>
+          </ul>
+        </section>
 
-      {/* 6. LLAMADO A LA ACCIÓN: Verificación en Vivo y Panel */}
-      <section className="mx-auto max-w-5xl px-4 sm:px-6 text-center py-8">
-        <div className="space-y-4">
-          <h2 className="font-serif text-3xl sm:text-4xl font-normal tracking-tight text-foreground">
-            {t("¿Tienes una pieza en tus manos?")}
-          </h2>
-          <p className="mx-auto max-w-xl text-sm text-muted-foreground leading-relaxed">
-            {t("Escanea el código QR del Pasaporte Cultural con tu celular para consultar la técnica, el rostro del maestro creador y el certificado inmutable emitido en Stellar Soroban.")}
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-            <Button asChild size="lg" variant="outline" className="rounded-full">
-              <Link to="/panel">
-                <LayoutDashboard className="mr-2 h-4 w-4" />
-                {t("Ingreso a Panel Promotor")}
-              </Link>
+        {/* Tres piezas */}
+        <section className="space-y-8">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <Eyebrow>{t("Para empezar")}</Eyebrow>
+              <h2 className="font-serif text-3xl tracking-tight text-foreground">{t("Tres piezas, tres historias")}</h2>
+            </div>
+            <Button asChild variant="outline" className="rounded-full">
+              <Link to="/mercado">{t("Explorar todo el catálogo")} <ArrowRight className="ml-1 h-3.5 w-3.5" /></Link>
             </Button>
           </div>
-        </div>
-      </section>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {starters.map((p, i) => <PieceCard key={p.id} piece={p} index={i} />)}
+          </div>
+        </section>
+
+        {/* El hilo de una pieza */}
+        {thread && (
+          <section className="rounded-3xl bg-secondary/60 p-6 sm:p-10">
+            <Eyebrow>{t("El hilo de una pieza")}</Eyebrow>
+            <h2 className="font-serif text-3xl tracking-tight text-foreground">{t("Una pieza no está sola")}</h2>
+            <ol className="mt-8 grid gap-4 md:grid-cols-4">
+              {[
+                { icon: Shapes, k: "La pieza", v: t(thread.title) },
+                { icon: Fingerprint, k: "Quién la hizo", v: thread.artisan },
+                { icon: Landmark, k: "Su comunidad", v: thread.regionDetail ?? thread.community },
+                { icon: Sparkles, k: "El saber que la sostiene", v: thread.techniqueDetail ?? t(thread.technique) },
+              ].map((s, i) => (
+                <li key={s.k} className="relative rounded-2xl border border-border bg-card p-5">
+                  <span className="absolute right-4 top-3 font-serif text-3xl text-primary/15">{i + 1}</span>
+                  <s.icon className="h-5 w-5 text-primary" />
+                  <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t(s.k)}</p>
+                  <p className="mt-1 text-sm font-medium text-foreground">{s.v}</p>
+                </li>
+              ))}
+            </ol>
+            <Link to="/verificar" search={{ id: thread.id }} className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline">
+              {t("Ver el pasaporte completo")} <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </section>
+        )}
+
+        {/* Recorridos */}
+        <section className="space-y-8">
+          <div>
+            <Eyebrow>{t("Explora")}</Eyebrow>
+            <h2 className="font-serif text-3xl tracking-tight text-foreground">{t("Recorridos para empezar")}</h2>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {routes.map((r) => (
+              <Link key={r.n} to={r.to} className="group rounded-2xl border border-border bg-card p-6 transition-shadow hover:shadow-lg">
+                <div className="flex items-center justify-between">
+                  <span className="font-serif text-2xl text-primary/40">{r.n}</span>
+                  <r.icon className="h-5 w-5 text-primary" />
+                </div>
+                <p className="mt-4 font-serif text-xl text-foreground">{t(r.title)}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{t(r.text)}</p>
+                <ArrowRight className="mt-4 h-4 w-4 text-primary transition-transform group-hover:translate-x-1" />
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* Formas de participar */}
+        <section className="rounded-3xl bg-primary px-6 py-12 text-center text-primary-foreground sm:px-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] opacity-80">{t("Cada comunidad decide cómo participar")}</p>
+          <h2 className="mt-2 font-serif text-3xl tracking-tight sm:text-4xl">{t("Ninguna forma es mejor que otra")}</h2>
+          <p className="mx-auto mt-3 max-w-2xl text-sm opacity-85">
+            {t("Algunas comparten solo su historia; otras muestran sus obras, venden en lugares que eligieron o abren talleres en fechas fijas.")}
+          </p>
+          <ul className="mt-8 flex flex-wrap justify-center gap-3">
+            {modes.map((m) => (
+              <li key={m.label} className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-4 py-2 text-sm">
+                <m.icon className="h-4 w-4" /> {t(m.label)}
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* CTA */}
+        <section className="text-center">
+          <h2 className="font-serif text-3xl tracking-tight text-foreground sm:text-4xl">{t("¿Tienes una pieza en tus manos?")}</h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
+            {t("Escanea su pasaporte para saber quién la hizo, de dónde viene y cómo se hizo, según lo que su autora o autor quiso compartir.")}
+          </p>
+          <Button asChild size="lg" className="mt-6 rounded-full">
+            <Link to="/verificar"><ScanLine className="mr-2 h-4 w-4" />{t("Escanear Pasaporte")}</Link>
+          </Button>
+        </section>
+      </div>
     </div>
   );
 }
