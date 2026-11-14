@@ -4,7 +4,7 @@ import { ArrowRight, BookOpen, Eye, Fingerprint, Map, MapPin, QrCode, ScanLine, 
 import { Button } from "@/components/ui/button";
 import { PieceCard } from "@/components/toltek/ui";
 import { images, pieces, type Piece } from "@/lib/toltek";
-import heroValle from "@/assets/hero-valle-tlamatik.jpg";
+import heroValle from "@/assets/landing-hero-photo.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
