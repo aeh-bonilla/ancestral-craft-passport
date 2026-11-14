@@ -2102,6 +2102,7 @@
   "Explorador territorial": ["Territorial explorer", "地区探索"],
   "Mapa de regiones de México": ["Map of Mexican regions", "墨西哥地区地图"],
   "Cargando mapa…": ["Loading map…", "正在加载地图…"],
+  "El mapa interactivo no está disponible en este dominio; explora las regiones en la lista.": ["The interactive map is not available on this domain; explore the regions in the list.", "此域名无法使用交互式地图；请在列表中浏览各地区。"],
   "El mapa estará disponible en el sitio publicado.": ["The map will be available on the published site.", "地图将在已发布的网站上显示。"],
   "Google Maps no está configurado.": ["Google Maps is not configured.", "Google Maps 尚未配置。"],
   "No se pudo cargar Google Maps.": ["Google Maps could not be loaded.", "无法加载 Google Maps。"],

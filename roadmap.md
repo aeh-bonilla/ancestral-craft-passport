@@ -1,7 +1,8 @@
 - [x] Remove La Galería from desktop and mobile navigation; browser checks passed.
 - [x] Harden Maps initialization against invalid/detached containers and partial API readiness; show filtered regional links on load/auth/runtime failure. Build and ten tests passed; fallback filtering, microsite navigation and mobile empty state verified.
 - [x] Add the public Regiones Google map and craft/community/technique filters for the eight catalog communities; filter and empty states verified.
-- [ ] Verify Google Maps rendering and marker navigation on an authorized published origin; Maps-dependent sandbox checks are unsupported.
+- [x] Skip Google Maps on unauthorized domains (e.g. Vercel) and show regions with their works instead.
+- [ ] Verify Google Maps rendering and marker navigation on an authorized published origin; Maps-dependent sandbox checks are unsupported. Vercel map needs the user's own Google key authorizing that domain.
 - [x] Open eight regional microsites with explicit work membership; Cuetzalan navigation, three works and mobile layout verified.
 - [x] Restore the visible Panel del Promotor navigation and restyle all six existing menu options; verified through the app's current sign-in form.
 - [x] Require Google authentication for Panel and Registro de Obras; preserve public pages.

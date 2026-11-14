@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useI18n } from '@/i18n';
-import type { CulturalRegion } from '@/lib/regions';
+import { regionWorks, type CulturalRegion } from '@/lib/regions';
+import { Link } from '@tanstack/react-router';
 import { MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -13,6 +14,15 @@ type MapsApi = {
 };
 declare global { interface Window { google?: { maps: MapsApi }; initTlamatikRegionsMap?: () => void; gm_authFailure?: () => void } }
 let mapsPromise: Promise<MapsApi> | undefined;
+// The managed browser key is referrer-restricted to Lovable domains; other hosts need their own key
+// listed in VITE_GOOGLE_MAPS_ALLOWED_HOSTS (comma separated), otherwise we skip Google entirely.
+export function mapsHostAllowed(hostname: string, extraHosts = String(import.meta.env['VITE_GOOGLE_MAPS_ALLOWED_HOSTS'] ?? '')): boolean {
+  const host = hostname.toLowerCase();
+  if (host === 'localhost' || host === '') return false;
+  if (host.endsWith('.lovable.app') || host.endsWith('.lovableproject.com')) return true;
+  return extraHosts.split(',').map(item => item.trim().toLowerCase()).filter(Boolean)
+    .some(item => item.startsWith('*.') ? host.endsWith(item.slice(1)) : host === item);
+}
 function loadMaps(language: string): Promise<MapsApi> {
   if (mapsPromise) return mapsPromise;
   mapsPromise = new Promise((resolve, reject) => {
@@ -70,7 +80,7 @@ export function RegionsMap({ regions, onSelect }: { regions: CulturalRegion[]; o
     window.addEventListener('tlamatik:maps-auth-failure', fail);
     window.addEventListener('unhandledrejection', onRejection);
     // Sandbox Maps rendering is not supported; preserve the real integration on deployed origins.
-    if (window.location.hostname === 'localhost') fail();
+    if (!mapsHostAllowed(window.location.hostname)) { if (active) setError('El mapa interactivo no está disponible en este dominio; explora las regiones en la lista.'); }
     else void loadMaps(initialLanguage.current).then(maps => {
       if (!active) return;
       if (!(element instanceof HTMLElement) || !element.isConnected || container.current !== element) { fail(); return; }
@@ -107,11 +117,17 @@ export function RegionsMap({ regions, onSelect }: { regions: CulturalRegion[]; o
   }, [api, regions, onSelect, error]);
   if (error) return <section className="border-y border-border py-6" aria-label={t('Comunidades')}>
     <p role="status" className="mb-4 flex items-center gap-2 text-sm text-muted-foreground"><MapPin className="h-4 w-4 shrink-0 text-primary" />{t(error)}</p>
-    <ul className="divide-y divide-border">{regions.map(region => <li key={region.id}>
-      <Button variant="ghost" className="h-auto w-full justify-start whitespace-normal py-4 text-left" onClick={() => onSelect(region.id)}>
+    <ul className="divide-y divide-border">{regions.map(region => { const works = regionWorks(region); return <li key={region.id} className="py-5">
+      <Button variant="ghost" className="h-auto w-full justify-start whitespace-normal px-2 py-2 text-left" onClick={() => onSelect(region.id)}>
         <MapPin className="shrink-0" /><span className="min-w-0"><span className="block font-medium">{region.name}</span><span className="block text-xs text-muted-foreground">{region.state} · {region.communities.join(', ')}</span><span className="mt-1 block text-xs text-muted-foreground">{region.techniques.map(technique => t(technique)).join(' · ')}</span></span>
       </Button>
-    </li>)}</ul>
+      {works.length > 0 && <ul className="mt-3 grid grid-cols-2 gap-3 px-2 sm:grid-cols-3" aria-label={t('Obras de la región')}>{works.map(piece => <li key={piece.id}>
+        <Link to="/verificar" search={{ id: piece.id }} className="group block overflow-hidden rounded-md border border-border bg-card hover:border-primary">
+          <img src={piece.image} alt={piece.title} loading="lazy" className="aspect-square w-full object-cover" />
+          <span className="block truncate px-2 py-2 text-xs font-medium group-hover:text-primary">{piece.title}</span>
+        </Link>
+      </li>)}</ul>}
+    </li>; })}</ul>
     {regions.length === 0 && <p className="text-sm text-muted-foreground">{t('No hay comunidades con estos filtros.')}</p>}
   </section>;
   return <div className="relative h-[420px] overflow-hidden rounded-lg border border-border bg-muted sm:h-[580px]">
