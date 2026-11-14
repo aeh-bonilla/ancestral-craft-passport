@@ -69,12 +69,6 @@ export function Navbar() {
         {/* Acciones y navegación derecha */}
         <div className="hidden lg:flex lg:flex-1 items-center justify-end gap-3 xl:gap-6 [&>a]:whitespace-nowrap">
           <Link
-            to="/mercado"
-            className="text-xs font-medium tracking-wide text-foreground/75 transition-colors hover:text-foreground"
-          >
-            {t("La Galería")}
-          </Link>
-          <Link
             to="/panel"
             className="text-xs font-medium tracking-wide text-foreground/75 transition-colors hover:text-foreground"
           >
@@ -185,13 +179,6 @@ export function Navbar() {
               {t(l.es)}
             </Link>
           ))}
-          <Link
-            to="/mercado"
-            onClick={() => setOpen(false)}
-            className="block rounded-lg px-3 py-2 text-sm font-medium text-foreground/85 hover:bg-sand"
-          >
-            {t("La Galería")}
-          </Link>
           <Link
             to="/panel"
             onClick={() => setOpen(false)}

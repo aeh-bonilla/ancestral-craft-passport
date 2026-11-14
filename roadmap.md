@@ -1,3 +1,5 @@
+- [x] Remove La Galería from desktop and mobile navigation; browser checks passed.
+- [ ] Diagnose the reported Vercel Maps error; external inspection awaits authorization under the Lovable-only source-of-truth rule.
 - [x] Add the public Regiones Google map and craft/community/technique filters for the eight catalog communities; filter and empty states verified.
 - [ ] Verify Google Maps rendering and marker navigation on an authorized published origin; Maps-dependent sandbox checks are unsupported.
 - [x] Open eight regional microsites with explicit work membership; Cuetzalan navigation, three works and mobile layout verified.
