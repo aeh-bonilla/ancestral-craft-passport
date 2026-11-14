@@ -1,13 +1,13 @@
-/** The listed price includes the certificate commission, without shipping. */
+/** The artisan receives 100% of the listed price; the buyer pays a 5% certificate fee on top. Shipping is charged separately to the buyer. */
 export function getPriceBreakdown(priceMxn: number) {
-  const totalCents = Math.round(priceMxn * 100);
-  const commissionCents = Math.round(totalCents * 5 / 100);
+  const baseCents = Math.round(priceMxn * 100);
+  const feeCents = Math.round((baseCents * 5) / 100);
   return {
-    totalMxn: totalCents / 100,
-    commissionMxn: commissionCents / 100,
-    artisanMxn: (totalCents - commissionCents) / 100,
+    totalMxn: (baseCents + feeCents) / 100,
+    commissionMxn: feeCents / 100,
+    artisanMxn: baseCents / 100,
     commissionPercent: 5,
-    artisanPercent: 95,
+    artisanPercent: 100,
     shippingMxn: 0,
   };
 }

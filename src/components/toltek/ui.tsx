@@ -290,19 +290,20 @@ export function PieceCard({
   );
 }
 
-/** Listed price includes the certificate commission; shipping is excluded. */
+/** The artisan receives 100% of the listed price; the buyer pays a 5% certificate fee on top, plus shipping. */
 export function FullBreakdown({ piece }: { piece: Pick<Piece, 'priceMxn' | 'priceUsd'> }) {
   const { t, money } = useI18n();
   const breakdown = getPriceBreakdown(piece.priceMxn);
-  const rows: [string, number][] = [["Monto de la obra", breakdown.totalMxn], ["Comisión de la plataforma · Certificado (5%, incluido)", breakdown.commissionMxn]];
+  const rows: [string, number][] = [["Monto de la obra", breakdown.artisanMxn], ["Comisión de la plataforma · Certificado (5%)", breakdown.commissionMxn]];
   return (
     <dl className="space-y-1.5 text-sm">
       {rows.map(([k, v]) => (
         <div key={k} className="flex justify-between gap-3"><dt className="min-w-0 text-muted-foreground">{t(k)}</dt><dd className="shrink-0 whitespace-nowrap font-mono">{money(v, 2)}</dd></div>
       ))}
-      <div className="flex justify-between gap-3 border-t pt-2 font-semibold"><dt>{t("Total")}</dt><dd className="shrink-0 whitespace-nowrap font-mono">{money(breakdown.totalMxn, 2)}</dd></div>
-      <div className="flex justify-between gap-3 border-t pt-2 text-jade"><dt className="min-w-0 font-medium">{t("El artesano recibe (95%)")}</dt><dd className="shrink-0 whitespace-nowrap font-mono font-semibold">{money(breakdown.artisanMxn, 2)}</dd></div>
+      <div className="flex justify-between gap-3 border-t pt-2 font-semibold"><dt>{t("Total a pagar")}</dt><dd className="shrink-0 whitespace-nowrap font-mono">{money(breakdown.totalMxn, 2)}</dd></div>
+      <div className="flex justify-between gap-3 border-t pt-2 text-jade"><dt className="min-w-0 font-medium">{t("El artesano recibe (100%)")}</dt><dd className="shrink-0 whitespace-nowrap font-mono font-semibold">{money(breakdown.artisanMxn, 2)}</dd></div>
       {piece.priceUsd && <p className="text-xs text-muted-foreground">{t("Precio internacional de la obra: USD $")}{" "}{piece.priceUsd}</p>}
+      <p className="pt-1 text-xs text-muted-foreground">{t("Los gastos de envío los cubre el comprador.")}</p>
     </dl>
   );
 }
@@ -597,7 +598,7 @@ export function QrCode({ value, size = 140, className }: { value: string; size?:
 
 
 
-/** Desglose transparente "Buyer Premium": 95% artesano / 5% certificado. */
+/** Desglose transparente "Buyer Premium": 100% artesano / +5% certificado a cargo del comprador. */
 export function PriceBreakdown({ priceMxn, piece }: { priceMxn: number; piece?: Piece }) {
   const { t } = useI18n();
   return (

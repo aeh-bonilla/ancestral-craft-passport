@@ -192,9 +192,9 @@ describe("Tlamatik Stellar integration", () => {
     expect(processed.artisan).toBe("Angel Cordero Sosa");
     expect(processed.amountMxn).toBe(450);
     expect(processed.basePriceMxn).toBe(450);
-    expect(processed.certFeeMxn).toBe(0);
+    expect(processed.certFeeMxn).toBe(22.5);
     expect(processed.shippingMxn).toBe(0);
-    expect(processed.netArtisanMxn).toBe(428.4);
+    expect(processed.netArtisanMxn).toBe(450);
     expect(processed.signatureVerified).toBe(true);
     expect(processed.duplicate).toBe(false);
     expect(processed.sorobanContractId).toBe(STELLAR_CONFIG.contractId);

@@ -942,7 +942,10 @@ function DefaultVerify({
               {money(price)} <PriceBreakdown priceMxn={price} />
             </p>
             <p className="text-sm text-muted-foreground">
-              {t("El artesano recibe el 95% del monto de la obra.")}
+              {t("El artesano recibe el 100% del monto de la obra.")}
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {t("Los gastos de envío los cubre el comprador.")}
             </p>
             <div className="mt-4 grid gap-2 sm:grid-cols-2">
               <CodiButton piece={piece} primary className="w-full" />

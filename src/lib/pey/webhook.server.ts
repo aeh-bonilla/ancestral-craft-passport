@@ -333,12 +333,13 @@ export async function processPeyWebhookEvent(params: {
 
   const matchedPiece = pieces.find((p) => p.id === pieceId);
   const basePriceMxn = matchedPiece ? matchedPiece.priceMxn : Number(payload.amount) || 1;
-  const certFeeMxn = matchedPiece?.certFeeMxn ?? 0;
+  const certFeeMxn = matchedPiece
+    ? Number((basePriceMxn * 0.05).toFixed(2))
+    : 0;
   const shippingMxn = matchedPiece?.shippingMxn ?? 0;
   const amountMxn =
     Number(payload.amount) || basePriceMxn + certFeeMxn + shippingMxn;
-  const netArtisanMxn =
-    basePriceMxn <= 1 ? basePriceMxn : Number((basePriceMxn * 0.952).toFixed(2));
+  const netArtisanMxn = basePriceMxn;
   const concept =
     payload.concept || `Tlamatik ${pieceId} ${pieceTitle}`.slice(0, 40);
   const clabe = payload.metadata?.clabe || "012650001234567895";

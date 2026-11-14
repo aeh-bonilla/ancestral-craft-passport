@@ -275,7 +275,7 @@ export function Footer() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 text-center sm:flex-row sm:text-left text-[11px] text-[#A89D8D]">
           <p>
             {t(
-              "Inclusión financiera real: 95% del importe se liquida de inmediato en moneda nacional ($MXN) a la cuenta bancaria del taller.",
+              "Inclusión financiera real: el 100% del importe de la obra se liquida de inmediato en moneda nacional ($MXN) a la cuenta bancaria del taller.",
             )}
           </p>
           <p className="opacity-70">{t("Tlamatik © 2026 · Certificado de Origen")}</p>
