@@ -11,8 +11,6 @@ import { useI18n } from "@/i18n";
 
 const leftLinks: Array<{ to: "/" | "/verificar" | "/mercado" | "/regiones"; hash?: string; es: string; en: string }> = [
   { to: "/", es: "Inicio", en: "Home" },
-  { to: "/verificar", es: "Exposiciones", en: "Exhibitions" },
-  { to: "/mercado", es: "Colecciones", en: "Collections" },
   { to: "/regiones", es: "Regiones", en: "Regions" },
 ];
 
