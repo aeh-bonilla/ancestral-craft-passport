@@ -16,4 +16,5 @@
 - Artisan banking details are transient form inputs; keep only salted domain-separated SHA-256 hashes in the mock catalog, never raw bank/account/CLABE values, because the current artisan flow is not a payment backend.
 - Regional public microsites and map filters share an explicit editorial catalog with stable IDs and piece membership; this prevents translated labels or neighboring regions from mixing unrelated works.
 - Geographic maps use the managed Google Maps JavaScript loader with public browser credentials, callback initialization and tracking channel; keep Places and server credentials out of the browser.
+- Initialize geographic maps only against a connected HTML container after the Maps library resolves; keep React out of the map-owned DOM and preserve filtered regional navigation on load/auth/runtime failures.
 - Optional legacy catalog contracts are typed locally rather than added to the generated managed schema; preserve existing local fallback when those tables are unavailable.
