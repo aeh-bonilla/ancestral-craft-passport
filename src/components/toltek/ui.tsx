@@ -255,7 +255,7 @@ export function PieceCard({
               <span className="font-sans text-sm font-semibold text-foreground">
                 MXN {piece.priceMxn.toLocaleString("es-MX")}
               </span>
-              <PriceBreakdown priceMxn={piece.priceMxn} />
+              <PriceBreakdown priceMxn={piece.priceMxn} piece={piece} />
             </div>
             {clickable ? (
               <button
@@ -279,6 +279,7 @@ export function PieceCard({
             )}
           </div>
           <PiecePassportQr piece={piece} compact />
+          {!action && <CodiButton piece={piece} primary className="w-full h-auto min-h-10 whitespace-normal text-xs" />}
           {action}
         </div>
       </div>
@@ -444,7 +445,7 @@ export function CuratorialPieceDetail({
                 <span className="font-sans text-xl sm:text-2xl font-bold text-foreground">
                   MXN {piece.priceMxn.toLocaleString("es-MX")}
                 </span>
-                <PriceBreakdown priceMxn={piece.priceMxn} />
+                <PriceBreakdown priceMxn={piece.priceMxn} piece={piece} />
               </div>
               <span className="text-xs font-serif italic text-muted-foreground">
                 {t("Obra única")}
@@ -452,11 +453,11 @@ export function CuratorialPieceDetail({
             </div>
 
             {/* Botones de acción directos: Adquirir (CoDi/SPEI) y Reservar */}
-            <div className="grid sm:grid-cols-2 gap-3 pt-1">
+            <div className="grid gap-3 pt-1">
               <CodiButton
                 piece={piece}
                 primary
-                className="w-full bg-[#8E4429] hover:bg-[#78361E] text-white border-0 shadow-sm py-2.5 rounded-xl font-medium"
+                className="w-full h-auto min-h-10 whitespace-normal shadow-sm py-2.5 font-medium"
               />
               <Button
                 variant="outline"
@@ -596,23 +597,26 @@ export function QrCode({ value, size = 140, className }: { value: string; size?:
 
 
 /** Desglose transparente "Buyer Premium": 95% artesano / 5% certificado. */
-export function PriceBreakdown({ priceMxn }: { priceMxn: number }) {
+export function PriceBreakdown({ priceMxn, piece }: { priceMxn: number; piece?: Piece }) {
   const { t } = useI18n();
   const base = Math.round(priceMxn * 0.95);
   const cert = priceMxn - base;
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
           aria-label={t("Ver desglose transparente del precio")}
-          className="inline-flex items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
+          className="h-7 w-7 shrink-0 text-muted-foreground hover:text-foreground"
         >
-          <span className="grid h-3.5 w-3.5 place-items-center rounded-full border border-foreground/35 text-[9px] font-sans font-medium text-foreground">ⓘ</span>
-        </button>
+          <Info className="h-3.5 w-3.5" />
+        </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-72 rounded-xl border border-[#D5CABB] bg-[#EFE8DB] p-4 text-xs text-[#2B231D] shadow-md">
+      <PopoverContent className="w-72 max-w-[calc(100vw-2rem)] border-border bg-popover p-4 text-xs text-popover-foreground shadow-md">
         <p className="font-serif text-sm font-semibold">{t("Desglose transparente")}</p>
-        <dl className="mt-3 space-y-2">
+        {piece ? <div className="mt-3"><FullBreakdown piece={piece} /></div> : <dl className="mt-3 space-y-2">
           <div className="flex items-start justify-between gap-3 text-[11px]">
             <dt className="text-[#6B5E50]">{t("Precio Base para el Artesano (95%)")}</dt>
             <dd className="shrink-0 font-medium whitespace-nowrap">MXN {base.toLocaleString("es-MX")}</dd>
@@ -625,7 +629,7 @@ export function PriceBreakdown({ priceMxn }: { priceMxn: number }) {
             <dt>{t("Total Transparente")}</dt>
             <dd className="shrink-0 whitespace-nowrap">MXN {priceMxn.toLocaleString("es-MX")}</dd>
           </div>
-        </dl>
+        </dl>}
       </PopoverContent>
     </Popover>
   );

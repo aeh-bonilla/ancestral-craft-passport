@@ -1,4 +1,5 @@
 - [x] Replace the React QR adapter with a hook-free SVG renderer; homepage-to-passport navigation has no runtime errors, QR decoding and six tests passed.
+- [x] Show complete piece-specific price breakdown beside prices and the existing pey payment control without clipping in craft cards and detail modals; popovers and payment dialog opening verified, six tests passed (no charge attempted).
 - [x] Replace the tiny Cuetzalan cover with high-resolution illustrative workshop artwork, lighten regional overlays, and add softly blurred illustrative artisan imagery behind modal and verifier histories; desktop render and six tests passed.
 - [x] Match photo-frame backgrounds to the craft photos; visually verified the homepage at the user's viewport without blank side bands.
 - [x] Harmonize nine craft-photo backgrounds, retain original Tecuani, and avoid cropping the main craft in cards and curatorial details.
