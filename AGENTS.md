@@ -19,3 +19,4 @@
 - Initialize geographic maps only against a connected HTML container after the Maps library resolves; keep React out of the map-owned DOM and preserve filtered regional navigation on load/auth/runtime failures.
 - Optional legacy catalog contracts are typed locally rather than added to the generated managed schema; preserve existing local fallback when those tables are unavailable.
 - Catalog QR codes link to each piece's public verification record using a shared canonical URL; show only supplied transaction identifiers and distinguish catalog/testnet data from proven on-chain fields.
+- Render passport QR modules with the React-independent qrcode-generator engine and a local hook-free SVG component; avoid React QR adapters that can capture a separate prebundled dispatcher.

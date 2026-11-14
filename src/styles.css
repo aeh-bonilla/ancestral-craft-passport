@@ -36,6 +36,7 @@
   --color-indigo: var(--indigo);
   --color-indigo-foreground: var(--indigo-foreground);
   --color-sand: var(--sand);
+  --color-craft-photo: var(--craft-photo);
   --color-gold: var(--gold);
   --color-gold-foreground: var(--gold-foreground);
   --color-jade: var(--jade);
@@ -88,6 +89,7 @@
   --indigo: oklch(0.23 0.022 52);
   --indigo-foreground: oklch(0.95 0.012 85);
   --sand: oklch(0.925 0.022 82);
+  --craft-photo: #d5e7f0;
   --gold: oklch(0.65 0.1 75);
   --gold-foreground: oklch(0.24 0.02 55);
   --jade: oklch(0.52 0.09 155);

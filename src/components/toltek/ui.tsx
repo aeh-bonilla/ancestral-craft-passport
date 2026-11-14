@@ -101,8 +101,8 @@ export function PiecePhotoGallery({
   const currentIdx = Math.min(active, items.length - 1);
 
   return (
-    <div className={cn("flex flex-col bg-sand overflow-hidden", className)}>
-      <div className="relative flex-1 min-h-[300px] max-h-[65vh] md:max-h-none flex items-center justify-center overflow-hidden bg-black/5">
+    <div className={cn("flex flex-col bg-craft-photo overflow-hidden", className)}>
+      <div className="relative flex-1 min-h-[300px] max-h-[65vh] md:max-h-none flex items-center justify-center overflow-hidden bg-craft-photo">
         <img
           src={items[currentIdx]}
           alt={title ? t(title) : "Foto de la pieza"}
@@ -197,7 +197,7 @@ export function PieceCard({
         "group flex flex-col overflow-hidden rounded-2xl border border-border/80 bg-card shadow-xs transition-all duration-300 hover:shadow-md hover:-translate-y-0.5",
         clickable && "cursor-pointer"
       )}>
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-sand/40">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-craft-photo">
         <img
           src={gallery[currentIdx] || piece.image}
           alt={t(piece.title)}
@@ -411,7 +411,7 @@ export function CuratorialPieceDetail({
         <div className="lg:col-span-5 p-6 sm:p-8 md:p-10 flex flex-col justify-between bg-card">
           <div className="space-y-6">
             {/* Foto de la Obra con Badge de Certificado */}
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-sand/40 border border-border/70 shadow-sm">
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-craft-photo border border-border/70 shadow-sm">
               <img
                 src={piece.image}
                 alt={t(piece.title)}

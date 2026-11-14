@@ -1,4 +1,4 @@
-import { QRCodeSVG } from 'qrcode.react';
+import { PassportQrCode } from '@/components/toltek/PassportQrCode';
 import { Link } from '@tanstack/react-router';
 import { ExternalLink, ShieldCheck } from 'lucide-react';
 import { useI18n } from '@/i18n';
@@ -10,7 +10,7 @@ export function PiecePassportQr({ piece, compact = false }: { piece: Piece; comp
   const { t } = useI18n();
   return <section aria-label={`${t('Pasaporte Stellar')} · ${piece.id}`} className="flex items-start gap-4 border-t border-border py-4">
     <Link to="/verificar" search={{ id: piece.id }} aria-label={`${t('Consultar pasaporte')} · ${piece.id}`} className="shrink-0 rounded-md focus-visible:outline-ring">
-      <QRCodeSVG value={piecePassportUrl(piece)} size={compact ? 100 : 152} level="M" marginSize={4} title={`${t('Código QR del pasaporte')} · ${piece.id}`} />
+      <PassportQrCode value={piecePassportUrl(piece)} size={compact ? 100 : 152} title={`${t('Código QR del pasaporte')} · ${piece.id}`} />
     </Link>
     <div className="min-w-0 flex-1 space-y-1 text-xs">
       <p className="flex items-center gap-1.5 font-semibold text-foreground"><ShieldCheck className="h-4 w-4 shrink-0 text-jade" />{t('Pasaporte Stellar')}</p>

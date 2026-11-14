@@ -51,7 +51,7 @@ import {
 import { QrCameraScanner } from "@/components/toltek/QrCameraScanner";
 import { PiecePassportQr } from '@/components/toltek/PiecePassportQr';
 import { piecePassportUrl } from '@/lib/piece-passport';
-import { QRCodeSVG } from 'qrcode.react';
+import { PassportQrCode } from '@/components/toltek/PassportQrCode';
 import {
   contractId,
   getPiece,
@@ -1099,11 +1099,9 @@ function BlockchainAuditPanel({
               </div>
             </dl>
             <div className="self-center rounded-xl bg-card p-3">
-              <QRCodeSVG
+              <PassportQrCode
                 value={piecePassportUrl(work)}
                 size={190}
-                level="M"
-                marginSize={4}
                 title="Código QR del pasaporte"
               />
             </div>
