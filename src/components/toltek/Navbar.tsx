@@ -9,11 +9,11 @@ import { Button } from "@/components/ui/button";
 import { Logo } from "./ui";
 import { useI18n } from "@/i18n";
 
-const leftLinks: Array<{ to: "/" | "/verificar" | "/mercado"; hash?: string; es: string; en: string }> = [
+const leftLinks: Array<{ to: "/" | "/verificar" | "/mercado" | "/regiones"; hash?: string; es: string; en: string }> = [
   { to: "/", es: "Inicio", en: "Home" },
   { to: "/verificar", es: "Exposiciones", en: "Exhibitions" },
   { to: "/mercado", es: "Colecciones", en: "Collections" },
-  { to: "/", hash: "regiones", es: "Regiones", en: "Regions" },
+  { to: "/regiones", es: "Regiones", en: "Regions" },
 ];
 
 export function Navbar() {
@@ -67,7 +67,7 @@ export function Navbar() {
         </div>
 
         {/* Acciones y navegación derecha */}
-        <div className="hidden lg:flex lg:flex-1 items-center justify-end gap-6">
+        <div className="hidden lg:flex lg:flex-1 items-center justify-end gap-3 xl:gap-6 [&>a]:whitespace-nowrap">
           <Link
             to="/mercado"
             className="text-xs font-medium tracking-wide text-foreground/75 transition-colors hover:text-foreground"
@@ -78,7 +78,7 @@ export function Navbar() {
             to="/panel"
             className="text-xs font-medium tracking-wide text-foreground/75 transition-colors hover:text-foreground"
           >
-            {t("Contacto")}
+            {t("Panel del Promotor")}
           </Link>
 
           <div className="h-4 w-px bg-border/80" />

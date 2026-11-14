@@ -14,3 +14,6 @@
 - Internationalization uses a per-render i18next instance with Spanish SSR defaults and browser-only preference restoration; translated labels never replace stored profile, filter, contract or hash values.
 - Bind i18next through the app's own React context instead of a separately prebundled React adapter to avoid mismatched React instances during preview dependency updates.
 - Artisan banking details are transient form inputs; keep only salted domain-separated SHA-256 hashes in the mock catalog, never raw bank/account/CLABE values, because the current artisan flow is not a payment backend.
+- Regional public microsites and map filters share an explicit editorial catalog with stable IDs and piece membership; this prevents translated labels or neighboring regions from mixing unrelated works.
+- Geographic maps use the managed Google Maps JavaScript loader with public browser credentials, callback initialization and tracking channel; keep Places and server credentials out of the browser.
+- Optional legacy catalog contracts are typed locally rather than added to the generated managed schema; preserve existing local fallback when those tables are unavailable.

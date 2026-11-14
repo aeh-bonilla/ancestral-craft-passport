@@ -1,5 +1,7 @@
-- [ ] Add the public Regiones interactive map with craft, community and technique filters based on the supplied reference.
-- [ ] Open a regional microsite with its works when a region is selected, following the second reference.
+- [x] Add the public Regiones Google map and craft/community/technique filters for the eight catalog communities; filter and empty states verified.
+- [ ] Verify Google Maps rendering and marker navigation on an authorized published origin; Maps-dependent sandbox checks are unsupported.
+- [x] Open eight regional microsites with explicit work membership; Cuetzalan navigation, three works and mobile layout verified.
+- [x] Restore the visible Panel del Promotor navigation and restyle all six existing menu options; verified through the app's current sign-in form.
 - [x] Require Google authentication for Panel and Registro de Obras; preserve public pages.
 - [x] Implement persistent owner-only promoter profile and private photo storage with saved-data restoration.
 - [x] Verify signed-out restrictions and public pages on desktop/mobile; access tests pass.

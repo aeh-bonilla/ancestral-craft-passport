@@ -522,24 +522,27 @@ function Panel() {
 
   return (
     <div className="mx-auto grid max-w-[1440px] gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[248px_minmax(0,1fr)]">
-      <aside className="flex gap-2 overflow-x-auto rounded-xl bg-sidebar p-3 text-sidebar-foreground [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:flex-col lg:self-start">
-        <p className="hidden px-3 pb-2 pt-1 text-xs uppercase tracking-wider opacity-60 lg:block">
+      <aside aria-label={t("Panel del Promotor")} className="flex gap-2 overflow-x-auto border-b border-border bg-background py-3 text-foreground [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:sticky lg:top-24 lg:flex-col lg:self-start lg:border-b-0 lg:border-r lg:pr-5">
+        <h1 className="hidden px-3 pb-3 text-2xl font-normal lg:block">{t("Panel del Promotor")}</h1>
+        <p className="hidden px-3 pb-4 text-xs text-muted-foreground lg:block">
           Cooperativa Guelaguetza
         </p>
         {nav.map((n) => (
-          <button
+          <Button
             key={n.id}
+            variant="ghost"
             onClick={() => setTab(n.id)}
+            aria-pressed={tab === n.id}
             className={cn(
-              "flex shrink-0 items-center justify-start gap-2.5 whitespace-nowrap rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors lg:w-full",
+              "h-auto shrink-0 justify-start gap-2.5 whitespace-nowrap rounded-md px-3 py-3 text-left text-sm font-medium lg:w-full",
               tab === n.id
-                ? "bg-sidebar-primary text-sidebar-primary-foreground"
-                : "hover:bg-sidebar-accent",
+                ? "bg-primary/10 text-primary hover:bg-primary/15"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground",
             )}
           >
             <n.icon className="h-4 w-4 shrink-0" />
             <span>{t(n.label)}</span>
-          </button>
+          </Button>
         ))}
       </aside>
 

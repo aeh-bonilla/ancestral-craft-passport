@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { images, pieces, USDC_RATE, type Piece } from "./toltek";
 import {
   getContractExplorerUrl,
@@ -69,8 +70,29 @@ export interface AuthoryRightsEvent {
   createdAt: string;
 }
 
-type DbWorkRow = Database["public"]["Tables"]["works"]["Row"];
-type DbRightsEventRow = Database["public"]["Tables"]["rights_events"]["Row"];
+// Optional legacy catalog tables are not part of the managed generated schema.
+// Keep their existing best-effort calls typed independently; local fallback remains authoritative.
+type DbWorkRow = {
+  id: string; promoter_id: string | null; title: string; type: WorkType;
+  description: string; author: string; artisan: string; community: string;
+  region: string; technique: string; materials: string; dimensions: string;
+  price_mxn: number; hash: string; stellar_transaction_id: string | null;
+  network: string; status: WorkStatus; filename: string | null; file_size: string | null;
+  file_mime_type: string | null; source_url: string | null; file_url: string | null;
+  notes: string | null; created_at: string; registered_at: string;
+};
+type DbRightsEventRow = {
+  id: string; work_id: string; promoter_id: string | null; type: RightsEventType;
+  actor: string; recipient: string | null; effective_date: string; terms: string | null;
+  notes: string | null; stellar_transaction_id: string | null; created_at: string;
+};
+type LegacyTable<Row> = { Row: Row; Insert: Partial<Row>; Update: Partial<Row>; Relationships: [] };
+type LegacyCatalogDatabase = Omit<Database, 'public'> & {
+  public: Omit<Database['public'], 'Tables'> & { Tables: Database['public']['Tables'] & {
+    works: LegacyTable<DbWorkRow>; rights_events: LegacyTable<DbRightsEventRow>;
+  } };
+};
+const legacyCatalog = supabase as unknown as SupabaseClient<LegacyCatalogDatabase>;
 
 const LOCAL_WORKS_KEY = "tlamatik_authory_works";
 const LOCAL_EVENTS_KEY = "tlamatik_authory_events";
@@ -379,7 +401,7 @@ export async function saveWorkAndInitialEvents(work: AuthoryWork): Promise<{
   }
 
   try {
-    const { error: workError } = await supabase.from("works").upsert({
+    const { error: workError } = await legacyCatalog.from("works").upsert({
       id: work.id,
       promoter_id: work.promoterId ?? null,
       title: work.title,
@@ -412,7 +434,7 @@ export async function saveWorkAndInitialEvents(work: AuthoryWork): Promise<{
     }
 
     for (const evt of initialEvents) {
-      await supabase.from("rights_events").upsert({
+      await legacyCatalog.from("rights_events").upsert({
         id: evt.id,
         work_id: evt.workId,
         promoter_id: evt.promoterId ?? null,
@@ -438,7 +460,7 @@ export async function recordRightsEvent(
 ): Promise<boolean> {
   writeLocalEvent(event);
   try {
-    const { error } = await supabase.from("rights_events").upsert({
+    const { error } = await legacyCatalog.from("rights_events").upsert({
       id: event.id,
       work_id: event.workId,
       promoter_id: event.promoterId ?? null,
@@ -465,8 +487,8 @@ export async function findWorkByIdOrHash(query: string): Promise<AuthoryWork | n
 
   try {
     const req = isHash
-      ? supabase.from("works").select("*").eq("hash", cleaned.toLowerCase()).maybeSingle()
-      : supabase.from("works").select("*").ilike("id", cleaned).maybeSingle();
+      ? legacyCatalog.from("works").select("*").eq("hash", cleaned.toLowerCase()).maybeSingle()
+      : legacyCatalog.from("works").select("*").ilike("id", cleaned).maybeSingle();
     const { data, error } = await req;
     if (!error && data) {
       return mapDbRowToWork(data);
@@ -529,7 +551,7 @@ export async function saveWorkDraft(work: AuthoryWork): Promise<AuthoryWork> {
   };
   writeLocalWork(draft);
   try {
-    await supabase.from("works").upsert({
+    await legacyCatalog.from("works").upsert({
       id: draft.id,
       promoter_id: draft.promoterId ?? null,
       title: draft.title,
@@ -610,7 +632,7 @@ export async function updateUnanchoredWork(
 
   writeLocalWork(updated);
   try {
-    await supabase
+    await legacyCatalog
       .from("works")
       .update({
         title: updated.title,
@@ -660,7 +682,7 @@ export async function listAllRegisteredWorks(): Promise<RegisteredWorkSummary[]>
   }
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await legacyCatalog
       .from("works")
       .select("*")
       .order("created_at", { ascending: false })
@@ -747,7 +769,7 @@ export async function listAllCatalogPieces(): Promise<Piece[]> {
   }
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await legacyCatalog
       .from("works")
       .select("*")
       .order("created_at", { ascending: false })
@@ -778,7 +800,7 @@ export async function getWorkRightsEvents(
   const combined: AuthoryRightsEvent[] = [];
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await legacyCatalog
       .from("rights_events")
       .select("*")
       .eq("work_id", workId)

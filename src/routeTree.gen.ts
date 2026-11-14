@@ -13,9 +13,12 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as MercadoRouteImport } from './routes/mercado'
+import { Route as RegionesRouteImport } from './routes/regiones'
 import { Route as VerificarRouteImport } from './routes/verificar'
 import { Route as AuthenticatedPanelRouteImport } from './routes/_authenticated/panel'
 import { Route as AuthenticatedRegistrarRouteImport } from './routes/_authenticated/registrar'
+import { Route as RegionesIndexRouteImport } from './routes/regiones.index'
+import { Route as RegionesRegionRouteImport } from './routes/regiones.$region'
 import { Route as ApiWebhooksPeyRouteImport } from './routes/api/webhooks/pey'
 
 const IndexRoute = IndexRouteImport.update({
@@ -37,6 +40,11 @@ const MercadoRoute = MercadoRouteImport.update({
   path: '/mercado',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegionesRoute = RegionesRouteImport.update({
+  id: '/regiones',
+  path: '/regiones',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VerificarRoute = VerificarRouteImport.update({
   id: '/verificar',
   path: '/verificar',
@@ -52,6 +60,16 @@ const AuthenticatedRegistrarRoute = AuthenticatedRegistrarRouteImport.update({
   path: '/registrar',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const RegionesIndexRoute = RegionesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RegionesRoute,
+} as any)
+const RegionesRegionRoute = RegionesRegionRouteImport.update({
+  id: '/$region',
+  path: '/$region',
+  getParentRoute: () => RegionesRoute,
+} as any)
 const ApiWebhooksPeyRoute = ApiWebhooksPeyRouteImport.update({
   id: '/api/webhooks/pey',
   path: '/api/webhooks/pey',
@@ -62,9 +80,12 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/mercado': typeof MercadoRoute
+  '/regiones': typeof RegionesRouteWithChildren
   '/verificar': typeof VerificarRoute
   '/panel': typeof AuthenticatedPanelRoute
   '/registrar': typeof AuthenticatedRegistrarRoute
+  '/regiones/$region': typeof RegionesRegionRoute
+  '/regiones/': typeof RegionesIndexRoute
   '/api/webhooks/pey': typeof ApiWebhooksPeyRoute
 }
 export interface FileRoutesByTo {
@@ -74,6 +95,8 @@ export interface FileRoutesByTo {
   '/verificar': typeof VerificarRoute
   '/panel': typeof AuthenticatedPanelRoute
   '/registrar': typeof AuthenticatedRegistrarRoute
+  '/regiones/$region': typeof RegionesRegionRoute
+  '/regiones': typeof RegionesIndexRoute
   '/api/webhooks/pey': typeof ApiWebhooksPeyRoute
 }
 export interface FileRoutesById {
@@ -82,9 +105,12 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/mercado': typeof MercadoRoute
+  '/regiones': typeof RegionesRouteWithChildren
   '/verificar': typeof VerificarRoute
   '/_authenticated/panel': typeof AuthenticatedPanelRoute
   '/_authenticated/registrar': typeof AuthenticatedRegistrarRoute
+  '/regiones/$region': typeof RegionesRegionRoute
+  '/regiones/': typeof RegionesIndexRoute
   '/api/webhooks/pey': typeof ApiWebhooksPeyRoute
 }
 export interface FileRouteTypes {
@@ -93,9 +119,12 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/mercado'
+    | '/regiones'
     | '/verificar'
     | '/panel'
     | '/registrar'
+    | '/regiones/$region'
+    | '/regiones/'
     | '/api/webhooks/pey'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -105,6 +134,8 @@ export interface FileRouteTypes {
     | '/verificar'
     | '/panel'
     | '/registrar'
+    | '/regiones/$region'
+    | '/regiones'
     | '/api/webhooks/pey'
   id:
     | '__root__'
@@ -112,9 +143,12 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/mercado'
+    | '/regiones'
     | '/verificar'
     | '/_authenticated/panel'
     | '/_authenticated/registrar'
+    | '/regiones/$region'
+    | '/regiones/'
     | '/api/webhooks/pey'
   fileRoutesById: FileRoutesById
 }
@@ -123,6 +157,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   MercadoRoute: typeof MercadoRoute
+  RegionesRoute: typeof RegionesRouteWithChildren
   VerificarRoute: typeof VerificarRoute
   ApiWebhooksPeyRoute: typeof ApiWebhooksPeyRoute
 }
@@ -157,6 +192,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MercadoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/regiones': {
+      id: '/regiones'
+      path: '/regiones'
+      fullPath: '/regiones'
+      preLoaderRoute: typeof RegionesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/verificar': {
       id: '/verificar'
       path: '/verificar'
@@ -177,6 +219,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/registrar'
       preLoaderRoute: typeof AuthenticatedRegistrarRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/regiones/': {
+      id: '/regiones/'
+      path: '/'
+      fullPath: '/regiones/'
+      preLoaderRoute: typeof RegionesIndexRouteImport
+      parentRoute: typeof RegionesRoute
+    }
+    '/regiones/$region': {
+      id: '/regiones/$region'
+      path: '/$region'
+      fullPath: '/regiones/$region'
+      preLoaderRoute: typeof RegionesRegionRouteImport
+      parentRoute: typeof RegionesRoute
     }
     '/api/webhooks/pey': {
       id: '/api/webhooks/pey'
@@ -201,11 +257,26 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface RegionesRouteChildren {
+  RegionesRegionRoute: typeof RegionesRegionRoute
+  RegionesIndexRoute: typeof RegionesIndexRoute
+}
+
+const RegionesRouteChildren: RegionesRouteChildren = {
+  RegionesRegionRoute: RegionesRegionRoute,
+  RegionesIndexRoute: RegionesIndexRoute,
+}
+
+const RegionesRouteWithChildren = RegionesRoute._addFileChildren(
+  RegionesRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   MercadoRoute: MercadoRoute,
+  RegionesRoute: RegionesRouteWithChildren,
   VerificarRoute: VerificarRoute,
   ApiWebhooksPeyRoute: ApiWebhooksPeyRoute,
 }
