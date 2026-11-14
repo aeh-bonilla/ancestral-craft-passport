@@ -49,31 +49,35 @@ import { encodeQrMatrix } from "@/lib/qr-encoder";
 import tlamatikMark from "@/assets/tlamatik-mark.png";
 
 export function Logo({ className }: { className?: string }) {
-  const { t, money } = useI18n();
   return (
-    <span className={cn("flex items-center gap-2", className)}>
-      <img src={tlamatikMark} alt={t("Sello Tlamatik")} width={36} height={36} className="h-9 w-9" />
-      <span className="font-serif text-2xl font-semibold tracking-wide">Tlamatik</span>
+    <span className={cn("inline-flex flex-col items-center justify-center text-center select-none leading-none", className)}>
+      <span className="font-serif text-xl sm:text-2xl font-normal tracking-[0.24em] text-foreground uppercase">
+        ARTE & ORIGEN
+      </span>
+      <span className="text-[8px] sm:text-[9px] tracking-[0.28em] text-muted-foreground uppercase font-sans font-medium mt-0.5">
+        TLAMATIK · PASAPORTE CULTURAL
+      </span>
     </span>
   );
 }
 
-export function StellarBadge({ className, label = "Certificado en Stellar" }: { className?: string; label?: string }) {
-  const { t, money } = useI18n();
+export function StellarBadge({ className, label = "CERTIFICADO DE ORIGEN" }: { className?: string; label?: string }) {
+  const { t } = useI18n();
   return (
-    <span className={cn("inline-flex items-center gap-1 rounded-full bg-seal px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-gold-foreground shadow-sm", className)}>
-      <img src={tlamatikMark} alt="" className="h-3.5 w-3.5 rounded-full" /> {t(label)}
+    <span className={cn("inline-flex items-center gap-1.5 rounded-full bg-[#EAE0D2]/95 px-2.5 py-1 text-[10px] font-semibold tracking-wider text-[#4A3D2F] uppercase backdrop-blur-xs border border-[#DCD0C0]/90 shadow-xs", className)}>
+      <span className="grid h-3.5 w-3.5 place-items-center rounded-full bg-[#4A3D2F]/15 text-[9px] font-serif font-bold">@</span>
+      <span>{t(label)}</span>
     </span>
   );
 }
 
 export function SectionTitle({ eyebrow, title, sub, center }: { eyebrow?: string; title: string; sub?: string; center?: boolean }) {
-  const { t, money } = useI18n();
+  const { t } = useI18n();
   return (
     <div className={cn("max-w-2xl", center && "mx-auto text-center")}>
-      {eyebrow && <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-primary">{t(eyebrow)}</p>}
-      <h2 className="text-3xl font-semibold leading-tight md:text-4xl">{t(title)}</h2>
-      {sub && <p className="mt-3 text-muted-foreground">{t(sub)}</p>}
+      {eyebrow && <p className="mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-primary">{t(eyebrow)}</p>}
+      <h2 className="font-serif text-3xl font-normal tracking-tight leading-tight md:text-4xl text-foreground">{t(title)}</h2>
+      {sub && <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{t(sub)}</p>}
     </div>
   );
 }
@@ -151,10 +155,18 @@ export function PiecePhotoGallery({
   );
 }
 
-export function PieceCard({ piece, action }: { piece: Piece; action?: React.ReactNode }) {
+export function PieceCard({
+  piece,
+  action,
+  index,
+}: {
+  piece: Piece;
+  action?: React.ReactNode;
+  index?: number;
+}) {
   const { t, money } = useI18n();
   const [open, setOpen] = useState(false);
-  const clickable = !!piece.featured;
+  const clickable = !action;
   const gallery = piece.gallery && piece.gallery.length > 0 ? piece.gallery : [piece.image];
   const [currentIdx, setCurrentIdx] = useState(0);
 
@@ -170,6 +182,8 @@ export function PieceCard({ piece, action }: { piece: Piece; action?: React.Reac
     setCurrentIdx((prev) => (prev < gallery.length - 1 ? prev + 1 : 0));
   };
 
+  const indexPrefix = index !== undefined ? `${String(index + 1).padStart(2, "0")}. ` : "";
+
   return (
     <>
     <article
@@ -178,19 +192,22 @@ export function PieceCard({ piece, action }: { piece: Piece; action?: React.Reac
       tabIndex={clickable ? 0 : undefined}
       role={clickable ? "button" : undefined}
       aria-label={clickable ? t("Abrir pasaporte de {{title}}", { title: t(piece.title) }) : undefined}
-      className={cn("group overflow-hidden rounded-xl border bg-card shadow-float transition-transform hover:-translate-y-1", clickable && "cursor-pointer ring-2 ring-gold/60")}>
-      <div className="relative aspect-square overflow-hidden bg-sand">
+      className={cn(
+        "group flex flex-col overflow-hidden rounded-2xl border border-border/80 bg-card shadow-xs transition-all duration-300 hover:shadow-md hover:-translate-y-0.5",
+        clickable && "cursor-pointer"
+      )}>
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-sand/40">
         <img
           src={gallery[currentIdx] || piece.image}
           alt={t(piece.title)}
           loading="lazy"
           width={816}
-          height={816}
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          height={612}
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
-        <StellarBadge className="absolute left-3 top-3 z-10" />
+        <StellarBadge className="absolute left-3.5 top-3.5 z-10" />
         {gallery.length > 1 && (
-          <div className="absolute right-3 top-3 z-10 flex items-center gap-1 rounded-full bg-black/60 px-2 py-0.5 font-mono text-[10px] text-white backdrop-blur-xs">
+          <div className="absolute right-3.5 top-3.5 z-10 flex items-center gap-1 rounded-full bg-black/50 px-2 py-0.5 font-mono text-[10px] text-white backdrop-blur-xs">
             <Images className="h-3 w-3" />
             <span>{currentIdx + 1}/{gallery.length}</span>
           </div>
@@ -215,33 +232,44 @@ export function PieceCard({ piece, action }: { piece: Piece; action?: React.Reac
             </button>
           </div>
         )}
-        {piece.badge && (
-          <span className="absolute bottom-3 left-3 z-10 flex items-center gap-1 rounded-full bg-indigo px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-indigo-foreground shadow-sm">
-            <Sparkles className="h-3 w-3" /> {piece.badge}
-          </span>
-        )}
-        {!gallery.length || gallery.length <= 1 ? (
-          <span className="absolute right-3 top-3 rounded-full bg-card/90 px-2 py-0.5 font-mono text-[10px] text-muted-foreground">{piece.id}</span>
-        ) : null}
-        {piece.unesco && (
-          <span className="absolute inset-x-3 bottom-3 z-10 flex items-center gap-1.5 rounded-full bg-seal px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-gold-foreground shadow-sm">
-            <Award className="h-3.5 w-3.5 shrink-0" /> {t(piece.unesco)}
-          </span>
-        )}
       </div>
-      <div className="space-y-2 p-4">
-        <p className="text-xs font-medium uppercase tracking-wider text-primary">{piece.community}, {piece.region}</p>
-        <h3 className="text-lg font-semibold leading-snug">{t(piece.title)}</h3>
-        <p className="text-sm text-muted-foreground">{piece.artisan} · {t(piece.technique)}</p>
-        <div className="flex flex-col gap-2 pt-2">
-          <div className="flex items-end justify-between">
-            <div>
-              <p className="flex items-center gap-1.5 font-semibold">{money(piece.priceMxn)} <PriceBreakdown priceMxn={piece.priceMxn} /></p>
+      <div className="flex flex-1 flex-col justify-between p-4 sm:p-5">
+        <div className="space-y-1">
+          <p className="text-[11px] font-medium tracking-[0.14em] uppercase text-muted-foreground">
+            {piece.community.toUpperCase()}, {piece.region.toUpperCase()}
+          </p>
+          <h3 className="font-serif text-base sm:text-lg font-semibold leading-snug text-foreground">
+            {indexPrefix}{t(piece.title)}
+          </h3>
+          <p className="text-xs text-muted-foreground line-clamp-1">
+            {piece.artisan.toLowerCase().includes("colectivo") || piece.artisan.toLowerCase().includes("taller") || piece.artisan.toLowerCase().includes("familia")
+              ? piece.artisan
+              : `${t("Artesana(o)")}: ${piece.artisan}`} · {t(piece.technique)}
+          </p>
+        </div>
+        <div className="flex flex-col gap-2 pt-4 mt-auto">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5">
+              <span className="font-sans text-sm font-semibold text-foreground">
+                MXN {piece.priceMxn.toLocaleString("es-MX")}
+              </span>
+              <PriceBreakdown priceMxn={piece.priceMxn} />
             </div>
             {!action && (clickable ? (
-              <button onClick={() => setOpen(true)} className="text-sm font-medium text-primary hover:underline">{t("Ver pasaporte →")}</button>
+              <button
+                onClick={() => setOpen(true)}
+                className="text-xs font-medium text-foreground/80 hover:text-primary transition-colors underline-offset-4 hover:underline"
+              >
+                {t("Ver pasaporte →")}
+              </button>
             ) : (
-              <Link to="/verificar" search={{ id: piece.id }} className="text-sm font-medium text-primary hover:underline">{t("Ver pasaporte →")}</Link>
+              <Link
+                to="/verificar"
+                search={{ id: piece.id }}
+                className="text-xs font-medium text-foreground/80 hover:text-primary transition-colors underline-offset-4 hover:underline"
+              >
+                {t("Ver pasaporte →")}
+              </Link>
             ))}
           </div>
           {action}
@@ -366,30 +394,35 @@ export function QrCode({ value, size = 140, className }: { value: string; size?:
 
 
 
-/** Desglose transparente "Buyer Premium": 95.2% artesano / 4.8% certificado. */
+/** Desglose transparente "Buyer Premium": 95% artesano / 5% certificado. */
 export function PriceBreakdown({ priceMxn }: { priceMxn: number }) {
-  const { t, money } = useI18n();
+  const { t } = useI18n();
+  const base = Math.round(priceMxn * 0.95);
+  const cert = priceMxn - base;
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button aria-label={t("Ver desglose transparente del precio")} className="text-muted-foreground transition-colors hover:text-primary">
-          <Info className="h-4 w-4" />
+        <button
+          aria-label={t("Ver desglose transparente del precio")}
+          className="inline-flex items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <span className="grid h-3.5 w-3.5 place-items-center rounded-full border border-foreground/35 text-[9px] font-sans font-medium text-foreground">ⓘ</span>
         </button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 text-sm">
-        <p className="font-semibold">{t("Desglose transparente")}</p>
+      <PopoverContent className="w-72 rounded-xl border border-[#D5CABB] bg-[#EFE8DB] p-4 text-xs text-[#2B231D] shadow-md">
+        <p className="font-serif text-sm font-semibold">{t("Desglose transparente")}</p>
         <dl className="mt-3 space-y-2">
-          <div className="flex items-start justify-between gap-3">
-            <dt className="text-muted-foreground">{t("Precio Base para el Artesano (95.2%)")}</dt>
-            <dd className="shrink-0 font-mono">{money(priceMxn * 0.952, 2)}</dd>
+          <div className="flex items-start justify-between gap-3 text-[11px]">
+            <dt className="text-[#6B5E50]">{t("Precio Base para el Artesano (95%)")}</dt>
+            <dd className="shrink-0 font-medium whitespace-nowrap">MXN {base.toLocaleString("es-MX")}</dd>
           </div>
-          <div className="flex items-start justify-between gap-3">
-            <dt className="text-muted-foreground">{t("Certificado Phygital & Buyer Premium (4.8%)")}</dt>
-            <dd className="shrink-0 font-mono">{money(priceMxn * 0.048, 2)}</dd>
+          <div className="flex items-start justify-between gap-3 text-[11px]">
+            <dt className="text-[#6B5E50]">{t("Certificado y Preservación (5%)")}</dt>
+            <dd className="shrink-0 font-medium whitespace-nowrap">MXN {cert.toLocaleString("es-MX")}</dd>
           </div>
-          <div className="flex items-start justify-between gap-3 border-t pt-2 font-semibold">
-            <dt>{t("Total Transparentado")}</dt>
-            <dd className="shrink-0 font-mono">{money(priceMxn, 2)}</dd>
+          <div className="flex items-start justify-between gap-3 border-t border-[#D5CABB] pt-2 font-semibold text-xs">
+            <dt>{t("Total Transparente")}</dt>
+            <dd className="shrink-0 whitespace-nowrap">MXN {priceMxn.toLocaleString("es-MX")}</dd>
           </div>
         </dl>
       </PopoverContent>

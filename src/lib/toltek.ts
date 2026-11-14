@@ -6,9 +6,26 @@ import cobre from "@/assets/cobre.jpg";
 import talavera from "@/assets/talavera.jpg";
 import hero from "@/assets/hero.jpg";
 import tecuani from "@/assets/tecuani-tk0512.jpg";
+import rebozoCuetzalan from "@/assets/rebozo-cuetzalan.jpg";
+import huipilCuetzalan from "@/assets/huipil-cuetzalan.jpg";
+import canastaCuetzalan from "@/assets/canasta-cuetzalan.jpg";
+import cuetzalanCourtyard from "@/assets/cuetzalan-courtyard.jpg";
 import type { BankingHashes } from "./artisan-banking";
 
-export const images = { alebrije, barroNegro, huipil, olinala, cobre, talavera, hero, tecuani };
+export const images = {
+  alebrije,
+  barroNegro,
+  huipil,
+  olinala,
+  cobre,
+  talavera,
+  hero,
+  tecuani,
+  rebozoCuetzalan,
+  huipilCuetzalan,
+  canastaCuetzalan,
+  cuetzalanCourtyard,
+};
 
 export const USDC_RATE = 17.2; // MXN por USDC (mock)
 
@@ -18,7 +35,7 @@ export type Piece = {
   artisan: string;
   community: string;
   region: "Oaxaca" | "Chiapas" | "Jalisco" | "Michoacán" | "Guerrero" | "Puebla";
-  technique: "Textil" | "Cerámica" | "Talla en Madera" | "Filigrana" | "Laca";
+  technique: "Textil" | "Cerámica" | "Talla en Madera" | "Filigrana" | "Laca" | "Cestería";
   priceMxn: number;
   image: string;
   gallery?: string[] | undefined;
@@ -40,6 +57,78 @@ export type Piece = {
 };
 
 export const pieces: Piece[] = [
+  {
+    id: "TK-0701",
+    title: "Rebozo de Lana Tradicional",
+    artisan: "María Dolores - Telar de Cintura",
+    community: "Cuetzalan",
+    region: "Puebla",
+    technique: "Textil",
+    priceMxn: 1850,
+    image: rebozoCuetzalan,
+    gallery: [rebozoCuetzalan, huipilCuetzalan, cuetzalanCourtyard],
+    featured: true,
+    badge: "Cuetzalan · Telar de Cintura",
+    category: "Textiles / Rebozos y Fajas",
+    location: "Cuetzalan del Progreso, Puebla, México",
+    techniqueDetail: "Tejido en telar de cintura con lana virgen hilada a mano y teñido con tintes naturales de la Sierra Norte",
+    dimensions: "210cm x 75cm (520g)",
+    priceUsd: 108,
+    certFeeMxn: 92,
+    shippingMxn: 0,
+    status: "available",
+    stellarTxHash: "4a28f72c01998b795f328f99e9ba60d863202d06aa1166016d0cd573eadd49e1",
+    ledgerStatus: "Verified on Soroban Testnet",
+    story: "El rebozo tradicional de lana es prenda de abrigo y símbolo de identidad en la Sierra Norte de Puebla. Elaborado pacientemente durante cuatro semanas en telar de cintura por la maestra María Dolores, entrelaza saberes ancestrales transmitidos de generación en generación.",
+  },
+  {
+    id: "TK-0702",
+    title: "Huipil Ceremonial Bordado",
+    artisan: "Colectivo Masehual - Textil",
+    community: "Cuetzalan",
+    region: "Puebla",
+    technique: "Textil",
+    priceMxn: 3200,
+    image: huipilCuetzalan,
+    gallery: [huipilCuetzalan, rebozoCuetzalan, cuetzalanCourtyard],
+    featured: true,
+    badge: "Cuetzalan · Bordado Masehual",
+    category: "Textil Ceremonial / Huipiles",
+    location: "Cuetzalan del Progreso, Puebla, México",
+    techniqueDetail: "Lienzo de algodón puro tejido en telar de cintura con bordado en punto de cruz hilvanado con motivos de flores y fauna sagrada",
+    dimensions: "105cm x 68cm (380g)",
+    priceUsd: 186,
+    certFeeMxn: 160,
+    shippingMxn: 0,
+    status: "available",
+    stellarTxHash: "5b39e83d12998b795f328f99e9ba60d863202d06aa1166016d0cd573eadd50f2",
+    ledgerStatus: "Verified on Soroban Testnet",
+    story: "Vestimenta tradicional de las festividades patronales de San Francisco de Asís. El bordado en el pecho representa la unión del cielo, la tierra y las flores de café de la montaña, custodiado por el Colectivo Masehual para sostener a familias tejedoras.",
+  },
+  {
+    id: "TK-0703",
+    title: "Canasta de Fibra de Jonote",
+    artisan: "Pedro Juárez - Cestería",
+    community: "Cuetzalan",
+    region: "Puebla",
+    technique: "Cestería",
+    priceMxn: 850,
+    image: canastaCuetzalan,
+    gallery: [canastaCuetzalan, cuetzalanCourtyard, rebozoCuetzalan],
+    featured: true,
+    badge: "Cuetzalan · Cestería Ancestral",
+    category: "Cestería y Fibras Vegetales",
+    location: "Cuetzalan del Progreso, Puebla, México",
+    techniqueDetail: "Tejido en espiral con corteza interna del árbol de jonote (Heliocarpus appendiculatus) recolectada en luna menguante",
+    dimensions: "32cm diámetro x 22cm alto (410g)",
+    priceUsd: 49,
+    certFeeMxn: 42,
+    shippingMxn: 0,
+    status: "available",
+    stellarTxHash: "6c4af94e23998b795f328f99e9ba60d863202d06aa1166016d0cd573eadd61a3",
+    ledgerStatus: "Verified on Soroban Testnet",
+    story: "La fibra de jonote es recolectada en las barrancas húmedas de Cuetzalan. Don Pedro Juárez trabaja la fibra con las manos húmedas logrando una resistencia que dura generaciones sin deformarse.",
+  },
   {
     id: "TK-0512",
     title: "El Guardián del Monte: Tecuani de Acatlán",

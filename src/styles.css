@@ -56,51 +56,57 @@
 }
 
 :root {
-  /* Palette extracted from the Aztec ceramic medallion (user image, 2026-10-25):
-     deep indigo #1d3e5e · slate blue #325e7e · soft blue #689caf ·
-     pale blue #b2cfd6 · porcelain #daeaf1 · muted bronze accents */
-  --radius: 0.75rem;
-  --background: oklch(0.927 0.018 225.7);
-  --foreground: oklch(0.27 0.05 248);
-  --card: oklch(0.973 0.008 222);
-  --card-foreground: oklch(0.27 0.05 248);
-  --popover: oklch(0.973 0.008 222);
-  --popover-foreground: oklch(0.27 0.05 248);
-  --primary: oklch(0.465 0.072 242.1);
-  --primary-foreground: oklch(0.975 0.008 222);
-  --secondary: oklch(0.879 0.027 217.2);
-  --secondary-foreground: oklch(0.27 0.05 248);
-  --muted: oklch(0.879 0.027 217.2);
-  --muted-foreground: oklch(0.45 0.045 235);
-  --accent: oklch(0.835 0.033 213.9);
-  --accent-foreground: oklch(0.27 0.05 248);
-  --destructive: oklch(0.577 0.2 27);
+  /* Warm Linen & Roasted Clay Palette (Arte & Origen / Tlamatik):
+     Background: Linen Ivory #F7F4EE
+     Foreground: Dark Roasted Coffee / Cacao #2B231D
+     Card: Soft Cream Ivory #FAF8F5
+     Border: Warm Oat/Bone #E5DFD5
+     Primary: Warm Terracotta / Sienna #A24E2E
+     Popover: Warm Sand #EFE8DB
+     Hero Dark: Warm Espresso #2B231D
+  */
+  --radius: 0.85rem;
+  --background: oklch(0.966 0.011 86);
+  --foreground: oklch(0.24 0.02 55);
+  --card: oklch(0.988 0.007 85);
+  --card-foreground: oklch(0.24 0.02 55);
+  --popover: oklch(0.925 0.022 82);
+  --popover-foreground: oklch(0.24 0.02 55);
+  --primary: oklch(0.48 0.13 45);
+  --primary-foreground: oklch(0.975 0.008 85);
+  --secondary: oklch(0.915 0.018 85);
+  --secondary-foreground: oklch(0.24 0.02 55);
+  --muted: oklch(0.915 0.018 85);
+  --muted-foreground: oklch(0.52 0.025 65);
+  --accent: oklch(0.88 0.025 80);
+  --accent-foreground: oklch(0.24 0.02 55);
+  --destructive: oklch(0.55 0.18 28);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.85 0.03 218);
-  --input: oklch(0.85 0.03 218);
-  --ring: oklch(0.465 0.072 242.1);
-  --indigo: oklch(0.355 0.068 249.7);
-  --indigo-foreground: oklch(0.96 0.012 222);
-  --sand: oklch(0.879 0.027 217.2);
-  --gold: oklch(0.72 0.06 80);
-  --gold-foreground: oklch(0.28 0.05 248);
-  --jade: oklch(0.62 0.07 195);
-  --jade-foreground: oklch(0.975 0.008 222);
-  --chart-1: oklch(0.465 0.072 242.1);
-  --chart-2: oklch(0.62 0.07 195);
-  --chart-3: oklch(0.355 0.068 249.7);
-  --chart-4: oklch(0.72 0.06 80);
-  --chart-5: oklch(0.663 0.062 222.9);
-  --sidebar: oklch(0.355 0.068 249.7);
-  --sidebar-foreground: oklch(0.96 0.012 222);
-  --sidebar-primary: oklch(0.663 0.062 222.9);
-  --sidebar-primary-foreground: oklch(0.28 0.05 248);
-  --sidebar-accent: oklch(0.44 0.065 247);
-  --sidebar-accent-foreground: oklch(0.96 0.012 222);
+  --border: oklch(0.89 0.015 80);
+  --input: oklch(0.89 0.015 80);
+  --ring: oklch(0.48 0.13 45);
+  --indigo: oklch(0.23 0.022 52);
+  --indigo-foreground: oklch(0.95 0.012 85);
+  --sand: oklch(0.925 0.022 82);
+  --gold: oklch(0.65 0.1 75);
+  --gold-foreground: oklch(0.24 0.02 55);
+  --jade: oklch(0.52 0.09 155);
+  --jade-foreground: oklch(0.975 0.008 85);
+  --chart-1: oklch(0.48 0.13 45);
+  --chart-2: oklch(0.52 0.09 155);
+  --chart-3: oklch(0.23 0.022 52);
+  --chart-4: oklch(0.65 0.1 75);
+  --chart-5: oklch(0.75 0.06 70);
+  --sidebar: oklch(0.23 0.022 52);
+  --sidebar-foreground: oklch(0.95 0.012 85);
+  --sidebar-primary: oklch(0.48 0.13 45);
+  --sidebar-primary-foreground: oklch(0.975 0.008 85);
+  --sidebar-accent: oklch(0.32 0.025 55);
+  --sidebar-accent-foreground: oklch(0.95 0.012 85);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.663 0.062 222.9);
-  --shadow-float: 0 18px 40px -18px color-mix(in oklab, var(--indigo) 45%, transparent);
-  --gradient-seal: linear-gradient(135deg, var(--gold), color-mix(in oklab, var(--gold) 60%, var(--primary)));
+  --sidebar-ring: oklch(0.48 0.13 45);
+  --shadow-float: 0 16px 36px -16px color-mix(in oklab, var(--primary) 18%, transparent);
+  --gradient-seal: linear-gradient(135deg, oklch(0.65 0.1 75), oklch(0.48 0.13 45));
 }
 
 @layer base {
@@ -125,21 +131,22 @@
   background-image: var(--gradient-seal);
 }
 
-/* Greca zapoteca minimal: stepped fret band */
+/* Greca textil tradicional minimal */
 @utility greca {
-  height: 10px;
+  height: 3px;
   background-image:
     linear-gradient(90deg, var(--primary) 0 25%, transparent 25% 50%, var(--primary) 50% 75%, transparent 75%),
     linear-gradient(90deg, transparent 0 25%, var(--primary) 25% 50%, transparent 50% 75%, var(--primary) 75%);
-  background-size: 20px 5px, 20px 5px;
-  background-position: 0 0, 0 5px;
+  background-size: 16px 1.5px, 16px 1.5px;
+  background-position: 0 0, 0 1.5px;
   background-repeat: repeat-x;
-  opacity: 0.85;
+  opacity: 0.25;
 }
 
 @utility talavera-bg {
-  background-image: radial-gradient(color-mix(in oklab, var(--primary) 14%, transparent) 1.2px, transparent 1.4px);
-  background-size: 18px 18px;
+  background-color: var(--background);
+  background-image: radial-gradient(color-mix(in oklab, var(--primary) 5%, transparent) 1px, transparent 1.2px);
+  background-size: 24px 24px;
 }
 
 @keyframes confetti-fall {

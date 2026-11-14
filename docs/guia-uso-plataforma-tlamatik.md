@@ -493,3 +493,4 @@ Al momento en que el comprador realiza el pago por CoDi/SPEI, la transferencia s
 ---
 
 *Fin del documento — Tlamatik © 2026. Todos los derechos reservados a las comunidades creadoras de México.*
+
