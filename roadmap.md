@@ -1,3 +1,5 @@
+- [ ] Add the public Regiones interactive map with craft, community and technique filters based on the supplied reference.
+- [ ] Open a regional microsite with its works when a region is selected, following the second reference.
 - [x] Require Google authentication for Panel and Registro de Obras; preserve public pages.
 - [x] Implement persistent owner-only promoter profile and private photo storage with saved-data restoration.
 - [x] Verify signed-out restrictions and public pages on desktop/mobile; access tests pass.
