@@ -81,7 +81,8 @@ function Index() {
   const { t } = useI18n();
   const [selectedRegionId, setSelectedRegionId] = useState("cuetzalan");
 
-  const currentRegion = regionsData.find((r) => r.id === selectedRegionId) || regionsData[0]!;
+  const currentRegion = regionsData.find((r) => r.id === selectedRegionId) || regionsData[0];
+  if (!currentRegion) return null;
 
   const featuredPieces = currentRegion.pieceIds
     .map((id) => pieces.find((p) => p.id === id))
@@ -94,7 +95,7 @@ function Index() {
         <div className="relative overflow-hidden rounded-3xl bg-[#2B231D] text-[#F4EFE6] shadow-xl">
           <div className="grid gap-8 p-6 sm:p-10 md:grid-cols-12 md:gap-12 md:p-14 items-center">
             {/* Columna Izquierda: Información Editorial */}
-            <div className="md:col-span-7 space-y-4">
+            <div className="min-w-0 md:col-span-7 space-y-4">
               <div className="space-y-1">
                 <h1 className="font-serif text-3xl font-normal tracking-tight text-[#F4EFE6] sm:text-4xl md:text-5xl leading-[1.15]">
                   {t(currentRegion.name)}
@@ -128,7 +129,7 @@ function Index() {
             </div>
 
             {/* Columna Derecha: Fotografía de Taller / Comunidad */}
-            <div className="md:col-span-5">
+            <div className="min-w-0 md:col-span-5">
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-white/10 shadow-lg">
                 <img
                   src={currentRegion.image}
@@ -150,7 +151,7 @@ function Index() {
         </div>
 
         {/* Capturas de identidad editorial en esquinas inferiores */}
-        <div className="mt-8 flex items-center justify-between px-2 text-xs font-serif tracking-wider text-muted-foreground/80 uppercase">
+        <div className="mt-8 grid grid-cols-2 items-start gap-4 px-2 text-xs font-serif tracking-wider text-muted-foreground/80 uppercase [&>span:last-child]:text-right">
           <span>{t("Comunidad & Tradición")}</span>
           <span>{t("Comercio Justo Transparente")}</span>
         </div>
@@ -227,12 +228,6 @@ function Index() {
             {t("Escanea el código QR del Pasaporte Cultural con tu celular para consultar la técnica, el rostro del maestro creador y el certificado inmutable emitido en Stellar Soroban.")}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-            <Button asChild size="lg" className="rounded-full">
-              <Link to="/verificar">
-                <ScanLine className="mr-2 h-4 w-4" />
-                {t("Escanear Pasaporte (Cámara)")}
-              </Link>
-            </Button>
             <Button asChild size="lg" variant="outline" className="rounded-full">
               <Link to="/panel">
                 <LayoutDashboard className="mr-2 h-4 w-4" />

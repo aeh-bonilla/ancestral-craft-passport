@@ -1,4 +1,5 @@
 - [x] Replace the React QR adapter with a hook-free SVG renderer; homepage-to-passport navigation has no runtime errors, QR decoding and six tests passed.
+- [x] Move passport scanning into the top desktop/mobile navigation; five public screens verified at 360, 390, 768, 1024 and 1280px without overflow or runtime errors, scanner navigation and twelve tests passed. Protected content requires the project's current platform sign-in (managed Cloud session alone does not unlock it).
 - [x] Replace nine blue product backgrounds with light pearl gray and matching photo frames; original Tecuani preserved, desktop/mobile detail and six tests verified.
 - [x] Show complete piece-specific price breakdown beside prices and the existing pey payment control without clipping in craft cards and detail modals; popovers and payment dialog opening verified, six tests passed (no charge attempted).
 - [x] Replace the tiny Cuetzalan cover with high-resolution illustrative workshop artwork, lighten regional overlays, and add softly blurred illustrative artisan imagery behind modal and verifier histories; desktop render and six tests passed.

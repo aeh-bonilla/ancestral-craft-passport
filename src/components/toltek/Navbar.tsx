@@ -1,5 +1,5 @@
 import { Link, useNavigate, useHydrated } from "@tanstack/react-router";
-import { Menu, X, LogOut, UserRound, Search, ShoppingBag, User } from "lucide-react";
+import { Menu, X, LogOut, UserRound, Search, ShoppingBag, User, ScanLine } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { signOutPlatform } from "@/lib/platform-auth";
@@ -39,9 +39,9 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/80 bg-background/95 backdrop-blur-md">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
+      <div className="mx-auto grid h-20 max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-4 sm:px-6 xl:flex xl:justify-between xl:gap-4">
         {/* Navegación izquierda (Estilo Galería) */}
-        <nav className="hidden items-center gap-7 lg:flex lg:flex-1">
+        <nav className="hidden min-w-0 items-center gap-5 xl:flex xl:flex-1">
           {leftLinks.map((l) => (
             <Link
               key={l.es}
@@ -60,14 +60,15 @@ export function Navbar() {
         </nav>
 
         {/* Logo Central: ARTE & ORIGEN */}
-        <div className="flex shrink-0 items-center justify-center py-1">
+        <div className="flex min-w-0 items-center justify-start py-1 xl:shrink-0 xl:justify-center [&_a]:min-w-0 [&_a]:max-w-full">
           <Link to="/" className="transition-opacity hover:opacity-90">
             <Logo />
           </Link>
         </div>
 
         {/* Acciones y navegación derecha */}
-        <div className="hidden lg:flex lg:flex-1 items-center justify-end gap-3 xl:gap-6 [&>a]:whitespace-nowrap">
+        <div className="hidden xl:flex xl:flex-1 items-center justify-end gap-3 [&>a]:whitespace-nowrap">
+          <Button asChild variant="ghost" size="icon" title={t("Escanear Pasaporte (Cámara)")}><Link to="/verificar" search={{}} aria-label={t("Escanear Pasaporte (Cámara)")}><ScanLine className="h-4 w-4" /></Link></Button>
           <Link
             to="/panel"
             className="text-xs font-medium tracking-wide text-foreground/75 transition-colors hover:text-foreground"
@@ -142,7 +143,8 @@ export function Navbar() {
         </div>
 
         {/* Botón hamburguesa móvil */}
-        <div className="flex items-center gap-3 lg:hidden">
+        <div className="flex shrink-0 items-center gap-1 xl:hidden">
+          <Button asChild variant="ghost" size="icon" title={t("Escanear Pasaporte (Cámara)")}><Link to="/verificar" search={{}} onClick={() => setOpen(false)} aria-label={t("Escanear Pasaporte (Cámara)")}><ScanLine className="h-5 w-5" /></Link></Button>
           <Link
             to="/mercado"
             aria-label={t("Bolsa de compra")}
@@ -153,19 +155,22 @@ export function Navbar() {
               0
             </span>
           </Link>
-          <button
-            className="rounded-lg p-2 text-foreground/80 hover:text-foreground"
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-foreground/80 hover:text-foreground"
             onClick={() => setOpen(!open)}
             aria-label={t("Menú")}
+            aria-expanded={open}
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Menú desplegable móvil */}
       {open && (
-        <nav className="border-t border-border/80 bg-background px-4 py-4 space-y-2 lg:hidden">
+        <nav className="max-h-[calc(100dvh-5rem)] overflow-y-auto border-t border-border/80 bg-background px-4 py-4 space-y-2 xl:hidden">
           {leftLinks.map((l) => (
             <Link
               key={l.es}
