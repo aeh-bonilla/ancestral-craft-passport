@@ -50,6 +50,7 @@ import {
 } from "@/components/toltek/ui";
 import { QrCameraScanner } from "@/components/toltek/QrCameraScanner";
 import { PiecePassportQr } from '@/components/toltek/PiecePassportQr';
+import { ArtisanStoryBackground } from '@/components/toltek/ArtisanStoryBackground';
 import { piecePassportUrl } from '@/lib/piece-passport';
 import { PassportQrCode } from '@/components/toltek/PassportQrCode';
 import {
@@ -771,7 +772,7 @@ function FeaturedVerify({
         </div>
       </div>
       <div className="mt-8 grid gap-8 lg:grid-cols-[1.1fr_1fr]">
-        <div className="self-start overflow-hidden rounded-2xl shadow-float">
+        <div className="min-w-0 self-start overflow-hidden rounded-2xl shadow-float">
           <PiecePhotoGallery
             photos={
               piece.gallery && piece.gallery.length > 0
@@ -781,7 +782,7 @@ function FeaturedVerify({
             title={piece.title}
           />
         </div>
-        <div className="space-y-6">
+        <div className="min-w-0 space-y-6">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
               {t(piece.category ?? piece.technique)}
@@ -794,9 +795,10 @@ function FeaturedVerify({
               {piece.location ?? `${piece.community}, ${piece.region}`}
             </p>
           </div>
-          <p className="leading-relaxed text-muted-foreground">
-            {t(piece.story ?? work.description)}
-          </p>
+          <div className="relative isolate overflow-hidden bg-indigo px-6 py-8 text-indigo-foreground">
+            <ArtisanStoryBackground />
+            <p className="relative leading-relaxed">{t(piece.story ?? work.description)}</p>
+          </div>
           <div className="space-y-1 text-sm text-muted-foreground">
             <p>
               <span className="font-semibold text-foreground">{t("Técnica:")}</span>{" "}

@@ -1,4 +1,5 @@
 import { useI18n } from "@/i18n";
+import { ArtisanStoryBackground } from '@/components/toltek/ArtisanStoryBackground';
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
@@ -481,17 +482,7 @@ export function CuratorialPieceDetail({
 
         {/* COLUMNA DERECHA: Ficha Curatorial, Historia y Trazabilidad (Fondo Espresso) */}
         <div className="lg:col-span-7 relative p-6 sm:p-8 md:p-12 flex flex-col justify-between bg-[#28201B] text-[#F4EFE6] overflow-hidden">
-          {/* Fotografía de Fondo del Artesano/Taller con Gradient Overlay */}
-          {piece.artisanPhoto && (
-            <div className="absolute inset-0 z-0 pointer-events-none opacity-25 mix-blend-luminosity">
-              <img
-                src={piece.artisanPhoto}
-                alt=""
-                className="h-full w-full object-cover object-right"
-              />
-            </div>
-          )}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#28201B] via-[#28201B]/92 to-[#28201B]/75 z-0 pointer-events-none" />
+          <ArtisanStoryBackground />
 
           {/* Contenido Editorial Curatorial */}
           <div className="relative z-10 space-y-7">

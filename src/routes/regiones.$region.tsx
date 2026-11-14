@@ -23,8 +23,8 @@ function RegionMicrosite() {
   return <main>
     <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6"><Button asChild variant="ghost" size="sm"><Link to="/regiones"><ArrowLeft />{t('Volver al mapa')}</Link></Button></div>
     <section className="relative isolate min-h-[350px] bg-indigo text-indigo-foreground sm:min-h-[400px]">
-      <img src={region.image} alt={region.name} className="absolute inset-0 h-full w-full object-cover" />
-      <div className="absolute inset-0 bg-indigo/75" />
+      <img src={region.image} alt={region.name} fetchPriority="high" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+      <div className="absolute inset-0 bg-linear-to-r from-indigo/85 via-indigo/55 to-indigo/10" />
       <div className="relative mx-auto flex min-h-[350px] max-w-7xl items-center px-4 py-10 sm:min-h-[400px] sm:px-6">
         <div className="max-w-2xl"><p className="mb-3 flex items-center gap-2 text-sm"><MapPin className="h-4 w-4" />{region.state} · México</p><h1 className="text-3xl leading-tight sm:text-4xl lg:text-5xl">{region.name}</h1><p className="mt-3 text-lg">{t(region.area)}</p><p className="mt-5 max-w-xl text-sm leading-relaxed">{t(region.description)}</p></div>
       </div>

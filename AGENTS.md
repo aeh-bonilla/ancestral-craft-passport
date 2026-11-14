@@ -20,3 +20,4 @@
 - Optional legacy catalog contracts are typed locally rather than added to the generated managed schema; preserve existing local fallback when those tables are unavailable.
 - Catalog QR codes link to each piece's public verification record using a shared canonical URL; show only supplied transaction identifiers and distinguish catalog/testnet data from proven on-chain fields.
 - Render passport QR modules with the React-independent qrcode-generator engine and a local hook-free SVG component; avoid React QR adapters that can capture a separate prebundled dispatcher.
+- Use shared decorative illustrative artisan artwork behind piece histories, never as an identified artisan portrait; tiny regional originals are not evidence for invented photographic detail.

@@ -9,7 +9,7 @@ import tecuani from "@/assets/tecuani-tk0512.jpg";
 import rebozoCuetzalan from "@/assets/rebozo-cuetzalan-refined.jpg";
 import huipilCuetzalan from "@/assets/huipil-cuetzalan-refined.jpg";
 import canastaCuetzalan from "@/assets/canasta-cuetzalan-refined.jpg";
-import cuetzalanCourtyard from "@/assets/cuetzalan-courtyard.jpg";
+import cuetzalanCourtyard from "@/assets/cuetzalan-workshop-cover.jpg";
 import artisanTelar from "@/assets/artesana-telar.jpg";
 import type { BankingHashes } from "./artisan-banking";
 
