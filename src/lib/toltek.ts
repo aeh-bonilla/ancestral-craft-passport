@@ -10,6 +10,7 @@ import rebozoCuetzalan from "@/assets/rebozo-cuetzalan.jpg";
 import huipilCuetzalan from "@/assets/huipil-cuetzalan.jpg";
 import canastaCuetzalan from "@/assets/canasta-cuetzalan.jpg";
 import cuetzalanCourtyard from "@/assets/cuetzalan-courtyard.jpg";
+import artisanTelar from "@/assets/artesana-telar.jpg";
 import type { BankingHashes } from "./artisan-banking";
 
 export const images = {
@@ -25,6 +26,7 @@ export const images = {
   huipilCuetzalan,
   canastaCuetzalan,
   cuetzalanCourtyard,
+  artisanTelar,
 };
 
 export const USDC_RATE = 17.2; // MXN por USDC (mock)
@@ -54,6 +56,12 @@ export type Piece = {
   stellarTxHash?: string;
   ledgerStatus?: string;
   story?: string;
+  curatorialId?: string;
+  regionDetail?: string;
+  regionStory?: string;
+  artisanBio?: string;
+  processAndMaterials?: string;
+  artisanPhoto?: string;
 };
 
 export const pieces: Piece[] = [
@@ -80,6 +88,12 @@ export const pieces: Piece[] = [
     stellarTxHash: "4a28f72c01998b795f328f99e9ba60d863202d06aa1166016d0cd573eadd49e1",
     ledgerStatus: "Verified on Soroban Testnet",
     story: "El rebozo tradicional de lana es prenda de abrigo y símbolo de identidad en la Sierra Norte de Puebla. Elaborado pacientemente durante cuatro semanas en telar de cintura por la maestra María Dolores, entrelaza saberes ancestrales transmitidos de generación en generación.",
+    curatorialId: "CUET-MD-012026",
+    regionDetail: "Cuetzalan, Sierra Norte de Puebla",
+    regionStory: "El entorno montañoso se enamora de la bruma de la Sierra Norte, cobijando la tradición y preservando la técnica del telar de cintura Nahua de la Sierra Norte de Puebla.",
+    artisanBio: "María Dolores preserva la herencia familiar y legado generacional en el telar de cintura, transmitido de madres a hijas a lo largo de cuatro generaciones.",
+    processAndMaterials: "Preciada lana virgen natural, teñida con tintes naturales de plantas locales. Tiempo de 3 a 4 semanas de elaboración con la técnica ancestral del telar de cintura.",
+    artisanPhoto: artisanTelar,
   },
   {
     id: "TK-0702",
@@ -104,6 +118,12 @@ export const pieces: Piece[] = [
     stellarTxHash: "5b39e83d12998b795f328f99e9ba60d863202d06aa1166016d0cd573eadd50f2",
     ledgerStatus: "Verified on Soroban Testnet",
     story: "Vestimenta tradicional de las festividades patronales de San Francisco de Asís. El bordado en el pecho representa la unión del cielo, la tierra y las flores de café de la montaña, custodiado por el Colectivo Masehual para sostener a familias tejedoras.",
+    curatorialId: "CUET-MH-022026",
+    regionDetail: "Cuetzalan, Sierra Norte de Puebla",
+    regionStory: "Comunidad de origen Nahua que habita entre la niebla y el verdor de la Sierra Norte, preservando saberes ancestrales que dan forma a su identidad.",
+    artisanBio: "El Colectivo Masehual preserva el bordado ceremonial y la iconografía sagrada de las fiestas patronales de la montaña.",
+    processAndMaterials: "Lienzo de algodón puro hilado en telar de cintura con bordado en punto de cruz hilvanado con tintes autóctonos. 6 semanas de labor.",
+    artisanPhoto: cuetzalanCourtyard,
   },
   {
     id: "TK-0703",
@@ -128,6 +148,12 @@ export const pieces: Piece[] = [
     stellarTxHash: "6c4af94e23998b795f328f99e9ba60d863202d06aa1166016d0cd573eadd61a3",
     ledgerStatus: "Verified on Soroban Testnet",
     story: "La fibra de jonote es recolectada en las barrancas húmedas de Cuetzalan. Don Pedro Juárez trabaja la fibra con las manos húmedas logrando una resistencia que dura generaciones sin deformarse.",
+    curatorialId: "CUET-PJ-032026",
+    regionDetail: "Cuetzalan, Sierra Norte de Puebla",
+    regionStory: "Entre barrancas húmedas y selva alta, la tradición de cestería nahua aprovecha los recursos forestales con respeto a la tierra.",
+    artisanBio: "Don Pedro Juárez es maestro cestero de tercera generación; elabora canastos utilitarios y piezas ceremoniales de corteza de jonote.",
+    processAndMaterials: "Corteza interna de jonote recolectada en luna menguante, tejida a mano con humedad constante. 2 semanas de trabajo.",
+    artisanPhoto: cuetzalanCourtyard,
   },
   {
     id: "TK-0512",
@@ -152,6 +178,12 @@ export const pieces: Piece[] = [
     stellarTxHash: "725e126cc7998b795f328f99e9ba60d863202d06aa1166016d0cd573eadd48cf",
     ledgerStatus: "Verified on Soroban Testnet",
     story: "En las entrañas de la Mixteca, el sonido del teponaztli y la flauta de carrizo anuncian la llegada del Tecuani. Esta pieza rinde homenaje a la danza ancestral de petición de lluvias y protección de las cosechas. Modelado y ensamblado a mano por la maestra artesana Miriam Nava, viste el tradicional mazo amarillo salpicado con las rosetas del felino sagrado y una máscara decorada con cerdas naturales e hilos de ixtle trenzado.",
+    curatorialId: "ACAT-MN-0512",
+    regionDetail: "Acatlán de Osorio, Mixteca Poblana",
+    regionStory: "Cuna de la danza del Tecuani y el barro bruñido rojo en la mixteca alta, donde el jaguar sagrado protege los campos de cultivo.",
+    artisanBio: "La maestra Miriam Nava elabora máscaras y vestimentas ceremoniales para preservar el rito de la fertilidad y la petición de lluvias.",
+    processAndMaterials: "Madera de copal tallada a mano con machete y cuchillo, pigmentos minerales, ensamble de ixtle y rosetas felinas pintadas a pincel fino.",
+    artisanPhoto: tecuani,
   },
   {
     id: "TK-0388",

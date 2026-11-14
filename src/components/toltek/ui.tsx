@@ -255,9 +255,13 @@ export function PieceCard({
               </span>
               <PriceBreakdown priceMxn={piece.priceMxn} />
             </div>
-            {!action && (clickable ? (
+            {clickable ? (
               <button
-                onClick={() => setOpen(true)}
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpen(true);
+                }}
                 className="text-xs font-medium text-foreground/80 hover:text-primary transition-colors underline-offset-4 hover:underline"
               >
                 {t("Ver pasaporte →")}
@@ -270,7 +274,7 @@ export function PieceCard({
               >
                 {t("Ver pasaporte →")}
               </Link>
-            ))}
+            )}
           </div>
           {action}
         </div>
@@ -327,36 +331,241 @@ export function StripeButton({ piece, className }: { piece: Piece; className?: s
   );
 }
 
-/** Modal de Pasaporte para piezas destacadas. */
-export function PassportModal({ piece, open, onOpenChange }: { piece: Piece; open: boolean; onOpenChange: (o: boolean) => void }) {
-  const { t, money } = useI18n();
-  const gallery = piece.gallery && piece.gallery.length > 0 ? piece.gallery : [piece.image];
+export function CulturalSeal({ className }: { className?: string }) {
+  return (
+    <div className={cn("relative flex items-center justify-center h-16 w-16 select-none shrink-0", className)}>
+      <svg viewBox="0 0 100 100" className="h-full w-full">
+        <path
+          id="seal-curve-static"
+          d="M 50, 50 m -36, 0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0"
+          fill="transparent"
+        />
+        <text className="text-[9px] uppercase tracking-[0.25em] fill-[#D6CCA8] font-serif font-medium">
+          <textPath href="#seal-curve-static" startOffset="0%">
+            ORIGEN CERTIFICADO · PRESERVACIÓN CULTURAL ·
+          </textPath>
+        </text>
+      </svg>
+      <div className="absolute inset-2.5 rounded-full border border-dashed border-[#D6CCA8]/50 flex flex-col items-center justify-center text-center p-1">
+        <div className="h-3 w-3 rounded-full border border-[#D6CCA8]/70 flex items-center justify-center">
+          <span className="text-[7px] text-[#D6CCA8]">★</span>
+        </div>
+        <span className="font-serif text-[6.5px] uppercase tracking-wider text-[#D6CCA8] mt-0.5">TLAMATIK</span>
+      </div>
+    </div>
+  );
+}
+
+/** Ficha Curatorial & Pasaporte Cultural en split-screen (Look & Feel Arte & Origen) */
+export function CuratorialPieceDetail({
+  piece,
+  onClose,
+  showCornerLabels = true,
+}: {
+  piece: Piece;
+  onClose?: () => void;
+  showCornerLabels?: boolean;
+}) {
+  const { t } = useI18n();
+  const [reserving, setReserving] = useState(false);
+
+  const regionName = piece.regionDetail || `${piece.community}, Sierra de ${piece.region}`;
+  const regionStory =
+    piece.regionStory ||
+    piece.story ||
+    "El entorno montañoso cobija la memoria viva de la comunidad, preservando saberes y técnicas ancestrales transmitidas de generación en generación.";
+
+  const cleanArtisanName = piece.artisan
+    .split("-")[0]!
+    .replace(/^(Artesana:|Artesano:)\s*/i, "")
+    .trim();
+
+  const artisanBio =
+    piece.artisanBio ||
+    piece.story ||
+    `${cleanArtisanName} preserva la herencia familiar y legado generacional en el oficio, transmitido con paciencia y maestría.`;
+
+  const processAndMaterials =
+    piece.processAndMaterials ||
+    piece.techniqueDetail ||
+    "Materiales autóctonos de recolección local, trabajados con técnicas tradicionales respetuosas con los ciclos de la tierra.";
+
+  const curatorialFolio = piece.curatorialId || `ID: ${piece.id}`;
+
+  const handleReserve = () => {
+    setReserving(true);
+    setTimeout(() => {
+      setReserving(false);
+      toast.success(t("Solicitud de reserva registrada"), {
+        description: t("La pieza {{title}} ha quedado reservada por 24 horas para pago en firme.", {
+          title: t(piece.title),
+        }),
+      });
+    }, 600);
+  };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[92vh] max-w-4xl overflow-y-auto p-0">
-        <div className="grid md:grid-cols-2">
-          <PiecePhotoGallery photos={gallery} title={piece.title} />
-          <div className="space-y-4 p-6">
-            <DialogHeader className="text-left">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">{t(piece.category)}</p>
-              <DialogTitle className="font-serif text-2xl leading-tight">{t(piece.title)}</DialogTitle>
-              <DialogDescription className="flex items-start gap-1"><MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" /> {piece.artisan} · {piece.location}</DialogDescription>
-            </DialogHeader>
-            <p className="text-sm leading-relaxed text-muted-foreground">{t(piece.story)}</p>
-            <div className="space-y-1 text-xs text-muted-foreground">
-              <p><span className="font-semibold text-foreground">{t("Técnica:")}</span> {t(piece.techniqueDetail)}</p>
-              <p className="flex items-center gap-1"><Ruler className="h-3.5 w-3.5" /> {piece.dimensions}{" "}{t("· Pasaporte")}{" "}{piece.id}</p>
+    <div className="relative w-full overflow-hidden rounded-3xl border border-border/80 bg-card shadow-2xl">
+      <div className="grid lg:grid-cols-12 min-h-[580px]">
+        {/* COLUMNA IZQUIERDA: Tarjeta de la Obra y Acción de Compra */}
+        <div className="lg:col-span-5 p-6 sm:p-8 md:p-10 flex flex-col justify-between bg-card">
+          <div className="space-y-6">
+            {/* Foto de la Obra con Badge de Certificado */}
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-sand/40 border border-border/70 shadow-sm">
+              <img
+                src={piece.image}
+                alt={t(piece.title)}
+                className="h-full w-full object-cover"
+              />
+              <StellarBadge className="absolute left-3.5 top-3.5 z-10" />
             </div>
-            <div className="rounded-xl border bg-card p-4"><FullBreakdown piece={piece} /></div>
-            <div className="grid gap-2">
-              <CodiButton piece={piece} primary className="w-full" />
-              <StripeButton piece={piece} className="w-full" />
+
+            {/* Ficha Comercial */}
+            <div className="space-y-1.5">
+              <p className="text-[11px] font-medium tracking-[0.16em] uppercase text-muted-foreground">
+                {piece.community.toUpperCase()}, {piece.region.toUpperCase()}
+              </p>
+              <h2 className="font-serif text-2xl sm:text-3xl font-semibold leading-tight text-foreground">
+                {t(piece.title)}
+              </h2>
+              <p className="text-xs sm:text-sm text-muted-foreground pt-0.5">
+                {piece.artisan.toLowerCase().includes("colectivo") || piece.artisan.toLowerCase().includes("taller")
+                  ? piece.artisan
+                  : `${t("Artesana")}: ${piece.artisan}`}
+              </p>
             </div>
-            <LedgerBadge piece={piece} />
-            <Link to="/verificar" search={{ id: piece.id }} className="block text-center text-sm font-medium text-primary hover:underline">{t("Abrir verificador público →")}</Link>
+          </div>
+
+          <div className="pt-6 border-t border-border/60 space-y-4 mt-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-baseline gap-2">
+                <span className="font-sans text-xl sm:text-2xl font-bold text-foreground">
+                  MXN {piece.priceMxn.toLocaleString("es-MX")}
+                </span>
+                <PriceBreakdown priceMxn={piece.priceMxn} />
+              </div>
+              <span className="text-xs font-serif italic text-muted-foreground">
+                {t("Obra única")}
+              </span>
+            </div>
+
+            {/* Botones de acción directos: Adquirir (CoDi/SPEI) y Reservar */}
+            <div className="grid sm:grid-cols-2 gap-3 pt-1">
+              <CodiButton
+                piece={piece}
+                primary
+                className="w-full bg-[#8E4429] hover:bg-[#78361E] text-white border-0 shadow-sm py-2.5 rounded-xl font-medium"
+              />
+              <Button
+                variant="outline"
+                onClick={handleReserve}
+                disabled={reserving}
+                className="w-full rounded-xl border-border/90 text-foreground hover:bg-sand/60"
+              >
+                {reserving ? t("Reservando…") : t("Reservar pieza")}
+              </Button>
+            </div>
+
+            <div className="pt-1 flex items-center justify-between text-[11px] text-muted-foreground">
+              <Link
+                to="/verificar"
+                search={{ id: piece.id }}
+                className="hover:text-primary transition-colors hover:underline"
+              >
+                {t("Consultar pasaporte en verificador público →")}
+              </Link>
+            </div>
           </div>
         </div>
+
+        {/* COLUMNA DERECHA: Ficha Curatorial, Historia y Trazabilidad (Fondo Espresso) */}
+        <div className="lg:col-span-7 relative p-6 sm:p-8 md:p-12 flex flex-col justify-between bg-[#28201B] text-[#F4EFE6] overflow-hidden">
+          {/* Fotografía de Fondo del Artesano/Taller con Gradient Overlay */}
+          {piece.artisanPhoto && (
+            <div className="absolute inset-0 z-0 pointer-events-none opacity-25 mix-blend-luminosity">
+              <img
+                src={piece.artisanPhoto}
+                alt=""
+                className="h-full w-full object-cover object-right"
+              />
+            </div>
+          )}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#28201B] via-[#28201B]/92 to-[#28201B]/75 z-0 pointer-events-none" />
+
+          {/* Contenido Editorial Curatorial */}
+          <div className="relative z-10 space-y-7">
+            {/* 1. La Región */}
+            <div className="space-y-1">
+              <p className="text-[11px] uppercase tracking-[0.2em] font-sans text-[#A89D8D]">
+                {t("La Región")}
+              </p>
+              <h3 className="font-serif text-xl sm:text-2xl font-normal text-[#F4EFE6]">
+                {t(regionName)}
+              </h3>
+              <p className="text-xs sm:text-sm text-[#C5B9A8] leading-relaxed pt-1 max-w-xl">
+                {t(regionStory)}
+              </p>
+            </div>
+
+            {/* 2. Historia de la Artesana */}
+            <div className="space-y-1">
+              <p className="text-[11px] uppercase tracking-[0.2em] font-sans text-[#A89D8D]">
+                {t("Historia de la Artesana")}
+              </p>
+              <h3 className="font-serif text-xl sm:text-2xl font-normal text-[#F4EFE6]">
+                {cleanArtisanName}
+              </h3>
+              <p className="text-xs sm:text-sm text-[#C5B9A8] leading-relaxed pt-1 max-w-xl">
+                {t(artisanBio)}
+              </p>
+            </div>
+
+            {/* 3. Proceso Creativo & Materiales */}
+            <div className="space-y-1">
+              <h4 className="font-serif text-base sm:text-lg font-normal text-[#F4EFE6]">
+                {t("Proceso Creativo & Materiales")}
+              </h4>
+              <p className="text-xs sm:text-sm text-[#C5B9A8] leading-relaxed pt-0.5 max-w-xl">
+                {t(processAndMaterials)}
+              </p>
+            </div>
+          </div>
+
+          {/* 4. Documentación y Trazabilidad + Sello */}
+          <div className="relative z-10 pt-8 mt-6 border-t border-white/10 flex items-center justify-between gap-4">
+            <div className="space-y-1.5 min-w-0">
+              <h4 className="font-serif text-base sm:text-lg font-normal text-[#F4EFE6]">
+                {t("Documentación y Trazabilidad")}
+              </h4>
+              <p className="text-xs font-mono text-[#D6CCA8] truncate">
+                {curatorialFolio} · {t("Origen Certificado")}
+              </p>
+              <p className="text-[11px] text-[#A89D8D]">
+                {t("Preservación Cultural")} · {piece.ledgerStatus || "Stellar Soroban"}
+              </p>
+            </div>
+
+            <CulturalSeal className="shrink-0" />
+          </div>
+        </div>
+      </div>
+
+      {showCornerLabels && (
+        <div className="flex items-center justify-between bg-sand/30 border-t border-border/40 px-6 py-2.5 text-[10px] font-serif uppercase tracking-widest text-muted-foreground">
+          <span>{t("Ficha Curatorial & Pasaporte")}</span>
+          <span>{t("Trazabilidad & Historia Viva")}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Modal de Pasaporte para piezas destacadas. */
+export function PassportModal({ piece, open, onOpenChange }: { piece: Piece; open: boolean; onOpenChange: (o: boolean) => void }) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-h-[94vh] max-w-5xl overflow-y-auto p-0 border-0 bg-transparent shadow-none">
+        <CuratorialPieceDetail piece={piece} onClose={() => onOpenChange(false)} showCornerLabels={true} />
       </DialogContent>
     </Dialog>
   );

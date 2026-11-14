@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import {
   CodiButton,
+  CuratorialPieceDetail,
   PieceCard,
   SectionTitle,
   StellarBadge,
@@ -62,6 +63,7 @@ function Market() {
   const { t, locale } = useI18n();
   const [mode, setMode] = useState<"fisico" | "b2b">("fisico");
   const [catalog, setCatalog] = useState<Piece[]>(seedPieces);
+  const [selectedPieceId, setSelectedPieceId] = useState<string>("TK-0701");
   const [region, setRegion] = useState<string | null>(null);
   const [tech, setTech] = useState<string | null>(null);
   const [max, setMax] = useState(10000);
@@ -79,6 +81,11 @@ function Market() {
       active = false;
     };
   }, []);
+
+  const selectedPiece = useMemo(
+    () => catalog.find((p) => p.id === selectedPieceId) || catalog[0] || seedPieces[0]!,
+    [catalog, selectedPieceId],
+  );
 
   const list = useMemo(
     () =>
@@ -161,47 +168,93 @@ function Market() {
       </div>
 
       {mode === "fisico" ? (
-        <div className="mt-10 grid gap-8 lg:grid-cols-[240px_1fr]">
-          <aside className="space-y-6 rounded-xl border bg-card p-5 shadow-float lg:self-start">
-            <Chips title={t("Región")} items={regions} value={region} onChange={setRegion} />
-            <Chips title={t("Técnica")} items={techniques} value={tech} onChange={setTech} />
-            <div>
-              <p className="mb-3 text-sm font-semibold">
-                {t("Precio máximo: $")}
-                {max.toLocaleString(locale)} MXN
-              </p>
-              <Slider
-                min={250}
-                max={10000}
-                step={250}
-                value={[max]}
-                onValueChange={(v) => setMax(v[0] ?? 10000)}
-              />
-            </div>
-          </aside>
-          <div>
-            <p className="mb-4 text-sm text-muted-foreground">
-              {t("{{count}} piezas certificadas", { count: list.length })}
-            </p>
-            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-              {list.map((p) => (
-                <PieceCard
-                  key={p.id}
-                  piece={p}
-                  action={
-                    <div className="flex w-full flex-col gap-1.5">
-                      <CodiButton piece={p} primary className="w-full" />
-                    </div>
-                  }
-                />
-              ))}
-              {list.length === 0 && (
-                <p className="text-muted-foreground">
-                  {t("No hay piezas con estos filtros.")}
+        <div className="mt-8 space-y-12">
+          {/* Ficha Curatorial & Pasaporte Cultural (Look & Feel Arte & Origen) */}
+          <section id="ficha-curatorial" className="space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+              <div>
+                <p className="text-[11px] font-sans uppercase tracking-[0.2em] text-muted-foreground">
+                  {t("Detalle de Obra Certificada")}
                 </p>
-              )}
+                <h2 className="font-serif text-2xl sm:text-3xl font-bold text-foreground">
+                  {t("Ficha Curatorial & Pasaporte")}
+                </h2>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {t("Selecciona cualquier obra del catálogo para explorar su historia viva y trazabilidad")}
+              </p>
             </div>
-          </div>
+
+            <CuratorialPieceDetail piece={selectedPiece} />
+          </section>
+
+          {/* Catálogo de Obras Físicas y Filtros */}
+          <section className="space-y-6 pt-4 border-t border-border/60">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-foreground">
+                  {t("Catálogo de Obras Disponibles")}
+                </h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">
+                  {t("{{count}} piezas certificadas en blockchain con comercio ético y directo", {
+                    count: list.length,
+                  })}
+                </p>
+              </div>
+            </div>
+
+            <div className="grid gap-8 lg:grid-cols-[240px_1fr]">
+              <aside className="space-y-6 rounded-xl border bg-card p-5 shadow-float lg:self-start">
+                <Chips title={t("Región")} items={regions} value={region} onChange={setRegion} />
+                <Chips title={t("Técnica")} items={techniques} value={tech} onChange={setTech} />
+                <div>
+                  <p className="mb-3 text-sm font-semibold">
+                    {t("Precio máximo: $")}
+                    {max.toLocaleString(locale)} MXN
+                  </p>
+                  <Slider
+                    min={250}
+                    max={10000}
+                    step={250}
+                    value={[max]}
+                    onValueChange={(v) => setMax(v[0] ?? 10000)}
+                  />
+                </div>
+              </aside>
+              <div>
+                <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                  {list.map((p, idx) => (
+                    <div
+                      key={p.id}
+                      onClick={() => {
+                        setSelectedPieceId(p.id);
+                        document.getElementById("ficha-curatorial")?.scrollIntoView({ behavior: "smooth" });
+                      }}
+                      className={cn(
+                        "cursor-pointer rounded-2xl transition-all",
+                        selectedPiece.id === p.id && "ring-2 ring-primary ring-offset-2 ring-offset-background",
+                      )}
+                    >
+                      <PieceCard
+                        piece={p}
+                        index={idx}
+                        action={
+                          <div className="flex w-full flex-col gap-1.5">
+                            <CodiButton piece={p} primary className="w-full" />
+                          </div>
+                        }
+                      />
+                    </div>
+                  ))}
+                  {list.length === 0 && (
+                    <p className="text-muted-foreground">
+                      {t("No hay piezas con estos filtros.")}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       ) : (
         <div className="mt-10">
